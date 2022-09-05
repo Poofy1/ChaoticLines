@@ -1,29 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MouseLook : MonoBehaviour
 {
     public Transform player;
+    public Slider setting;
+    public Text settingText;
     float mouseX;
     float mouseY;
     float xRotation;
     float yRotation;
-    public float mouseSensitivity = 100f;
+    public float mouseSensitivity;
 
-    public bool locked = true;
 
+    float offsetX;
+    float offsetY;
+
+    public bool locked = false;
+
+    static extern bool SetCursorPos(int X, int Y);
 
     void OnApplicationFocus(bool hasFocus)
     {
         if (hasFocus)
         {
-            locked = true;
+            //locked = true;
             Debug.Log("Application is focussed");
         }
         else
         {
-            locked = false;
+            //locked = false;
             Debug.Log("Application lost focus");
         }
     }
@@ -31,15 +39,13 @@ public class MouseLook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity * Time.deltaTime;
-        mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Escape)) locked = false;
-        Debug.Log(Camera.main.aspect);
 
         if (locked)
         {
-            Debug.Log("BROO");
+            mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity * 10 * Time.deltaTime;
+            mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity * 10 * Time.deltaTime;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
@@ -56,5 +62,16 @@ public class MouseLook : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+    }
+
+    public void GameClicked()
+    {
+        locked = true;
+    }
+
+    public void SensitivityChanged()
+    {
+        mouseSensitivity = setting.value;
+        settingText.text = mouseSensitivity.ToString("0");
     }
 }

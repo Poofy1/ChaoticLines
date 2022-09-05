@@ -51,6 +51,11 @@ public class PlayerMovement : MonoBehaviour
         {
             moveSpeed = walkSpeed;
         }
+
+        if (Input.GetKey("r"))
+        {
+            transform.position = new Vector3(0, 0, -10);
+        }
     }
 
     private void MovePlayer()

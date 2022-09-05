@@ -2,15 +2,25 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using TMPro;
+using UnityEditor;
+using B83.LogicExpressionParser;
 
 public class Chaos : MonoBehaviour
 {
     //System vars
     public GameObject trail;
-    public int trail_Amount;
+    public GameObject crosshair;
+    public int trail_Amount = 1;
     public float t;
     public float step;
     public float scale;
+    private int color;
+
+    //Custom WIPP<<<<<<<<<<<<<<<<<<<<<<<<<<
+    public string xCustom;
+    public string yCustom;
+    public string zCustom;
 
     //private vars
     private float[] x_AR;
@@ -18,13 +28,16 @@ public class Chaos : MonoBehaviour
     private float[] z_AR;
     private bool[] active;
     private GameObject[] trails;
-    private int system = 1;
+    private int system;
     private bool on = false;
+    private float trailLength;
+    private float lineThickness;
 
     //Canvas vars
     public GameObject canvas;
-    public Slider AmountSlider;
-    public Text AmountText;
+    public TMP_InputField Amount;
+    public TMP_Text AmountText;
+    public TMP_Text warningText;
     public Slider ScaleSlider;
     public Text ScaleText;
     public Slider StepSlider;
@@ -35,20 +48,54 @@ public class Chaos : MonoBehaviour
     public Button Activate;
     public Text ActivateText;
     public Button[] SysBut;
+    public Button[] ColBut;
+
+    public Slider ThicknessSlider;
+    public Text ThicknessText;
+    public Slider LengthSlider;
+    public Text LengthText;
+
+    //Custom Objs
+    public GameObject inputTextX;
+    public GameObject inputTextY;
+    public GameObject inputTextZ;
 
     private bool pauseTemp = false;
 
     //Canvas Updates
     public void UpdateAmount()
     {
-        trail_Amount = (int)AmountSlider.value;
-        AmountText.text = trail_Amount.ToString("0");
+        if (Int32.TryParse(Amount.text, out trail_Amount))
+        {
+            if(trail_Amount < 1)
+            {
+                trail_Amount = 1;
+                warningText.text = "Please enter a positve whole number";
+                AmountText.text = "";
+            }
+            else if(trail_Amount > 10000)
+            {
+                warningText.text = "It is recommended to not go above 10,000";
+            }
+            else
+            {
+                warningText.text = "";
+            }
+
+        }
+        else
+        {
+            trail_Amount = 1;
+            warningText.text = "Please enter a positve whole number";
+            AmountText.text = "";
+        }
+
     }
 
     public void UpdateScale()
     {
         scale = ScaleSlider.value;
-        ScaleText.text = scale.ToString("0.0");
+        ScaleText.text = (scale/20).ToString("0.0");
     }
     public void UpdateStep()
     {
@@ -59,10 +106,47 @@ public class Chaos : MonoBehaviour
         StepText.text = (StepSlider.value * 50).ToString("0.00");
     }
 
+    public void UpdateThickness()
+    {
+        lineThickness = ThicknessSlider.value;
+        ThicknessText.text = lineThickness.ToString("0.0");
+        if (on)
+        {
+            for (int i = 0; i < trail_Amount; i++)
+            {
+                trails[i].GetComponent<TrailRenderer>().startWidth = lineThickness / 5f;
+                trails[i].GetComponent<TrailRenderer>().endWidth = lineThickness / 10f;
+            }
+        }
+    }
+
+    public void UpdateLength()
+    {
+        trailLength = LengthSlider.value;
+        LengthText.text = trailLength.ToString("0.0");
+        if(trailLength == 20)
+        {
+            trailLength = 9999999999999;
+            LengthText.text = "∞";
+        }
+
+        if (on)
+        {
+            for (int i = 0; i < trail_Amount; i++)
+            {
+                trails[i].GetComponent<TrailRenderer>().time = trailLength * 5;
+            }
+        }
+    }
+
+
     //Starting
     public void On()
     {
         on = !on;
+        UpdateAmount();
+        crosshair.GetComponent<Billboard>().ToggleCrosshair();
+
         if(on)
         {
             pauseTemp = false;
@@ -71,7 +155,7 @@ public class Chaos : MonoBehaviour
             UpdateAmount();
             UpdateScale();
             UpdateStep();
-            AmountSlider.interactable = false;
+            Amount.interactable = false;
             ScaleSlider.interactable = false;
             for (int i = 0; i < SysBut.Length; i++)
                 SysBut[i].interactable = false;
@@ -100,15 +184,32 @@ public class Chaos : MonoBehaviour
                     var name = Instantiate(trail, new Vector3(x_AR[i] * scale, y_AR[i] * scale, z_AR[i] * scale), Quaternion.identity);
                     name.gameObject.name = "Trail" + i;
                     trails[i] = GameObject.Find("Trail" + i);
-
-                    //Colors
-                    trails[i].GetComponent<TrailRenderer>().startColor = new Color(UnityEngine.Random.Range(0f, 1f),
-                                                                                   UnityEngine.Random.Range(0f, 1f),
-                                                                                   UnityEngine.Random.Range(0f, 1f),
-                                                                                   1f);
-                    trails[i].GetComponent<TrailRenderer>().endColor = new Color(.5f, .5f, .5f, .5f);
                 }
             }
+
+            UpdateLength();
+            UpdateThickness();
+
+            //COLORS
+            if (color == 1)
+                Color1();
+            else if (color == 2)
+                Color2();
+            else if (color == 3)
+                Color3();
+            else if (color == 4)
+                Color4();
+            else if (color == 5)
+                Color5();
+            else if (color == 6)
+                Color6();
+            else if (color == 7)
+                Color7();
+            else if (color == 8)
+                Color8();
+            else if (color == 9)
+                Color9();
+
         }
         else
         {
@@ -116,7 +217,7 @@ public class Chaos : MonoBehaviour
             Activate.GetComponent<Image>().color = new Color(.6f, .6f, .6f);
             pauseTemp = false;
             t = 0;
-            AmountSlider.interactable = true;
+            Amount.interactable = true;
             ScaleSlider.interactable = true;
             for (int i = 0; i < SysBut.Length; i++)
                 SysBut[i].interactable = true;
@@ -152,167 +253,146 @@ public class Chaos : MonoBehaviour
         SysBut[system - 1].GetComponent<Image>().color = new Color(.2f, .2f, .2f);
     }
     
+
+    //Display Premade Systems
     public void System1()
     {
         system = 1;
         SystemDisplay.text = "X = (-x * x) + (z * t) + y\nY = (x * x) - (y * z) - (t * t) - (y * x) + (y * t) - x + y\nZ = (z * -z) - (t * x) + (z * t) + x + y";
         SystemConfig();
     }
-
     public void System2()
     {
         system = 2;
         SystemDisplay.text = "X = (x * y * -t * z) + (t * -z) - x\nY = (z * y * -y) - (z * x) - t + y\nZ = (-x * t * t) * (t * x) - y * y";
         SystemConfig();
     }
-
     public void System3()
     {
         system = 3;
         SystemDisplay.text = "X = (-x * x) + (z * t) + y\nY = (x * t) + z - (x * x) - x\nZ = (z * -z) - (t * x) + (z * t) - x + y";
         SystemConfig();
     }
-
     public void System4()
     {
         system = 4;
         SystemDisplay.text = "X = (-z * z) + (z * t) + (y * y)\nY = (y * -t) - (x * x) - x + z\nZ = (x * x) - (t * -z) + (z * -t) + x + y";
         SystemConfig();
     }
-
     public void System5()
     {
         system = 5;
         SystemDisplay.text = "X = (x * x * -t * y) + (z * y * t) - (t * x) + y\nY = (-y * t * z) - (t * x) + x\nZ = (z * z * -y * -x * t * t) - (t * x) + (t * y) + z + y";
         SystemConfig();
     }
-
     public void System6()
     {
         system = 6;
         SystemDisplay.text = "X = (x * -x * -t * y) + (z * z * t) + y\nY = (-y * t * -z) - (t * x) - x\nZ = (z * z * -y * -x) + (-y * t * -z) - (t * -t) - z + y";
         SystemConfig();
     }
-
     public void System7()
     {
         system = 7;
         SystemDisplay.text = "X = (x * z * t) - (t * y) + (t * t) + x - y\nY = (x * x * -t) - Sqrt(Abs(t * y * x)) + (y * t) + z + x\nZ = (z * y * t) + (y * t * -z) - (x * -t) + y";
         SystemConfig();
     }
-
     public void System8()
     {
         system = 8;
         SystemDisplay.text = "X = (z * x * t) + (y * x * t) - (z * x * t) - (x * t) - x + y\nY = (t * -z) + (x * t) + (y * t) + y - z + t\nZ = (z * t) + (z * x * t) + (y * x * t) + y + x";
         SystemConfig();
     }
-
     public void System9()
     {
         system = 9;
         SystemDisplay.text = "X = (x * y) - (y * -t) + (-x * t) + t - z\nY = (x * -z) + (x * x) + (t * -t) - y - z\nZ = (y * -x) + (x * -t) + (y * y) - t";
         SystemConfig();
     }
-
     public void System10()
     {
         system = 10;
         SystemDisplay.text = "X = (y * y) - (y * -t) + (-x * t) + (z * t) + y - z\nY = (y * z * t) + (y * x) + (t * -t) - y + z\nZ = (y * -x * t) + (x * -t) + (y * y * -t) + (z * z * t) - (-y * -z * t) - x";
         SystemConfig();
     }
-
     public void System11()
     {
         system = 11;
         SystemDisplay.text = "X = (z * z) + (y * x) - (z * -x) + (-x * t) + t + z\nY = (t * -z) + (x * y) + (y * t) + y - z + t\nZ = (z * t) + (-z * t) + (y * x) + t + x";
         SystemConfig();
     }
-
     public void System12()
     {
         system = 12;
         SystemDisplay.text = "X = (z * z) + (y * x) - (z * -x) + (-x * t) + t + z\nY = (t * -z) + (x * y) + (y * t) + y - z + t\nZ = (z * t) + (-z * t) + (y * x) - t + x";
         SystemConfig();
     }
-
     public void System13()
     {
         system = 13;
         SystemDisplay.text = "X = (t * -t) + (z * t) - (y * -x) - y\nY = (x * x) - (t * z) - (t * t) + (y * x) + (y * t) - x\nZ = (z * -z) - (t * x) + (z * t) + x + y";
         SystemConfig();
     }
-
     public void System14()
     {
         system = 14;
         SystemDisplay.text = "X = (-x * t) - (y * -t) + (-x * t) - t + z\nY = (x * -z * t) + (x * t) + (t * x) - y - z\nZ = (y * t) - (x * -t) + (z * t) - z";
         SystemConfig();
     }
-
     public void System15()
     {
         system = 15;
         SystemDisplay.text = "X = (y * y * t) + (-y * x * t) - (z * y * t) - (x * t)\nY = (t * -z) + (x * -t) + (y * t) + y - z + t - y\nZ = (z * -t) + (z * z * t) + (y * x * t) - y - x + t";
         SystemConfig();
     }
-
     public void System16()
     {
         system = 16;
         SystemDisplay.text = "X = (-x * x * y) + (z * t) + (x * t) + y\nY = (x * t) - (x * -x) - x + y\nZ = (z * x) - (-t * x) + (z * t) + y";
         SystemConfig();
     }
-
     public void System17()
     {
         system = 17;
         SystemDisplay.text = "X = (y * -t) + (-x * t) + (z * -t) - z\nY = (y * z * t) + (y * x) - y + z\nZ = (y * -x * t) + (y * z * -t) + (z * -z * t) - (-y * -z * -t) - x";
         SystemConfig();
     }
-
     public void System18()
     {
         system = 18;
         SystemDisplay.text = "X = (z * x * t) + (y * t) - (z * t) + (-x * t) + z + x\nY = (t * -z) - (x * y) + (-y * t) + y - z\nZ = (z * t) + (-z * t) - (y * z * t) - t";
         SystemConfig();
     }
-
     public void System19()
     {
         system = 19;
         SystemDisplay.text = "X = (z * z * -y) + (-y * t * -z) + (z * -t) + y\nY = (t * x * -z) + (-y * t) + z\nZ = (z * t) + (-z * t) - (y * x) - t + x";
         SystemConfig();
     }
-
     public void System20()
     {
         system = 20;
         SystemDisplay.text = "X = (t * -z) + (x * y) + y - z + t\nY = (t * -z) + (y * -t) - (y * t) + (-x * t) - y\nZ = (-x * -t) - (z * x * t) + (z * y * t)";
         SystemConfig();
     }
-
     public void System21()
     {
         system = 21;
         SystemDisplay.text = "X = (-x * t) - (y * -t) + (-x * t)+ z\nY = (y * -z * -t) + (x * t) + (t * x) - y\nZ = (z * t) + (x * -t) + (-z * t) - z + t";
         SystemConfig();
     }
-
     public void System22()
     {
         system = 22;
         SystemDisplay.text = "X = (z * x) - (y * x) - (t * -x) + t + z\nY = (t * -z) + (x * y) + y - z + t\nZ = (z * t) + (-z * t) - (y * x) - t + x";
         SystemConfig();
     }
-
     public void System23()
     {
         system = 23;
         SystemDisplay.text = "X = (-z * z) + (z * t) + (y * y) - (y * t) - y - z\nY = (y * -t) - (x * -x) - x + z + t\nZ = (x * z) - (t * -z) + (y * t) + x + y";
         SystemConfig();
     }
-
     public void System24()
     {
         system = 24;
@@ -320,7 +400,106 @@ public class Chaos : MonoBehaviour
         SystemConfig();
     }
 
+    //Color Helpers
+    private void SetColorRange(float r1, float r2, float g1, float g2, float b1, float b2)
+    {
+        if (on)
+        {
+            for (int i = 0; i < trail_Amount; i++)
+            {
+                float c1 = UnityEngine.Random.Range(r1, r2);
+                float c2 = UnityEngine.Random.Range(g1, g2);
+                float c3 = UnityEngine.Random.Range(b1, b2);
+                trails[i].GetComponent<TrailRenderer>().startColor = new Color(c1, c2, c3, 1);
+                trails[i].GetComponent<TrailRenderer>().endColor = new Color(c1, c2, c3, .5f);
+            }
+        }
+    }
 
+    private void SetColorChoice(float r1, float r2, float g1, float g2, float b1, float b2)
+    {
+        if (on)
+        {
+            for (int i = 0; i < trail_Amount; i++)
+            {
+                float rand = UnityEngine.Random.Range(0, 2);
+                if (rand == 0)
+                {
+                    trails[i].GetComponent<TrailRenderer>().startColor = new Color(r1, g1, b1, 1);
+                    trails[i].GetComponent<TrailRenderer>().endColor = new Color(r1, g1, b1, .5f);
+                }
+                else
+                {
+                    trails[i].GetComponent<TrailRenderer>().startColor = new Color(r2, g2, b2, 1);
+                    trails[i].GetComponent<TrailRenderer>().endColor = new Color(r2, g2, b2, .5f);
+                }
+
+            }
+        }
+    }
+
+    public void ColorConfig()
+    {
+        for (int i = 0; i < ColBut.Length; i++)
+            ColBut[i].GetComponent<Image>().color = new Color(.4f, .4f, .4f);
+        ColBut[color - 1].GetComponent<Image>().color = new Color(.2f, .2f, .2f);
+    }
+
+    //Color Options
+    public void Color1()
+    {
+        color = 1;
+        ColorConfig();
+        SetColorRange(0f, 1f, 0f, 1f, 0f, 1f);
+    }
+    public void Color2()
+    {
+        color = 2;
+        ColorConfig();
+        SetColorChoice(0.25f, 1f, .65f, .37f, .95f, .86f);
+    }
+    public void Color3()
+    {
+        color = 3;
+        ColorConfig();
+        SetColorChoice(0.86f, .5f, .08f, .08f, .82f, .84f);
+    }
+    public void Color4()
+    {
+        color = 4;
+        ColorConfig();
+        SetColorRange(.5f, .9f, .1f, .4f, .1f, .5f);
+    }
+    public void Color5()
+    {
+        color = 5;
+        ColorConfig();
+        SetColorChoice(1f, .89f, 1f, .03f, 1f, .16f);
+    }
+    public void Color6()
+    {
+        color = 6;
+        ColorConfig();
+        SetColorRange(.89f, .9f, .1f, .68f, .1f, .11f);
+    }
+    public void Color7()
+    {
+        color = 7;
+        ColorConfig();
+        SetColorChoice(1f, .1f, 1f, .56f, 1f, .89f);
+    }
+    public void Color8()
+    {
+        color = 8;
+        ColorConfig();
+        SetColorRange(.5f, .1f, .1f, .4f, .3f, .5f);
+    }
+    public void Color9()
+    {
+        color = 9;
+        ColorConfig();
+        SetColorChoice(1f, 1f, 1f, 1f, 1f, 1f);
+    }
 
 
     //System 1
@@ -711,10 +890,41 @@ public class Chaos : MonoBehaviour
         return (z * z * -y * -x * t) + (-y * t * -z) - (z * -t);
     }
 
+    //Input Custom Equations
+    public void SetCustom(float x)
+    {
+        //ExpressionEvaluator.Evaluate("x+1", out int output);
+        //Debug.Log(output);
+        //Parser.Equals
+    }
+
+    //Toggle Custom Inputs
+    private bool customOn;
+    public void ToggleCustom()
+    {
+        customOn = !customOn;
+
+        if (customOn)
+        {
+            SystemTitle.text = "Custom System";
+            
+        }
+        else
+        {
+            SystemTitle.text = "System "+system;
+        }
+
+        inputTextX.SetActive(!inputTextX.activeSelf);
+        inputTextY.SetActive(!inputTextY.activeSelf);
+        inputTextZ.SetActive(!inputTextZ.activeSelf);
+
+    }
+
 
     void Start()
     {
         System1();
+        Color1();
         On();
     }
 
