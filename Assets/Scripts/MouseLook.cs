@@ -19,9 +19,7 @@ public class MouseLook : MonoBehaviour
     float offsetY;
 
     public bool locked = false;
-
-    static extern bool SetCursorPos(int X, int Y);
-
+    
     void OnApplicationFocus(bool hasFocus)
     {
         if (hasFocus)

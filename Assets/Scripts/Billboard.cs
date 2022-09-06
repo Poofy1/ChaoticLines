@@ -5,14 +5,8 @@ using UnityEngine;
 public class Billboard : MonoBehaviour
 {
     private bool on = true;
-    private Camera cam;
+    public Camera cam;
 
-    private void Start()
-    {
-        cam = Camera.main;
-    }
-
-    
     void LateUpdate()
     {
         if (on)

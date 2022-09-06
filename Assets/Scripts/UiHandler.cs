@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class UiHandler : MonoBehaviour
 {
     public GameObject[] targets;
-    private bool[] on = new bool[4];
-    private Camera cam;
+    private bool[] on;
+    public Camera cam;
     private int speed;
 
     public GameObject[] buttons;
@@ -17,12 +17,12 @@ public class UiHandler : MonoBehaviour
 
     private void Start()
     {
-        cam = Camera.main;
+        on = new bool[buttons.Length];
     }
 
     public void SetSpeed(int input)
     {
-        speed = input;
+        speed = input * 1000;
     }
 
     public void ButtonPressed(int window)
@@ -41,6 +41,7 @@ public class UiHandler : MonoBehaviour
 
     }
 
+    //Animated Buttons
     public void Hovering(int index)
     {
         buttons[index].GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, 1200 * (cam.aspect * .25f), 0), ForceMode.Force);
@@ -50,6 +51,17 @@ public class UiHandler : MonoBehaviour
     {
         buttons[index].GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, -1200 * (cam.aspect * .25f), 0), ForceMode.Force);
     }
+
+    public void MainMenuHovering(int index)
+    {
+        buttons[index].transform.localScale += new Vector3(.1f, .1f, .1f);
+    }
+
+    public void MainMenuNotHovering(int index)
+    {
+        buttons[index].transform.localScale -= new Vector3(.1f, .1f, .1f);
+    }
+
 
     public void VolumeChange()
     {
