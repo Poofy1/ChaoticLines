@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
  
 ## [Unreleased]
  
-## [0.4.0] - 2022-09-
+## [0.4.0] - 2022-09-10
 ### Added
 - Improved Main Menu
 - Full support for saving systems
