@@ -12,6 +12,7 @@ public class Chaos : MonoBehaviour
     //System vars
     public GameObject trail;
     public GameObject crosshair;
+    public UiHandler uiRefrence;
     public int trail_Amount = 1;
     public float t;
     public float step;
@@ -22,8 +23,11 @@ public class Chaos : MonoBehaviour
     public string[] customFunc;
     public GameObject[] customInput;
     public GameObject[] errors;
+    public GameObject manageSaves;
+    public SaveHandler saveHandler;
     public Text customButText;
     private bool customOn;
+    private bool savedOn;
     Expression e;
 
     //private vars
@@ -33,7 +37,7 @@ public class Chaos : MonoBehaviour
     private bool[] active;
     private GameObject[] trails;
     private int system;
-    private bool on = false;
+    public bool on = false;
     private float trailLength;
     private float lineThickness;
 
@@ -98,12 +102,10 @@ public class Chaos : MonoBehaviour
         scale = ScaleSlider.value;
         ScaleText.text = (scale/20).ToString("0.0");
     }
-    public void UpdateStep()
+    public void UpdateStep(bool outsideOveride = false)
     {
-        if(pauseTemp == false)
-        {
-            step = StepSlider.value;
-        }
+        if(pauseTemp == false && outsideOveride == false) step = StepSlider.value;
+        else StepSlider.value = step;
         StepText.text = (StepSlider.value * 50).ToString("0.00");
     }
 
@@ -138,13 +140,6 @@ public class Chaos : MonoBehaviour
                 trails[i].GetComponent<TrailRenderer>().time = trailLength * 5;
             }
         }
-    }
-
-    void Start()
-    {
-        //System(1);
-        //Color(1);
-        //On();
     }
 
     //Starting
@@ -734,25 +729,20 @@ public class Chaos : MonoBehaviour
     //Input Custom Equations
     public void SetCustomVars()
     {
+        bool[] working = TestCustom();
         bool allTrue = true;
 
         for (int i = 0; i < 3; i++)
         {
             customFunc[i] = customInput[i].GetComponent<TMP_InputField>().text;
 
-            try
-            {
-                Expression test = new Expression(customFunc[i]);
-                test.Parameters["x"] = 0;
-                test.Parameters["y"] = 0;
-                test.Parameters["z"] = 0;
-                test.Parameters["t"] = 0;
-                test.Evaluate();
 
+            if (working[i] == true)
+            {
                 customInput[i].GetComponent<Image>().color = new Color(.098f, .098f, .098f);
                 errors[i].SetActive(false);
             }
-            catch
+            else
             {
                 customInput[i].GetComponent<Image>().color = new Color(.5f, .098f, .098f);
                 errors[i].SetActive(true);
@@ -761,7 +751,34 @@ public class Chaos : MonoBehaviour
             }
         }
 
-        if (allTrue) Activate.interactable = true;
+        if (allTrue)
+        {
+            Activate.interactable = true;
+            errors[3].SetActive(false);
+        }  
+    }
+
+    //Tester
+    public bool[] TestCustom()
+    {
+        bool[] working = new bool[3];
+
+        for (int i = 0; i < 3; i++)
+        {
+            try
+            {
+                Expression test = new Expression(customInput[i].GetComponent<TMP_InputField>().text);
+                test.Parameters["x"] = 0;
+                test.Parameters["y"] = 0;
+                test.Parameters["z"] = 0;
+                test.Parameters["t"] = 0;
+                test.Evaluate();
+
+                working[i] = true;
+            }
+            catch { }
+        }
+        return working;
     }
 
     public float CustomX(float x, float y, float z, float t)
@@ -799,27 +816,44 @@ public class Chaos : MonoBehaviour
         return (float)e.Evaluate();
     }
 
+    //Keep track of save window being open
+    public void openedSaved()
+    {
+        savedOn = !savedOn;
+        if (savedOn) saveHandler.ResetSelected();
+    }
+
     //Toggle Custom Inputs
     public void ToggleCustom()
     {
         customOn = !customOn;
         SetCustomVars();
+        manageSaves.SetActive(!manageSaves.activeSelf);
 
         if (customOn)
         {
             SystemTitle.text = "Custom System";
             customButText.text = "Disable Custom";
+            SystemDisplay.text = "X = \nY = \nZ =";
             backPanel.GetComponent<Image>().color = new Color(.2f, .098f, .098f, .588f);
+            saveHandler.ResetSelected();
             for (int i = 0; i < SysBut.Length; i++) SysBut[i].interactable = false;
         }
         else
         {
             SystemTitle.text = "System " + system;
             customButText.text = "Enable Custom";
+            System(system);
             if (!on)
             {
                 backPanel.GetComponent<Image>().color = new Color(.098f, .098f, .098f, .588f);
                 for (int i = 0; i < SysBut.Length; i++) SysBut[i].interactable = true;
+            }
+
+            if (savedOn)
+            {
+                savedOn = false;
+                uiRefrence.ButtonPressed(4);
             }
         }
 
@@ -830,8 +864,6 @@ public class Chaos : MonoBehaviour
     }
 
 
-
-   
 
     private void UpdateEquations()
     {
