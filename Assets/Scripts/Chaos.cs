@@ -12,18 +12,20 @@ public class Chaos : MonoBehaviour
     //System vars
     public GameObject trail;
     public GameObject crosshair;
-    public UiHandler uiRefrence;
     public int trail_Amount = 1;
     public float t;
     public float step;
     public float scale;
+    public bool safety = true;
     private int color;
+    
 
     //Custom
     public string[] customFunc;
     public GameObject[] customInput;
     public GameObject[] errors;
     public GameObject manageSaves;
+    public GameObject randomButton;
     public SaveHandler saveHandler;
     public Text customButText;
     private bool customOn;
@@ -43,6 +45,8 @@ public class Chaos : MonoBehaviour
 
     //Canvas vars
     public GameObject canvas;
+    public GameObject preMadeSystems;
+    public GameObject savedSystems;
     public TMP_InputField Amount;
     public TMP_Text AmountText;
     public TMP_Text warningText;
@@ -55,6 +59,8 @@ public class Chaos : MonoBehaviour
     public Text SystemDisplay;
     public Button Activate;
     public Text ActivateText;
+    public Button createRand;
+    public Button loadButton;
     public Button[] SysBut;
     public Button[] ColBut;
 
@@ -161,6 +167,8 @@ public class Chaos : MonoBehaviour
             UpdateStep();
             Amount.interactable = false;
             ScaleSlider.interactable = false;
+            createRand.interactable = false;
+            loadButton.interactable = false;
             for (int i = 0; i < SysBut.Length; i++) SysBut[i].interactable = false;
 
             for (int i = 0; i < 3; i++) customInput[i].GetComponent<TMP_InputField>().interactable = false;
@@ -210,7 +218,9 @@ public class Chaos : MonoBehaviour
             pauseTemp = false;
             t = 0;
             Amount.interactable = true;
-            ScaleSlider.interactable = true;  
+            ScaleSlider.interactable = true;
+            createRand.interactable = true;
+            loadButton.interactable = true;
             for (int i = 0; i < 3; i++) customInput[i].GetComponent<TMP_InputField>().interactable = true;
             for (int i = 0; i < trail_Amount; i++) Destroy(trails[i]);
         }
@@ -821,6 +831,7 @@ public class Chaos : MonoBehaviour
     {
         savedOn = !savedOn;
         if (savedOn) saveHandler.ResetSelected();
+        else errors[3].SetActive(false);
     }
 
     //Toggle Custom Inputs
@@ -829,32 +840,36 @@ public class Chaos : MonoBehaviour
         customOn = !customOn;
         SetCustomVars();
         manageSaves.SetActive(!manageSaves.activeSelf);
+        randomButton.SetActive(!randomButton.activeSelf);
+        backPanel.GetComponent<Image>().color = new Color(.098f, .098f, .098f, .588f);
 
         if (customOn)
         {
             SystemTitle.text = "Custom System";
             customButText.text = "Disable Custom";
             SystemDisplay.text = "X = \nY = \nZ =";
-            backPanel.GetComponent<Image>().color = new Color(.2f, .098f, .098f, .588f);
+
+            //BackPanel
+            backPanel.GetComponent<RectTransform>().offsetMin = new Vector2(backPanel.GetComponent<RectTransform>().offsetMin.x, 406);
+
+
             saveHandler.ResetSelected();
-            for (int i = 0; i < SysBut.Length; i++) SysBut[i].interactable = false;
+            preMadeSystems.gameObject.SetActive(false);
         }
         else
         {
             SystemTitle.text = "System " + system;
             customButText.text = "Enable Custom";
             System(system);
-            if (!on)
-            {
-                backPanel.GetComponent<Image>().color = new Color(.098f, .098f, .098f, .588f);
-                for (int i = 0; i < SysBut.Length; i++) SysBut[i].interactable = true;
-            }
+            backPanel.GetComponent<RectTransform>().offsetMin = new Vector2(backPanel.GetComponent<RectTransform>().offsetMin.x, 186);
+            preMadeSystems.gameObject.SetActive(true);
 
             if (savedOn)
             {
-                savedOn = false;
-                uiRefrence.ButtonPressed(4);
+                openedSaved();
+                savedSystems.GetComponent<selfAnimate>().Pressed();
             }
+
         }
 
         if (on) On();
@@ -863,6 +878,15 @@ public class Chaos : MonoBehaviour
 
     }
 
+
+    //Create Random System
+    public void GenRand()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            customInput[i].GetComponent<TMP_InputField>().text = RandomFunction.Create(6);
+        }
+    }
 
 
     private void UpdateEquations()
@@ -1030,6 +1054,7 @@ public class Chaos : MonoBehaviour
                 x_AR[i] = SaftyCheck(x_AR[i], i);
                 y_AR[i] = SaftyCheck(y_AR[i], i);
                 z_AR[i] = SaftyCheck(z_AR[i], i);
+
             }
         }
     }
@@ -1046,12 +1071,12 @@ public class Chaos : MonoBehaviour
     {
         if (input > 1000000)
         {
-            active[i] = false;
+            if (safety) active[i] = false;
             return 1000000;
         }
         else if (input < -1000000)
         {
-            active[i] = false;
+            if (safety) active[i] = false;
             return -1000000;
         }
         else
@@ -1065,7 +1090,7 @@ public class Chaos : MonoBehaviour
         TimeText.text = "Time: " + t.ToString("0.00000");
         if (on == true)
         {
-            t += step * Time.deltaTime;
+            t += (step * (1.5f + step)) * Time.deltaTime;
 
             UpdateEquations();
             UpdateLines();

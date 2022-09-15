@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
  
 ## [Unreleased]
- 
+
+## [0.4.5] - 2022-09-15
+### Added
+- Improved button animation and transitions
+- UI sounds
+- README file / Road Map
+
+### Fixed
+- Common button interatabily issues
+- Converted UI animation from rigid body to animations
+
 ## [0.4.0] - 2022-09-10
 ### Added
 - Improved Main Menu

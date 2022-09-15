@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class MouseLook : MonoBehaviour
 {
     public Transform player;
-    public Slider setting;
-    public Text settingText;
+    public Slider[] setting;
+    public Text[] settingText;
     float mouseX;
     float mouseY;
     float xRotation;
@@ -67,9 +67,11 @@ public class MouseLook : MonoBehaviour
         locked = true;
     }
 
-    public void SensitivityChanged()
+    public void SensitivityChanged(int index)
     {
-        mouseSensitivity = setting.value;
-        settingText.text = mouseSensitivity.ToString("0");
+        mouseSensitivity = setting[index].value;
+        if (index == 0) setting[1].value = setting[0].value;
+        else setting[0].value = setting[1].value;
+        for (int i = 0; i < 2; i++) settingText[i].text = mouseSensitivity.ToString("0");
     }
 }

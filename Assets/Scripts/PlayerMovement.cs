@@ -52,10 +52,7 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = walkSpeed;
         }
 
-        if (Input.GetKey("r"))
-        {
-            transform.position = new Vector3(0, 0, -10);
-        }
+        if (Input.GetKeyDown("r")) transform.GetChild(0).position = new Vector3(0, 0, 0);
     }
 
     private void MovePlayer()

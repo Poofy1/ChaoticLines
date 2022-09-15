@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
+    public AnimationHandler animHandle;
+
     //Scene 
     public GameObject mainMenu;
     public Chaos mainEvents;
@@ -27,6 +29,7 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+        fade.gameObject.SetActive(true);
         StartMainMenu();
     }
 
@@ -44,12 +47,28 @@ public class MainMenu : MonoBehaviour
 
     public void StartScene()
     {
+        StartCoroutine(Starting());
+    }
+
+    IEnumerator Starting()
+    {
+        yield return new WaitForSeconds(.5f);
+        buttons.alpha = 0;
+        yield return new WaitForSeconds(.1f);
+        title[0].GetComponent<CanvasGroup>().alpha = 0;
+        title[1].GetComponent<CanvasGroup>().alpha = 0;
+        title[2].GetComponent<CanvasGroup>().alpha = 0;
+        yield return new WaitForSeconds(.7f);
+
         hud.SetActive(true);
         crosshair.SetActive(true);
-        mainMenu.SetActive(false);
         mainCam.transform.rotation = menuCam.transform.rotation;
         mainOri.transform.position = menuCam.transform.position;
+        mainMenu.SetActive(false);
         mainCam.SetActive(true);
+        fade.alpha = 1;
+
+        animHandle.GoToHUD();
     }
 
     // Update is called once per frame
@@ -68,7 +87,7 @@ public class MainMenu : MonoBehaviour
         mainEvents.On();
         StartCoroutine(FadeOut(fade, .001f, 0));
 
-        float tempStep = UnityEngine.Random.Range(.004f, .008f);
+        float tempStep = UnityEngine.Random.Range(.025f, .075f);
         if (UnityEngine.Random.Range(0, 2) == 0) tempStep *= -1;
         mainEvents.step = tempStep;
         mainEvents.UpdateStep(true);
@@ -101,15 +120,15 @@ public class MainMenu : MonoBehaviour
 
         yield return new WaitForSeconds(2);
 
-        StartCoroutine(FadeIn(title[0], .0015f, 0f));
-        StartCoroutine(FadeIn(title[1], .0025f, .5f));
+        StartCoroutine(FadeIn(title[0], .0035f, 0f));
+        StartCoroutine(FadeIn(title[1], .0035f, .5f));
         StartCoroutine(FadeIn(title[2], .0035f, 1f));
 
-        StartCoroutine(FadeIn(buttons, .0015f, 2f));
+        StartCoroutine(FadeIn(buttons, .005f, 2f));
 
     }
 
-    IEnumerator FadeIn(CanvasGroup obj, float speed, float wait)
+    public IEnumerator FadeIn(CanvasGroup obj, float speed, float wait)
     {
         yield return new WaitForSeconds(wait);
         while (obj.alpha < 1)
@@ -119,7 +138,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    IEnumerator FadeOut(CanvasGroup obj, float speed, float wait)
+    public IEnumerator FadeOut(CanvasGroup obj, float speed, float wait)
     {
         yield return new WaitForSeconds(wait);
         while (obj.alpha > 0)

@@ -106,7 +106,7 @@ public class SaveHandler : MonoBehaviour
                 //Create List
                 buttonList.Add(new SaveButton(saveList[i].SaveName, saveList[i].CustomInput, spawnedButtons[i]));
                 if (bugWorkAround) buttonList[i].SetPos(new Vector3(0, offset, 0), new Vector3(0,0,0) );
-                else buttonList[i].SetPos(new Vector3(366.5f, offset, 0), new Vector3(0, 0, 0));
+                else buttonList[i].SetPos(new Vector3(400, offset, 0), new Vector3(0, 0, 0));
                 offset -= 150;
 
                 //Set Listener
