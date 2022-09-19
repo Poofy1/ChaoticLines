@@ -1089,15 +1089,15 @@ public class Chaos : MonoBehaviour
 
     private float SaftyCheck(float input, int i)
     {
-        if (input > 1000000)
+        if (input > 10000)
         {
             if (safety) active[i] = false;
-            return 1000000;
+            return 10000;
         }
-        else if (input < -1000000)
+        else if (input < -10000)
         {
             if (safety) active[i] = false;
-            return -1000000;
+            return -10000;
         }
         else
         {
