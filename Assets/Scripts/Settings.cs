@@ -6,7 +6,7 @@ using TMPro;
 
 public class Settings : MonoBehaviour
 {
-    private bool vSyncOn;
+    public bool vSyncOn;
     private bool safetyOn = true;
     public GameObject MMController;
     //Initial
@@ -15,6 +15,8 @@ public class Settings : MonoBehaviour
     public AudioSource music;
     public AudioSource uiSound;
     public CanvasScaler[] huds;
+
+    public int AAsetting = 0;
 
     //Settings
     public GameObject[] AAMenu;
@@ -28,10 +30,18 @@ public class Settings : MonoBehaviour
     public Slider[] hudSlider;
     public Text[] hudText;
 
-    private void Start()
+    public void UpdateAll()
     {
-
+        VolumeChange(0);
+        fovChange(0);
+        hudScale(0);
+        hudScaleApply(0);
+        ToggleFS(0);
+        AA(0);
+        VSync(0);
+        Safety(0);
     }
+
 
     //Volume
     public void VolumeChange(int index)
@@ -55,32 +65,31 @@ public class Settings : MonoBehaviour
     //HUD Scale
     public void hudScale(int index)
     {
-        for (int i = 0; i < 2; i++) hudText[i].text = hudSlider[index].value.ToString("0");
+        for (int i = 0; i < 2; i++) hudText[i].text = hudSlider[index].value.ToString("0.00");
         
     }
     public void hudScaleApply(int index)
     {
         if (index == 0) hudSlider[1].value = hudSlider[0].value;
         else hudSlider[0].value = hudSlider[1].value;
-        for (int i = 0; i < huds.Length; i++) huds[i].referenceResolution = new Vector2(hudSlider[0].value * 10, hudSlider[0].value * 10);
+        for (int i = 0; i < huds.Length; i++) huds[i].referenceResolution = new Vector2(hudSlider[0].value * 1000, hudSlider[0].value * 1000);
     }
 
     //FullScreen
     public void ToggleFS(int index)
     {
-        Screen.fullScreen = !Screen.fullScreen;
+        Screen.fullScreen = fullscreen[index].isOn;
         for (int i = 0; i < 2; i++) fullscreen[i].isOn = fullscreen[index].isOn;
     }
 
     //AA
     public void AA(int index)
     {
-        int setting = 0;
-        if (AAMenu[index].GetComponent<TMP_Dropdown>().value == 3) setting = 8;
-        else setting = AAMenu[index].GetComponent<TMP_Dropdown>().value * 2;
+        if (AAMenu[index].GetComponent<TMP_Dropdown>().value == 3) AAsetting = 8;
+        else AAsetting = AAMenu[index].GetComponent<TMP_Dropdown>().value * 2;
 
         for (int i = 0; i < 2; i++) AAMenu[i].GetComponent<TMP_Dropdown>().value = AAMenu[index].GetComponent<TMP_Dropdown>().value;
-        QualitySettings.antiAliasing = setting;
+        QualitySettings.antiAliasing = AAsetting;
     }
 
     //VSync
@@ -97,14 +106,15 @@ public class Settings : MonoBehaviour
             vSyncOn = true;
         }
 
-        for (int i = 0; i < 2; i++) vSync[i].isOn = vSync[index].isOn;
+        for (int i = 0; i < 2; i++) vSync[i].isOn = vSyncOn;
+        Debug.Log(QualitySettings.vSyncCount);
     }
 
     //Divergence Safety
     public void Safety(int index)
     {
         mainEvents.safety = !mainEvents.safety;
-        for (int i = 0; i < 2; i++) safety[i].isOn = safety[index].isOn;
+        for (int i = 0; i < 2; i++) safety[i].isOn = mainEvents.safety;
     }
 
     //Quit App
@@ -112,6 +122,8 @@ public class Settings : MonoBehaviour
     {
         Application.Quit();
     }
+
+
 
 
 }

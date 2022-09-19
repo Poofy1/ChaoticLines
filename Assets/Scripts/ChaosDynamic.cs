@@ -1,4 +1,5 @@
 ﻿
+
 using UnityEngine;
 using UnityEngine.UI;
 using System;
@@ -7,7 +8,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using NCalc;
 
-public class Chaos : MonoBehaviour
+public class ChaosDynamic : MonoBehaviour
 {
     //System vars
     public GameObject trail;
@@ -17,9 +18,8 @@ public class Chaos : MonoBehaviour
     public float step;
     public float scale;
     public bool safety = true;
-    public float speedLimit;
     private int color;
-
+    
 
     //Custom
     public string[] customFunc;
@@ -43,7 +43,6 @@ public class Chaos : MonoBehaviour
     public bool on = false;
     private float trailLength;
     private float lineThickness;
-    private Vector3[] pastLoc;
 
     //Canvas vars
     public GameObject canvas;
@@ -76,23 +75,31 @@ public class Chaos : MonoBehaviour
     private bool pauseTemp = false;
 
 
+    //TESTING
+    public float[] timers;
+    public float[] timeStepers;
+    public Vector3[] pastLoc;
+
 
     //Canvas Updates
     public void UpdateAmount()
     {
         if (Int32.TryParse(Amount.text, out trail_Amount))
         {
-            if (trail_Amount < 1)
+            if(trail_Amount < 1)
             {
                 trail_Amount = 1;
                 warningText.text = "Please enter a positve whole number";
                 AmountText.text = "";
             }
-            else if (trail_Amount > 5000)
+            else if(trail_Amount > 5000)
             {
                 warningText.text = "It is recommended to not go above 5,000";
             }
-            else warningText.text = "";
+            else
+            {
+                warningText.text = "";
+            }
 
         }
         else
@@ -107,11 +114,11 @@ public class Chaos : MonoBehaviour
     public void UpdateScale()
     {
         scale = ScaleSlider.value;
-        ScaleText.text = (scale / 20).ToString("0.0");
+        ScaleText.text = (scale/20).ToString("0.0");
     }
     public void UpdateStep(bool outsideOveride = false)
     {
-        if (pauseTemp == false && outsideOveride == false) step = StepSlider.value;
+        if(pauseTemp == false && outsideOveride == false) step = StepSlider.value;
         else StepSlider.value = step;
         StepText.text = (StepSlider.value * 50).ToString("0.00");
     }
@@ -134,7 +141,7 @@ public class Chaos : MonoBehaviour
     {
         trailLength = LengthSlider.value;
         LengthText.text = trailLength.ToString("0.0");
-        if (trailLength == 20)
+        if(trailLength == 20)
         {
             trailLength = 9999999999999;
             LengthText.text = "∞";
@@ -142,7 +149,10 @@ public class Chaos : MonoBehaviour
 
         if (on)
         {
-            for (int i = 0; i < trail_Amount; i++) trails[i].GetComponent<TrailRenderer>().time = trailLength * 5;
+            for (int i = 0; i < trail_Amount; i++)
+            {
+                trails[i].GetComponent<TrailRenderer>().time = trailLength * 5;
+            }
         }
     }
 
@@ -175,12 +185,21 @@ public class Chaos : MonoBehaviour
             x_AR = new float[trail_Amount];
             y_AR = new float[trail_Amount];
             z_AR = new float[trail_Amount];
+            timers = new float[trail_Amount];
+            timeStepers = new float[trail_Amount];
             pastLoc = new Vector3[trail_Amount];
             active = new bool[trail_Amount];
             for (int i = 0; i < trail_Amount; i++)
             {
+                timeStepers[i] = step;
+                timers[i] = 0;
                 active[i] = true;
             }
+                
+
+
+            //Find starting points
+            UpdateEquations();
 
             //Initialize trails
             trails = new GameObject[trail_Amount];
@@ -189,7 +208,7 @@ public class Chaos : MonoBehaviour
                 if (!float.IsNaN(x_AR[i]) && !float.IsNaN(x_AR[i]) && !float.IsNaN(z_AR[i]) && active[i])
                 {
                     //Create and Find
-                    var name = Instantiate(trail, new Vector3(0,0,0), Quaternion.identity);
+                    var name = Instantiate(trail, new Vector3(x_AR[i] * scale, y_AR[i] * scale, z_AR[i] * scale), Quaternion.identity);
                     name.gameObject.name = "Trail" + i;
                     trails[i] = GameObject.Find("Trail" + i);
                 }
@@ -225,7 +244,7 @@ public class Chaos : MonoBehaviour
     //Pausing
     public void Pause()
     {
-        if (pauseTemp == false)
+        if(pauseTemp == false)
         {
             step = 0;
             pauseTemp = true;
@@ -241,12 +260,12 @@ public class Chaos : MonoBehaviour
     //SYSTEMS
     public void SystemConfig()
     {
-        SystemTitle.text = "System " + system;
+        SystemTitle.text = "System "+ system;
         for (int i = 0; i < SysBut.Length; i++)
             SysBut[i].GetComponent<Image>().color = new Color(.4f, .4f, .4f);
         SysBut[system - 1].GetComponent<Image>().color = new Color(.2f, .2f, .2f);
     }
-
+    
 
     //Display Premade Systems
     public void System(int input)
@@ -454,7 +473,7 @@ public class Chaos : MonoBehaviour
 
     private float eq_Z7(float x, float y, float z, float t)
     {
-        return (z * y * t) + (y * t * -z) - (x * -t) + y;
+        return (z * y * t) + (y * t * -z) - (x * -t) + y ;
     }
 
     //System 8
@@ -668,7 +687,7 @@ public class Chaos : MonoBehaviour
     //System 21
     private float eq_X21(float x, float y, float z, float t)
     {
-        return (-x * t) - (y * -t) + (-x * t) + z;
+        return (-x * t) - (y * -t) + (-x * t)+ z;
     }
 
     private float eq_Y21(float x, float y, float z, float t)
@@ -761,7 +780,7 @@ public class Chaos : MonoBehaviour
         {
             Activate.interactable = true;
             errors[3].SetActive(false);
-        }
+        }  
     }
 
     //Tester
@@ -884,10 +903,9 @@ public class Chaos : MonoBehaviour
         }
     }
 
-
     private float Distance(float x1, float y1, float z1, float x2, float y2, float z2)
     {
-        return (float)Math.Abs(Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2) + Math.Pow(z2 - z1, 2)));
+        return (float) Math.Abs(Math.Sqrt(Math.Pow(x2-x1,2) + Math.Pow(y2 - y1, 2) + Math.Pow(z2 - z1, 2)));
     }
 
     private void UpdateEquations()
@@ -903,179 +921,177 @@ public class Chaos : MonoBehaviour
             {
                 if (customOn)
                 {
-                    x_AR[i] = CustomX(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = CustomY(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = CustomZ(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = CustomX(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = CustomY(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = CustomZ(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 1)
                 {
-                    x_AR[i] = eq_X1(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y1(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z1(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X1(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y1(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z1(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 2)
                 {
-                    x_AR[i] = eq_X2(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y2(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z2(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X2(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y2(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z2(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 3)
                 {
-                    x_AR[i] = eq_X3(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y3(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z3(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X3(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y3(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z3(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 4)
                 {
-                    x_AR[i] = eq_X4(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y4(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z4(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X4(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y4(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z4(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 5)
                 {
-                    x_AR[i] = eq_X5(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y5(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z5(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X5(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y5(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z5(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 6)
                 {
-                    x_AR[i] = eq_X6(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y6(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z6(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X6(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y6(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z6(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 7)
                 {
-                    x_AR[i] = eq_X7(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y7(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z7(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X7(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y7(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z7(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 8)
                 {
-                    x_AR[i] = eq_X8(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y8(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z8(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X8(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y8(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z8(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 9)
                 {
-                    x_AR[i] = eq_X9(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y9(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z9(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X9(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y9(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z9(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 10)
                 {
-                    x_AR[i] = eq_X10(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y10(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z10(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X10(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y10(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z10(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 11)
                 {
-                    x_AR[i] = eq_X11(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y11(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z11(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X11(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y11(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z11(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 12)
                 {
-                    x_AR[i] = eq_X12(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y12(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z12(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X12(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y12(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z12(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 13)
                 {
-                    x_AR[i] = eq_X13(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y13(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z13(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X13(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y13(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z13(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 14)
                 {
-                    x_AR[i] = eq_X14(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y14(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z14(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X14(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y14(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z14(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 15)
                 {
-                    x_AR[i] = eq_X15(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y15(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z15(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X15(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y15(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z15(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 16)
                 {
-                    x_AR[i] = eq_X16(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y16(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z16(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X16(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y16(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z16(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 17)
                 {
-                    x_AR[i] = eq_X17(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y17(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z17(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X17(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y17(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z17(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 18)
                 {
-                    x_AR[i] = eq_X18(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y18(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z18(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X18(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y18(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z18(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 19)
                 {
-                    x_AR[i] = eq_X19(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y19(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z19(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X19(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y19(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z19(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 20)
                 {
-                    x_AR[i] = eq_X20(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y20(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z20(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X20(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y20(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z20(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 21)
                 {
-                    x_AR[i] = eq_X21(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y21(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z21(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X21(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y21(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z21(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 22)
                 {
-                    x_AR[i] = eq_X22(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y22(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z22(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X22(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y22(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z22(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 23)
                 {
-                    x_AR[i] = eq_X23(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y23(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z23(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X23(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y23(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z23(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
                 else if (system == 24)
                 {
-                    x_AR[i] = eq_X24(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    y_AR[i] = eq_Y24(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
-                    z_AR[i] = eq_Z24(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], t);
+                    x_AR[i] = eq_X24(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    y_AR[i] = eq_Y24(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
+                    z_AR[i] = eq_Z24(x_AR[i - 1], y_AR[i - 1], z_AR[i - 1], timers[i]);
                 }
 
                 x_AR[i] = SaftyCheck(x_AR[i], i);
                 y_AR[i] = SaftyCheck(y_AR[i], i);
                 z_AR[i] = SaftyCheck(z_AR[i], i);
 
-                if (safety)
+                float distance = Distance(pastLoc[i][0], pastLoc[i][1], pastLoc[i][2], x_AR[i], y_AR[i], z_AR[i]);
+                if (distance > 1)
                 {
+                    timeStepers[i] *= 1/distance;
+                    Debug.Log("Distance: " + distance + "   " + timeStepers[i]);
 
-                    float distance = Distance(pastLoc[i][0], pastLoc[i][1], pastLoc[i][2], x_AR[i], y_AR[i], z_AR[i]);
-                    if (distance > speedLimit)
-                    {
-                        trails[i].GetComponent<TrailRenderer>().emitting = false;
-                        active[i] = false;
-                    }
-                    //else trails[i].GetComponent<TrailRenderer>().emitting = true;
+                }
+                else if(distance < .01f)
+                {
+                    timeStepers[i] *= 1.01f;
+                    Debug.Log("Distance: " + distance + "   " + timeStepers[i]);
                 }
 
-
-
                 pastLoc[i] = new Vector3(x_AR[i], y_AR[i], z_AR[i]);
-                //pastLoc[i] = new Vector3(54,0,0);
-                
-
 
             }
+
+
         }
     }
 
@@ -1083,7 +1099,7 @@ public class Chaos : MonoBehaviour
     {
         for (int i = 0; i < trail_Amount; i++)
         {
-            if(active[i]) trails[i].transform.position = new Vector3(x_AR[i] * scale, y_AR[i] * scale, z_AR[i] * scale);
+            trails[i].transform.position = new Vector3(x_AR[i] * scale, y_AR[i] * scale, z_AR[i] * scale);
         }
     }
 
@@ -1110,23 +1126,15 @@ public class Chaos : MonoBehaviour
         TimeText.text = "Time: " + t.ToString("0.00000");
         if (on == true)
         {
-            t += (step * (1.5f + step)) * Time.deltaTime;
-
-
+            for (int i = 1; i < trail_Amount; i++) timers[i] += timeStepers[i] * Time.deltaTime;
+            Debug.Log("Time1: " + timers[1]);
+            Debug.Log("Step1: " + timeStepers[1]);
 
             UpdateEquations();
             UpdateLines();
-
-            float percentActive = 0;
-            for (int i = 0; i < trail_Amount; i++)
-            {
-                if (active[i]) percentActive++;
-            }
-            percentActive /= trail_Amount;
-            Debug.Log(percentActive);
         }
-
-        
     }
 
 }
+
+

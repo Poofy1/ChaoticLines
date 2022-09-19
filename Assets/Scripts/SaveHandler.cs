@@ -11,8 +11,11 @@ using UnityEngine.UI;
 public class SaveHandler : MonoBehaviour
 {
     public Chaos mainEvents;
+    public Settings settings;
     public List<SaveList> saveList;
     public List<SaveButton> buttonList;
+    public SettingItem savedSet;
+    public MouseLook mouse;
     public GameObject button;
     public GameObject buttonParent;
     public GameObject[] functionButtons;
@@ -30,8 +33,24 @@ public class SaveHandler : MonoBehaviour
         mainEvents = GameObject.Find("Chaos_Event").GetComponent<Chaos>();
         saveList = new List<SaveList>();
         buttonList = new List<SaveButton>();
+        savedSet = new SettingItem();
         spawnedButtons = new GameObject[0];
         LoadAll(true);
+
+
+
+        //LoadAll Settings
+        if (File.Exists(Application.dataPath + "/UserSettings.txt"))
+        {
+            //Deserialize
+            string saveString = File.ReadAllText(Application.dataPath + "/UserSettings.txt");
+            savedSet = JsonConvert.DeserializeObject<SettingItem>(saveString);
+            LoadSettings();
+        }
+        else
+        {
+            Screen.fullScreen = true;
+        }
     }
 
 
@@ -64,6 +83,39 @@ public class SaveHandler : MonoBehaviour
             mainEvents.errors[3].SetActive(true);
         }
         
+    }
+
+    //Save Settings
+    public void SaveSettings()
+    {
+        savedSet.fullscreen = settings.fullscreen[0].isOn;
+        savedSet.AA = settings.AAMenu[0].GetComponent<TMP_Dropdown>().value;
+        savedSet.vSync = !settings.vSyncOn;
+        savedSet.mouseSen = mouse.setting[0].value;
+        savedSet.sound = settings.musicSlider[0].value;
+        savedSet.fov = settings.fovSlider[0].value;
+        savedSet.hudScale = settings.hudSlider[0].value;
+        savedSet.safety = mainEvents.safety;
+
+        //Write
+        string json = JsonConvert.SerializeObject(savedSet);
+        File.WriteAllText(Application.dataPath + "/UserSettings.txt", json);
+    }
+
+    //LoadSettings
+    public void LoadSettings()
+    {
+        settings.fullscreen[0].isOn = savedSet.fullscreen;
+        settings.AAMenu[0].GetComponent<TMP_Dropdown>().value = savedSet.AA;
+        settings.vSyncOn = savedSet.vSync;
+        mouse.setting[0].value = savedSet.mouseSen;
+        settings.musicSlider[0].value = savedSet.sound;
+        settings.fovSlider[0].value = savedSet.fov;
+        settings.hudSlider[0].value = savedSet.hudScale;
+        mainEvents.safety = !savedSet.safety;
+
+        mouse.SensitivityChanged(0);
+        settings.UpdateAll();
     }
 
     //Write Save
@@ -201,11 +253,24 @@ public class SaveHandler : MonoBehaviour
 
 
 
-    //SaveData
+    //SaveSystem
     public class SaveList
     {
         public string[] CustomInput { get; set; }
         public string SaveName { get; set; }
+    }
+
+    //SaveSettings
+    public class SettingItem
+    {
+        public bool fullscreen { get; set; }
+        public int AA { get; set; }
+        public bool vSync { get; set; }
+        public float mouseSen { get; set; }
+        public float sound { get; set; }
+        public float fov { get; set; }
+        public float hudScale { get; set; }
+        public bool safety { get; set; }
     }
 
     //Item List

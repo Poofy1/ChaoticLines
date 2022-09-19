@@ -54,11 +54,11 @@ public class MainMenu : MonoBehaviour
     {
         yield return new WaitForSeconds(.5f);
         buttons.alpha = 0;
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(.3f);
         title[0].GetComponent<CanvasGroup>().alpha = 0;
         title[1].GetComponent<CanvasGroup>().alpha = 0;
         title[2].GetComponent<CanvasGroup>().alpha = 0;
-        yield return new WaitForSeconds(.7f);
+        yield return new WaitForSeconds(.5f);
 
         hud.SetActive(true);
         crosshair.SetActive(true);

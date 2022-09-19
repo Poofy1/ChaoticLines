@@ -42,8 +42,8 @@ public class MouseLook : MonoBehaviour
 
         if (locked)
         {
-            mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity * 10 * Time.deltaTime;
-            mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity * 10 * Time.deltaTime;
+            mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity;
+            mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
@@ -69,9 +69,9 @@ public class MouseLook : MonoBehaviour
 
     public void SensitivityChanged(int index)
     {
-        mouseSensitivity = setting[index].value;
+        mouseSensitivity = setting[index].value * .1f;
         if (index == 0) setting[1].value = setting[0].value;
         else setting[0].value = setting[1].value;
-        for (int i = 0; i < 2; i++) settingText[i].text = mouseSensitivity.ToString("0");
+        for (int i = 0; i < 2; i++) settingText[i].text = (mouseSensitivity / 10).ToString("0.00");
     }
 }

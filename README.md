@@ -16,6 +16,7 @@ This simulation offers many different customization options, allowing the user t
 * Additional color and customization options
 * Improve "About" page with more indepth and visual discription
 * Different types of system visuals
+* 3D Map
 
 ### Installing
 

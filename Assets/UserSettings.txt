@@ -1,0 +1,1 @@
+{"fullscreen":true,"AA":1,"vSync":true,"mouseSen":50.0,"sound":0.3,"fov":110.0,"hudScale":1.0,"safety":true}

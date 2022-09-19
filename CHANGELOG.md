@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
  
 ## [Unreleased]
 
+
+## [0.5.0] - 2022-hgvwqeyhgedvqwyhveyhqwgve
+### Added
+- Improved "About" page
+- Settings automatically save on close
+
 ## [0.4.5] - 2022-09-15
 ### Added
 - Improved button animation and transitions
