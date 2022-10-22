@@ -7,10 +7,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ## [Unreleased]
 
 
-## [0.5.0] - 2022-hgvwqeyhgedvqwyhveyhqwgve
+## [0.4.9] - 2022-10-22
 ### Added
 - Improved "About" page
 - Settings automatically save on close
+- WIP UI redesign/polish
 
 ## [0.4.5] - 2022-09-15
 ### Added
