@@ -3,8 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
-using UnityEditor;
-using System.Collections.Generic;
+using System.Collections;
 using NCalc;
 
 public class Chaos : MonoBehaviour
@@ -12,6 +11,9 @@ public class Chaos : MonoBehaviour
     //System vars
     public GameObject trail;
     public GameObject crosshair;
+    public MapRotate mapRotator;
+    public Transform mapBounds;
+    public int bounds = 10000;
     public int trail_Amount = 1;
     public float t;
     public float step;
@@ -28,7 +30,6 @@ public class Chaos : MonoBehaviour
     public GameObject manageSaves;
     public GameObject randomButton;
     public SaveHandler saveHandler;
-    public Text customButText;
     private bool customOn;
     private bool savedOn;
     Expression e;
@@ -66,14 +67,29 @@ public class Chaos : MonoBehaviour
     public Button[] SysBut;
     public Button[] ColBut;
 
-    public GameObject backPanel;
-
     public Slider ThicknessSlider;
     public Text ThicknessText;
     public Slider LengthSlider;
     public Text LengthText;
 
     private bool pauseTemp = false;
+
+    //Stats
+    public Text percentActive;
+    private float activeCount = 0;
+
+
+
+
+    private void Update()
+    {
+        int boxBound = bounds * 100;
+        mapBounds.localScale = new Vector3(boxBound, boxBound, boxBound);
+        mapRotator.maxZoomOut = boxBound / 2;
+    }
+
+
+
 
 
 
@@ -159,7 +175,6 @@ public class Chaos : MonoBehaviour
             pauseTemp = false;
             ActivateText.text = "Clear";
             Activate.GetComponent<Image>().color = new Color(.4f, 0, 0);
-            backPanel.GetComponent<Image>().color = new Color(.2f, .098f, .098f, .588f);
             UpdateAmount();
             UpdateScale();
             UpdateStep();
@@ -167,6 +182,7 @@ public class Chaos : MonoBehaviour
             ScaleSlider.interactable = false;
             createRand.interactable = false;
             loadButton.interactable = false;
+            activeCount = 0;
             for (int i = 0; i < SysBut.Length; i++) SysBut[i].interactable = false;
 
             for (int i = 0; i < 3; i++) customInput[i].GetComponent<TMP_InputField>().interactable = false;
@@ -191,7 +207,7 @@ public class Chaos : MonoBehaviour
                     //Create and Find
                     var name = Instantiate(trail, new Vector3(0,0,0), Quaternion.identity);
                     name.gameObject.name = "Trail" + i;
-                    trails[i] = GameObject.Find("Trail" + i);
+                    trails[i] = name;//GameObject.Find("Trail" + i);
                 }
             }
 
@@ -208,7 +224,6 @@ public class Chaos : MonoBehaviour
             Activate.GetComponent<Image>().color = new Color(.6f, .6f, .6f);
             if (!customOn)
             {
-                backPanel.GetComponent<Image>().color = new Color(.098f, .098f, .098f, .588f);
                 for (int i = 0; i < SysBut.Length; i++) SysBut[i].interactable = true;
             }
             pauseTemp = false;
@@ -251,31 +266,31 @@ public class Chaos : MonoBehaviour
     //Display Premade Systems
     public void System(int input)
     {
-        system = input;
-        if (input == 1) SystemDisplay.text = "X = (-x * x) + (z * t) + y\nY = (x * x) - (y * z) - (t * t) - (y * x) + (y * t) - x + y\nZ = (z * -z) - (t * x) + (z * t) + x + y";
-        else if (input == 2) SystemDisplay.text = "X = (x * y * -t * z) + (t * -z) - x\nY = (z * y * -y) - (z * x) - t + y\nZ = (-x * t * t) * (t * x) - y * y";
-        else if (input == 3) SystemDisplay.text = "X = (-x * x) + (z * t) + y\nY = (x * t) + z - (x * x) - x\nZ = (z * -z) - (t * x) + (z * t) - x + y";
-        else if (input == 4) SystemDisplay.text = "X = (-z * z) + (z * t) + (y * y)\nY = (y * -t) - (x * x) - x + z\nZ = (x * x) - (t * -z) + (z * -t) + x + y";
-        else if (input == 5) SystemDisplay.text = "X = (x * x * -t * y) + (z * y * t) - (t * x) + y\nY = (-y * t * z) - (t * x) + x\nZ = (z * z * -y * -x * t * t) - (t * x) + (t * y) + z + y";
-        else if (input == 6) SystemDisplay.text = "X = (x * -x * -t * y) + (z * z * t) + y\nY = (-y * t * -z) - (t * x) - x\nZ = (z * z * -y * -x) + (-y * t * -z) - (t * -t) - z + y";
-        else if (input == 7) SystemDisplay.text = "X = (x * z * t) - (t * y) + (t * t) + x - y\nY = (x * x * -t) - Sqrt(Abs(t * y * x)) + (y * t) + z + x\nZ = (z * y * t) + (y * t * -z) - (x * -t) + y";
-        else if (input == 8) SystemDisplay.text = "X = (z * x * t) + (y * x * t) - (z * x * t) - (x * t) - x + y\nY = (t * -z) + (x * t) + (y * t) + y - z + t\nZ = (z * t) + (z * x * t) + (y * x * t) + y + x";
-        else if (input == 9) SystemDisplay.text = "X = (x * y) - (y * -t) + (-x * t) + t - z\nY = (x * -z) + (x * x) + (t * -t) - y - z\nZ = (y * -x) + (x * -t) + (y * y) - t";
-        else if (input == 10) SystemDisplay.text = "X = (y * y) - (y * -t) + (-x * t) + (z * t) + y - z\nY = (y * z * t) + (y * x) + (t * -t) - y + z\nZ = (y * -x * t) + (x * -t) + (y * y * -t) + (z * z * t) - (-y * -z * t) - x";
-        else if (input == 11) SystemDisplay.text = "X = (z * z) + (y * x) - (z * -x) + (-x * t) + t + z\nY = (t * -z) + (x * y) + (y * t) + y - z + t\nZ = (z * t) + (-z * t) + (y * x) + t + x";
-        else if (input == 12) SystemDisplay.text = "X = (z * z) + (y * x) - (z * -x) + (-x * t) + t + z\nY = (t * -z) + (x * y) + (y * t) + y - z + t\nZ = (z * t) + (-z * t) + (y * x) - t + x";
-        else if (input == 13) SystemDisplay.text = "X = (t * -t) + (z * t) - (y * -x) - y\nY = (x * x) - (t * z) - (t * t) + (y * x) + (y * t) - x\nZ = (z * -z) - (t * x) + (z * t) + x + y";
-        else if (input == 14) SystemDisplay.text = "X = (-x * t) - (y * -t) + (-x * t) - t + z\nY = (x * -z * t) + (x * t) + (t * x) - y - z\nZ = (y * t) - (x * -t) + (z * t) - z";
-        else if (input == 15) SystemDisplay.text = "X = (y * y * t) + (-y * x * t) - (z * y * t) - (x * t)\nY = (t * -z) + (x * -t) + (y * t) + y - z + t - y\nZ = (z * -t) + (z * z * t) + (y * x * t) - y - x + t";
-        else if (input == 16) SystemDisplay.text = "X = (-x * x * y) + (z * t) + (x * t) + y\nY = (x * t) - (x * -x) - x + y\nZ = (z * x) - (-t * x) + (z * t) + y";
-        else if (input == 17) SystemDisplay.text = "X = (y * -t) + (-x * t) + (z * -t) - z\nY = (y * z * t) + (y * x) - y + z\nZ = (y * -x * t) + (y * z * -t) + (z * -z * t) - (-y * -z * -t) - x";
-        else if (input == 18) SystemDisplay.text = "X = (z * x * t) + (y * t) - (z * t) + (-x * t) + z + x\nY = (t * -z) - (x * y) + (-y * t) + y - z\nZ = (z * t) + (-z * t) - (y * z * t) - t";
-        else if (input == 19) SystemDisplay.text = "X = (z * z * -y) + (-y * t * -z) + (z * -t) + y\nY = (t * x * -z) + (-y * t) + z\nZ = (z * t) + (-z * t) - (y * x) - t + x";
-        else if (input == 20) SystemDisplay.text = "X = (t * -z) + (x * y) + y - z + t\nY = (t * -z) + (y * -t) - (y * t) + (-x * t) - y\nZ = (-x * -t) - (z * x * t) + (z * y * t)";
-        else if (input == 21) SystemDisplay.text = "X = (-x * t) - (y * -t) + (-x * t)+ z\nY = (y * -z * -t) + (x * t) + (t * x) - y\nZ = (z * t) + (x * -t) + (-z * t) - z + t";
-        else if (input == 22) SystemDisplay.text = "X = (z * x) - (y * x) - (t * -x) + t + z\nY = (t * -z) + (x * y) + y - z + t\nZ = (z * t) + (-z * t) - (y * x) - t + x";
-        else if (input == 23) SystemDisplay.text = "X = (-z * z) + (z * t) + (y * y) - (y * t) - y - z\nY = (y * -t) - (x * -x) - x + z + t\nZ = (x * z) - (t * -z) + (y * t) + x + y";
-        else if (input == 24) SystemDisplay.text = "X = (z * -x * t * z) + (y * -z * t) - z\nY = (y * t * z) - (t * x) - x + y + t\nZ = (z * z * -y * -x * t) + (-y * t * -z) - (z * -t)";
+        system=input;
+        if(input==1)SystemDisplay.text="X=(-x*x)+(z*t)+y\nY=(x*x)-(y*z)-(t*t)-(y*x)+(y*t)-x+y\nZ=(z*-z)-(t*x)+(z*t)+x+y";
+        else if(input==2)SystemDisplay.text="X=(x*y*-t*z)+(t*-z)-x\nY=(z*y*-y)-(z*x)-t+y\nZ=(-x*t*t)*(t*x)-y*y";
+        else if(input==3)SystemDisplay.text="X=(-x*x)+(z*t)+y\nY=(x*t)+z-(x*x)-x\nZ=(z*-z)-(t*x)+(z*t)-x+y";
+        else if(input==4)SystemDisplay.text="X=(-z*z)+(z*t)+(y*y)\nY=(y*-t)-(x*x)-x+z\nZ=(x*x)-(t*-z)+(z*-t)+x+y";
+        else if(input==5)SystemDisplay.text="X=(x*x*-t*y)+(z*y*t)-(t*x)+y\nY=(-y*t*z)-(t*x)+x\nZ=(z*z*-y*-x*t*t)-(t*x)+(t*y)+z+y";
+        else if(input==6)SystemDisplay.text="X=(x*-x*-t*y)+(z*z*t)+y\nY=(-y*t*-z)-(t*x)-x\nZ=(z*z*-y*-x)+(-y*t*-z)-(t*-t)-z+y";
+        else if(input==7)SystemDisplay.text="X=(x*z*t)-(t*y)+(t*t)+x-y\nY=(x*x*-t)-Sqrt(Abs(t*y*x))+(y*t)+z+x\nZ=(z*y*t)+(y*t*-z)-(x*-t)+y";
+        else if(input==8)SystemDisplay.text="X=(z*x*t)+(y*x*t)-(z*x*t)-(x*t)-x+y\nY=(t*-z)+(x*t)+(y*t)+y-z+t\nZ=(z*t)+(z*x*t)+(y*x*t)+y+x";
+        else if(input==9)SystemDisplay.text="X=(x*y)-(y*-t)+(-x*t)+t-z\nY=(x*-z)+(x*x)+(t*-t)-y-z\nZ=(y*-x)+(x*-t)+(y*y)-t";
+        else if(input==10)SystemDisplay.text="X=(y*y)-(y*-t)+(-x*t)+(z*t)+y-z\nY=(y*z*t)+(y*x)+(t*-t)-y+z\nZ=(y*-x*t)+(x*-t)+(y*y*-t)+(z*z*t)-(-y*-z*t)-x";
+        else if(input==11)SystemDisplay.text="X=(z*z)+(y*x)-(z*-x)+(-x*t)+t+z\nY=(t*-z)+(x*y)+(y*t)+y-z+t\nZ=(z*t)+(-z*t)+(y*x)+t+x";
+        else if(input==12)SystemDisplay.text="X=(z*z)+(y*x)-(z*-x)+(-x*t)+t+z\nY=(t*-z)+(x*y)+(y*t)+y-z+t\nZ=(z*t)+(-z*t)+(y*x)-t+x";
+        else if(input==13)SystemDisplay.text="X=(t*-t)+(z*t)-(y*-x)-y\nY=(x*x)-(t*z)-(t*t)+(y*x)+(y*t)-x\nZ=(z*-z)-(t*x)+(z*t)+x+y";
+        else if(input==14)SystemDisplay.text="X=(-x*t)-(y*-t)+(-x*t)-t+z\nY=(x*-z*t)+(x*t)+(t*x)-y-z\nZ=(y*t)-(x*-t)+(z*t)-z";
+        else if(input==15)SystemDisplay.text="X=(y*y*t)+(-y*x*t)-(z*y*t)-(x*t)\nY=(t*-z)+(x*-t)+(y*t)+y-z+t-y\nZ=(z*-t)+(z*z*t)+(y*x*t)-y-x+t";
+        else if(input==16)SystemDisplay.text="X=(-x*x*y)+(z*t)+(x*t)+y\nY=(x*t)-(x*-x)-x+y\nZ=(z*x)-(-t*x)+(z*t)+y";
+        else if(input==17)SystemDisplay.text="X=(y*-t)+(-x*t)+(z*-t)-z\nY=(y*z*t)+(y*x)-y+z\nZ=(y*-x*t)+(y*z*-t)+(z*-z*t)-(-y*-z*-t)-x";
+        else if(input==18)SystemDisplay.text="X=(z*x*t)+(y*t)-(z*t)+(-x*t)+z+x\nY=(t*-z)-(x*y)+(-y*t)+y-z\nZ=(z*t)+(-z*t)-(y*z*t)-t";
+        else if(input==19)SystemDisplay.text="X=(z*z*-y)+(-y*t*-z)+(z*-t)+y\nY=(t*x*-z)+(-y*t)+z\nZ=(z*t)+(-z*t)-(y*x)-t+x";
+        else if(input==20)SystemDisplay.text="X=(t*-z)+(x*y)+y-z+t\nY=(t*-z)+(y*-t)-(y*t)+(-x*t)-y\nZ=(-x*-t)-(z*x*t)+(z*y*t)";
+        else if(input==21)SystemDisplay.text="X=(-x*t)-(y*-t)+(-x*t)+z\nY=(y*-z*-t)+(x*t)+(t*x)-y\nZ=(z*t)+(x*-t)+(-z*t)-z+t";
+        else if(input==22)SystemDisplay.text="X=(z*x)-(y*x)-(t*-x)+t+z\nY=(t*-z)+(x*y)+y-z+t\nZ=(z*t)+(-z*t)-(y*x)-t+x";
+        else if(input==23)SystemDisplay.text="X=(-z*z)+(z*t)+(y*y)-(y*t)-y-z\nY=(y*-t)-(x*-x)-x+z+t\nZ=(x*z)-(t*-z)+(y*t)+x+y";
+        else if(input==24)SystemDisplay.text="X=(z*-x*t*z)+(y*-z*t)-z\nY=(y*t*z)-(t*x)-x+y+t\nZ=(z*z*-y*-x*t)+(-y*t*-z)-(z*-t)";
         SystemConfig();
     }
 
@@ -746,12 +761,12 @@ public class Chaos : MonoBehaviour
             if (working[i] == true)
             {
                 customInput[i].GetComponent<Image>().color = new Color(.098f, .098f, .098f);
-                errors[i].SetActive(false);
+                errors[0].SetActive(false);
             }
             else
             {
                 customInput[i].GetComponent<Image>().color = new Color(.5f, .098f, .098f);
-                errors[i].SetActive(true);
+                errors[0].SetActive(true);
                 Activate.interactable = false;
                 allTrue = false;
             }
@@ -760,7 +775,7 @@ public class Chaos : MonoBehaviour
         if (allTrue)
         {
             Activate.interactable = true;
-            errors[3].SetActive(false);
+            SystemDisplay.text = "X="+customInput[0].GetComponent<TMP_InputField>().text+ "\nY=" + customInput[1].GetComponent<TMP_InputField>().text + "\nZ=" + customInput[2].GetComponent<TMP_InputField>().text;
         }
     }
 
@@ -794,8 +809,7 @@ public class Chaos : MonoBehaviour
         e.Parameters["y"] = y;
         e.Parameters["z"] = z;
         e.Parameters["t"] = t;
-
-        return (float)e.Evaluate();
+        return Convert.ToSingle(e.Evaluate());
     }
 
     public float CustomY(float x, float y, float z, float t)
@@ -807,7 +821,7 @@ public class Chaos : MonoBehaviour
         e.Parameters["z"] = z;
         e.Parameters["t"] = t;
 
-        return (float)e.Evaluate();
+        return Convert.ToSingle(e.Evaluate());
     }
 
     public float CustomZ(float x, float y, float z, float t)
@@ -819,7 +833,7 @@ public class Chaos : MonoBehaviour
         e.Parameters["z"] = z;
         e.Parameters["t"] = t;
 
-        return (float)e.Evaluate();
+        return Convert.ToSingle(e.Evaluate());
     }
 
     //Keep track of save window being open
@@ -837,16 +851,12 @@ public class Chaos : MonoBehaviour
         SetCustomVars();
         manageSaves.SetActive(!manageSaves.activeSelf);
         randomButton.SetActive(!randomButton.activeSelf);
-        backPanel.GetComponent<Image>().color = new Color(.098f, .098f, .098f, .588f);
 
         if (customOn)
         {
             SystemTitle.text = "Custom System";
-            customButText.text = "Disable Custom";
             SystemDisplay.text = "X = \nY = \nZ =";
 
-            //BackPanel
-            backPanel.GetComponent<RectTransform>().offsetMin = new Vector2(backPanel.GetComponent<RectTransform>().offsetMin.x, 406);
 
 
             saveHandler.ResetSelected();
@@ -855,15 +865,13 @@ public class Chaos : MonoBehaviour
         else
         {
             SystemTitle.text = "System " + system;
-            customButText.text = "Enable Custom";
             System(system);
-            backPanel.GetComponent<RectTransform>().offsetMin = new Vector2(backPanel.GetComponent<RectTransform>().offsetMin.x, 186);
             preMadeSystems.gameObject.SetActive(true);
 
             if (savedOn)
             {
                 openedSaved();
-                savedSystems.GetComponent<selfAnimate>().Pressed();
+                //savedSystems.GetComponent<selfAnimate>().Pressed();/////////////////////////
             }
 
         }
@@ -1056,7 +1064,7 @@ public class Chaos : MonoBehaviour
                 y_AR[i] = SaftyCheck(y_AR[i], i);
                 z_AR[i] = SaftyCheck(z_AR[i], i);
 
-                if (safety)
+                if (safety && false) //keep off for now
                 {
 
                     float distance = Distance(pastLoc[i][0], pastLoc[i][1], pastLoc[i][2], x_AR[i], y_AR[i], z_AR[i]);
@@ -1071,9 +1079,9 @@ public class Chaos : MonoBehaviour
 
 
                 pastLoc[i] = new Vector3(x_AR[i], y_AR[i], z_AR[i]);
-                //pastLoc[i] = new Vector3(54,0,0);
-                
 
+                
+                if (active[i] == false) activeCount++;
 
             }
         }
@@ -1089,15 +1097,15 @@ public class Chaos : MonoBehaviour
 
     private float SaftyCheck(float input, int i)
     {
-        if (input > 10000)
+        if (input > bounds)
         {
             if (safety) active[i] = false;
-            return 10000;
+            return bounds;
         }
-        else if (input < -10000)
+        else if (input < -bounds)
         {
             if (safety) active[i] = false;
-            return -10000;
+            return -bounds;
         }
         else
         {
@@ -1110,20 +1118,15 @@ public class Chaos : MonoBehaviour
         TimeText.text = "Time: " + t.ToString("0.00000");
         if (on == true)
         {
-            t += (step * (1.5f + step)) * Time.deltaTime;
+            t += step * (2 + step) * Time.deltaTime;
 
 
 
             UpdateEquations();
             UpdateLines();
 
-            float percentActive = 0;
-            for (int i = 0; i < trail_Amount; i++)
-            {
-                if (active[i]) percentActive++;
-            }
-            percentActive /= trail_Amount;
-            Debug.Log(percentActive);
+
+            percentActive.text = "Diverged: " + 100*(activeCount/trail_Amount) + "%";
         }
 
         

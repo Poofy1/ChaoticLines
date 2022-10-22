@@ -15,8 +15,8 @@ public static class RandomFunction
         {
             if (i != 0)
             {
-                if (Random.Range(0, 2) == 0) output += " - ";
-                else output += " + ";
+                if (Random.Range(0, 2) == 0) output += "-";
+                else output += "+";
             }
 
             output += multiplier();
@@ -24,8 +24,8 @@ public static class RandomFunction
 
         for (int i = 0; i < Random.Range(0, 4); i++)
         {
-            if (Random.Range(0, 3) == 0) output += " - ";
-            else output += " + ";
+            if (Random.Range(0, 3) == 0) output += "-";
+            else output += "+";
 
             output += vars[Random.Range(0, 4)];
         }
@@ -44,7 +44,7 @@ public static class RandomFunction
         {
             if (i != 2 || Random.Range(0, 8) == 0)
             {
-                if (i != 0) output += " * ";
+                if (i != 0) output += "*";
                 output += randVar();
             }
 

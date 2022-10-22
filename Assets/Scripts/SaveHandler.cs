@@ -88,13 +88,13 @@ public class SaveHandler : MonoBehaviour
     //Save Settings
     public void SaveSettings()
     {
-        savedSet.fullscreen = settings.fullscreen[0].isOn;
-        savedSet.AA = settings.AAMenu[0].GetComponent<TMP_Dropdown>().value;
+        savedSet.fullscreen = settings.fullscreen.isOn;
+        savedSet.AA = settings.AAMenu.GetComponent<TMP_Dropdown>().value;
         savedSet.vSync = !settings.vSyncOn;
-        savedSet.mouseSen = mouse.setting[0].value;
-        savedSet.sound = settings.musicSlider[0].value;
-        savedSet.fov = settings.fovSlider[0].value;
-        savedSet.hudScale = settings.hudSlider[0].value;
+        savedSet.mouseSen = mouse.setting.value;
+        savedSet.sound = settings.musicSlider.value;
+        savedSet.fov = settings.fovSlider.value;
+        savedSet.hudScale = settings.hudSlider.value;
         savedSet.safety = mainEvents.safety;
 
         //Write
@@ -105,13 +105,13 @@ public class SaveHandler : MonoBehaviour
     //LoadSettings
     public void LoadSettings()
     {
-        settings.fullscreen[0].isOn = savedSet.fullscreen;
-        settings.AAMenu[0].GetComponent<TMP_Dropdown>().value = savedSet.AA;
+        settings.fullscreen.isOn = savedSet.fullscreen;
+        settings.AAMenu.GetComponent<TMP_Dropdown>().value = savedSet.AA;
         settings.vSyncOn = savedSet.vSync;
-        mouse.setting[0].value = savedSet.mouseSen;
-        settings.musicSlider[0].value = savedSet.sound;
-        settings.fovSlider[0].value = savedSet.fov;
-        settings.hudSlider[0].value = savedSet.hudScale;
+        mouse.setting.value = savedSet.mouseSen;
+        settings.musicSlider.value = savedSet.sound;
+        settings.fovSlider.value = savedSet.fov;
+        settings.hudSlider.value = savedSet.hudScale;
         mainEvents.safety = !savedSet.safety;
 
         mouse.SensitivityChanged(0);

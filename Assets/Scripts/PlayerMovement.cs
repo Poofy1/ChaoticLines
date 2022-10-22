@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform orientation;
 
+    public bool active;
+
     float horizontalInput;
     float verticalInput;
 
@@ -36,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        MovePlayer();
+        if (active) MovePlayer();
     }
 
     private void MyInput()

@@ -882,7 +882,7 @@ public class ChaosDynamic : MonoBehaviour
             if (savedOn)
             {
                 openedSaved();
-                savedSystems.GetComponent<selfAnimate>().Pressed();
+                //savedSystems.GetComponent<SelfAnimate>().Pressed();///////////////////////////////////////////
             }
 
         }
