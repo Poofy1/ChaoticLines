@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
@@ -9,6 +10,7 @@ public class MainMenu : MonoBehaviour
 
     //Scene 
     public Chaos mainEvents;
+    public SaveHandler saveHandler;
     public Transform player;
     public Transform camera;
     public GameObject mainOri;
@@ -30,8 +32,9 @@ public class MainMenu : MonoBehaviour
     private bool MM_Active;
     private bool slowDown;
 
-    void Start()
+    private void Start()
     {
+        mainEvents.InitializeMainCords();
         StartMainMenu();
     }
 
@@ -80,11 +83,33 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    //Return random system from list
+    public List<FunctionInput> RandomSystem()
+    {
+        return saveHandler.saveList[UnityEngine.Random.Range(0, saveHandler.saveList.Count)].CustomFunctions;
+    }
+
     IEnumerator ResetScene()
     {
         //Reset
         yield return 0;
-        mainEvents.System(UnityEngine.Random.Range(1, 25));
+
+        List<FunctionInput> randSystem = RandomSystem();
+        for (int i = 0; i < randSystem.Count; i++)
+        {
+            if(i > mainEvents.func.Count - 1)
+            {
+                mainEvents.func.Add(new FunctionInput(mainEvents.CreateVarInput(randSystem[i].name).GetComponent<TMP_InputField>(), randSystem[i].name, randSystem[i].function));
+                mainEvents.func[i].textInput.text = randSystem[i].function;
+            }
+            else
+            {
+                mainEvents.func[i].function = randSystem[i].function;
+                mainEvents.func[i].textInput.text = randSystem[i].function;
+            }
+            
+        }
+            
         mainEvents.Color(UnityEngine.Random.Range(1, 10));
         mainEvents.On();
         StartCoroutine(FadeOut(fade, .005f, 0));

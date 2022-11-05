@@ -35,7 +35,7 @@ public class SaveHandler : MonoBehaviour
         buttonList = new List<SaveButton>();
         savedSet = new SettingItem();
         spawnedButtons = new GameObject[0];
-        LoadAll(true);
+        LoadAll();
 
 
 
@@ -62,16 +62,17 @@ public class SaveHandler : MonoBehaviour
 
     IEnumerator SaveCurrentCall()
     {
-        bool[] vaild = mainEvents.TestCustom();
-        if (vaild[0] && vaild[1] && vaild[2])
+        if (mainEvents.TestCustom())
         {
             yield return StartCoroutine(RenameSystemCall());
 
+            List<FunctionInput> temp = mainEvents.func;
+            for (int i = 0; i < temp.Count; i++) temp[i].mainCords = null;
+            for (int i = 0; i < temp.Count; i++) temp[i].textInput = null;
+
             saveList.Add(new SaveList
             {
-                CustomInput = new string[3] { mainEvents.customInput[0].GetComponent<TMP_InputField>().text,
-                                                                  mainEvents.customInput[1].GetComponent<TMP_InputField>().text,
-                                                                  mainEvents.customInput[2].GetComponent<TMP_InputField>().text},
+                CustomFunctions = temp,
                 SaveName = newName
             });
 
@@ -98,7 +99,7 @@ public class SaveHandler : MonoBehaviour
         savedSet.safety = mainEvents.safety;
 
         //Write
-        string json = JsonConvert.SerializeObject(savedSet);
+        string json = JsonConvert.SerializeObject(savedSet, Formatting.Indented);
         File.WriteAllText(Application.dataPath + "/UserSettings.txt", json);
     }
 
@@ -118,18 +119,18 @@ public class SaveHandler : MonoBehaviour
         settings.UpdateAll();
     }
 
-    //Write Save
+    //Write Custom Save
     public void WriteSave()
     {
-        string json = JsonConvert.SerializeObject(saveList);
+        string json = JsonConvert.SerializeObject(saveList, Formatting.Indented);
         File.WriteAllText(Application.dataPath + "/UserData.txt", json);
 
         //Re-load all data
         LoadAll();
     }
 
-    //Load All Data
-    public void LoadAll(bool bugWorkAround = false)
+    //Load All Custom Data
+    public void LoadAll()
     {
         if (File.Exists(Application.dataPath + "/UserData.txt"))
         {
@@ -146,7 +147,6 @@ public class SaveHandler : MonoBehaviour
             //Spawn Buttons
             buttonList = new List<SaveButton>();
             spawnedButtons = new GameObject[saveList.Count];
-            int offset = -100;
 
             for (int i = 0; i < saveList.Count; i++)
             {
@@ -156,16 +156,10 @@ public class SaveHandler : MonoBehaviour
                 spawnedButtons[i] = name.gameObject;
 
                 //Create List
-                buttonList.Add(new SaveButton(saveList[i].SaveName, saveList[i].CustomInput, spawnedButtons[i]));
-                if (bugWorkAround) buttonList[i].SetPos(new Vector3(0, offset, 0), new Vector3(0,0,0) );
-                else buttonList[i].SetPos(new Vector3(400, offset, 0), new Vector3(0, 0, 0));
-                offset -= 150;
+                buttonList.Add(new SaveButton(saveList[i].SaveName, saveList[i].CustomFunctions, spawnedButtons[i]));
 
                 //Set Listener
                 setButtonListener(i);
-
-                //ScrollSize
-                buttonParent.GetComponent<RectTransform>().sizeDelta = new Vector2(0, -offset);
             }
         }
         else
@@ -174,11 +168,12 @@ public class SaveHandler : MonoBehaviour
         }
     }
 
-    //Set Listeners
+    //Set Custom Button Listeners
     private void setButtonListener(int i)
     {
         buttonList[i].button.GetComponent<Button>().onClick.AddListener(delegate { ButtonClicked(i); });
     }
+
 
     //When Save is clicked
     public void ButtonClicked(int a)
@@ -202,9 +197,37 @@ public class SaveHandler : MonoBehaviour
     //Load System
     public void LoadSystem()
     {
-        for (int i = 0; i < 3; i++)
+        
+
+        while(mainEvents.func.Count > 3)
         {
-            mainEvents.customInput[i].GetComponent<TMP_InputField>().text = saveList[currentSelected].CustomInput[i];
+            Destroy(mainEvents.func[mainEvents.func.Count - 1].textInput.gameObject);
+            mainEvents.func.RemoveAt(mainEvents.func.Count - 1);
+        }
+
+        for (int i = 0; i < saveList[currentSelected].CustomFunctions.Count; i++)
+        {
+
+            string funcText = saveList[currentSelected].CustomFunctions[i].function;
+            string funcName = saveList[currentSelected].CustomFunctions[i].name;
+
+            if (i > 2)
+            {
+                GameObject cus = mainEvents.CreateVarInput(funcName);
+
+                mainEvents.func.Add(new FunctionInput(cus.gameObject.GetComponent<TMP_InputField>(), funcName, funcText));
+                mainEvents.func[i].textInput.text = funcText;
+            }
+            else
+            {
+                mainEvents.func[i].function = funcText;
+                mainEvents.func[i].textInput.text = funcText;
+                
+            }
+                
+
+            
+
         }
             
     }
@@ -256,7 +279,7 @@ public class SaveHandler : MonoBehaviour
     //SaveSystem
     public class SaveList
     {
-        public string[] CustomInput { get; set; }
+        public List<FunctionInput> CustomFunctions { get; set; }
         public string SaveName { get; set; }
     }
 
@@ -273,29 +296,21 @@ public class SaveHandler : MonoBehaviour
         public bool safety { get; set; }
     }
 
-    //Item List
+    //Save Item List
     public class SaveButton
     {
-        public string[] customInputs;
+        public List<FunctionInput> customInputs;
         public string name;
         public GameObject button;
 
         //Constructor
-        public SaveButton(string nameInput, string[] input, GameObject obj)
+        public SaveButton(string nameInput, List<FunctionInput> custIn, GameObject obj)
         {
-            customInputs = input;
+            customInputs = custIn;
             name = nameInput;
             button = obj;
 
             button.transform.GetChild(0).GetComponent<Text>().text = name;
-            button.transform.GetChild(1).GetComponent<Text>().text = customInputs[0] + "\n" + customInputs[1] + "\n" + customInputs[2];
-        }
-
-        //Move
-        public void SetPos(Vector3 pos, Vector3 rot)
-        {
-            button.transform.localPosition = pos;
-            button.transform.localEulerAngles = rot;
         }
     }
 

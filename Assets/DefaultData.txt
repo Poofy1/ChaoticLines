@@ -1,0 +1,194 @@
+[
+  {
+    "CustomInput": [
+      "(-x*x)+(z*t)+y",
+      "(x*x)-(y*z)-(t*t)-(y*x)+(y*t)-x+y",
+      "(z*-z)-(t*x)+(z*t)+x+y"
+    ],
+    "SaveName": "System 1"
+  },
+  {
+    "CustomInput": [
+      "(x*y*-t*z)+(t*-z)-x",
+      "(z*y*-y)-(z*x)-t+y",
+      "(-x*t*t)*(t*x)-y*y"
+    ],
+    "SaveName": "System 2"
+  },
+  {
+    "CustomInput": [
+      "(-x*x)+(z*t)+y",
+      "(x*t)+z-(x*x)-x",
+      "(z*-z)-(t*x)+(z*t)-x+y"
+    ],
+    "SaveName": "System 3"
+  },
+  {
+    "CustomInput": [
+      "(-z*z)+(z*t)+(y*y)",
+      "(y*-t)-(x*x)-x+z",
+      "(x*x)-(t*-z)+(z*-t)+x+y"
+    ],
+    "SaveName": "System 4"
+  },
+  {
+    "CustomInput": [
+      "(x*x*-t*y)+(z*y*t)-(t*x)+y",
+      "(-y*t*z)-(t*x)+x",
+      "(z*z*-y*-x*t*t)-(t*x)+(t*y)+z+y"
+    ],
+    "SaveName": "System 5"
+  },
+  {
+    "CustomInput": [
+      "(x*-x*-t*y)+(z*z*t)+y",
+      "(-y*t*-z)-(t*x)-x",
+      "(z*z*-y*-x)+(-y*t*-z)-(t*-t)-z+y"
+    ],
+    "SaveName": "System 6"
+  },
+  {
+    "CustomInput": [
+      "(x*z*t)-(t*y)+(t*t)+x-y",
+      "(x*x*-t)-Sqrt(Abs(t*y*x))+(y*t)+z+x",
+      "(z*y*t)+(y*t*-z)-(x*-t)+y"
+    ],
+    "SaveName": "System 7"
+  },
+  {
+    "CustomInput": [
+      "(z*x*t)+(y*x*t)-(z*x*t)-(x*t)-x+y",
+      "(t*-z)+(x*t)+(y*t)+y-z+t",
+      "(z*t)+(z*x*t)+(y*x*t)+y+x"
+    ],
+    "SaveName": "System 8"
+  },
+  {
+    "CustomInput": [
+      "(x*y)-(y*-t)+(-x*t)+t-z",
+      "(x*-z)+(x*x)+(t*-t)-y-z",
+      "(y*-x)+(x*-t)+(y*y)-t"
+    ],
+    "SaveName": "System 9"
+  },
+  {
+    "CustomInput": [
+      "(y*y)-(y*-t)+(-x*t)+(z*t)+y-z",
+      "(y*z*t)+(y*x)+(t*-t)-y+z",
+      "(y*-x*t)+(x*-t)+(y*y*-t)+(z*z*t)-(-y*-z*t)-x"
+    ],
+    "SaveName": "System 10"
+  },
+  {
+    "CustomInput": [
+      "(z*z)+(y*x)-(z*-x)+(-x*t)+t+z",
+      "(t*-z)+(x*y)+(y*t)+y-z+t",
+      "(z*t)+(-z*t)+(y*x)+t+x"
+    ],
+    "SaveName": "System 11"
+  },
+  {
+    "CustomInput": [
+      "(z*z)+(y*x)-(z*-x)+(-x*t)+t+z",
+      "(t*-z)+(x*y)+(y*t)+y-z+t",
+      "(z*t)+(-z*t)+(y*x)-t+x"
+    ],
+    "SaveName": "System 12"
+  },
+  {
+    "CustomInput": [
+      "(t*-t)+(z*t)-(y*-x)-y",
+      "(x*x)-(t*z)-(t*t)+(y*x)+(y*t)-x",
+      "(z*-z)-(t*x)+(z*t)+x+y"
+    ],
+    "SaveName": "System 13"
+  },
+  {
+    "CustomInput": [
+      "(-x*t)-(y*-t)+(-x*t)-t+z",
+      "(x*-z*t)+(x*t)+(t*x)-y-z",
+      "(y*t)-(x*-t)+(z*t)-z"
+    ],
+    "SaveName": "System 14"
+  },
+  {
+    "CustomInput": [
+      "(y*y*t)+(-y*x*t)-(z*y*t)-(x*t)",
+      "(t*-z)+(x*-t)+(y*t)+y-z+t-y",
+      "(z*-t)+(z*z*t)+(y*x*t)-y-x+t"
+    ],
+    "SaveName": "System 15"
+  },
+  {
+    "CustomInput": [
+      "(-x*x*y)+(z*t)+(x*t)+y",
+      "(x*t)-(x*-x)-x+y",
+      "(z*x)-(-t*x)+(z*t)+y"
+    ],
+    "SaveName": "System 16"
+  },
+  {
+    "CustomInput": [
+      "(y*-t)+(-x*t)+(z*-t)-z",
+      "(y*z*t)+(y*x)-y+z",
+      "(y*-x*t)+(y*z*-t)+(z*-z*t)-(-y*-z*-t)-x"
+    ],
+    "SaveName": "System 17"
+  },
+  {
+    "CustomInput": [
+      "(z*x*t)+(y*t)-(z*t)+(-x*t)+z+x",
+      "(t*-z)-(x*y)+(-y*t)+y-z",
+      "(z*t)+(-z*t)-(y*z*t)-t"
+    ],
+    "SaveName": "System 18"
+  },
+  {
+    "CustomInput": [
+      "(z*z*-y)+(-y*t*-z)+(z*-t)+y",
+      "(t*x*-z)+(-y*t)+z",
+      "(z*t)+(-z*t)-(y*x)-t+x"
+    ],
+    "SaveName": "System 19"
+  },
+  {
+    "CustomInput": [
+      "(t*-z)+(x*y)+y-z+t",
+      "(t*-z)+(y*-t)-(y*t)+(-x*t)-y",
+      "(-x*-t)-(z*x*t)+(z*y*t)"
+    ],
+    "SaveName": "System 20"
+  },
+  {
+    "CustomInput": [
+      "(-x*t)-(y*-t)+(-x*t)+z",
+      "(y*-z*-t)+(x*t)+(t*x)-y",
+      "(z*t)+(x*-t)+(-z*t)-z+t"
+    ],
+    "SaveName": "System 21"
+  },
+  {
+    "CustomInput": [
+      "(z*x)-(y*x)-(t*-x)+t+z",
+      "(t*-z)+(x*y)+y-z+t",
+      "(z*t)+(-z*t)-(y*x)-t+x"
+    ],
+    "SaveName": "System 22"
+  },
+  {
+    "CustomInput": [
+      "(-z*z)+(z*t)+(y*y)-(y*t)-y-z",
+      "(y*-t)-(x*-x)-x+z+t",
+      "(x*z)-(t*-z)+(y*t)+x+y"
+    ],
+    "SaveName": "System 23"
+  },
+  {
+    "CustomInput": [
+      "(z*-x*t*z)+(y*-z*t)-z",
+      "(y*t*z)-(t*x)-x+y+t",
+      "(z*z*-y*-x*t)+(-y*t*-z)-(z*-t)"
+    ],
+    "SaveName": "System 24"
+  }
+]

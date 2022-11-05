@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     public KeyCode runKey = KeyCode.LeftShift;
 
     public Transform orientation;
-
+    public float dis;
     public bool active;
 
     float horizontalInput;
@@ -46,15 +46,17 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
+        dis = Vector3.Distance(new Vector3(0, 0, 0), transform.position);
+
         if (Input.GetKey(runKey)) {
-            moveSpeed = sprintSpeed;
+            moveSpeed = (dis + walkSpeed) * sprintSpeed;
         }
         else
         {
-            moveSpeed = walkSpeed;
+            moveSpeed = dis + walkSpeed;
         }
 
-        if (Input.GetKeyDown("r")) transform.GetChild(0).position = new Vector3(0, 0, 0);
+        if (Input.GetKeyDown("r")) transform.position = new Vector3(0, 0, 0);
     }
 
     private void MovePlayer()

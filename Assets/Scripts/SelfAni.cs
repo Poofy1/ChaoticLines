@@ -8,7 +8,6 @@ public class SelfAni : MonoBehaviour
 {
     public float time;
 
-    public ButtonAnimate buttonOff;
     public Transform min;
     public Transform max;
 
@@ -20,7 +19,6 @@ public class SelfAni : MonoBehaviour
         if (open) LeanTween.moveLocalX(gameObject, min.localPosition.x, time).setEaseInOutCubic();
         else LeanTween.moveLocalX(gameObject, max.localPosition.x, time).setEaseInOutCubic();
         open = !open;
-        if(buttonOff != null) buttonOff.active = !buttonOff.active;
     }
 
 

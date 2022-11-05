@@ -4,14 +4,19 @@ using UnityEngine;
 
 public static class RandomFunction
 {
-    private static string vars = "xyzt";
+    private static string vars = "";
 
     //Compiles
-    public static string Create(int max)
+    public static string Create(int max, List<FunctionInput> f)
     {
+        //Set vars
+        vars = "t";
+        for (int i = 0; i < f.Count; i++) vars += f[i].name;
+
+
         string output = "";
 
-        for (int i = 0; i < Random.Range(2, max); i++)
+        for (int i = 0; i < Random.Range(1, max); i++)
         {
             if (i != 0)
             {
@@ -22,12 +27,12 @@ public static class RandomFunction
             output += multiplier();
         }
 
-        for (int i = 0; i < Random.Range(0, 4); i++)
+        for (int i = 0; i < Random.Range(0, 5); i++)
         {
-            if (Random.Range(0, 3) == 0) output += "-";
+            if (Random.Range(0, 2) == 0) output += "-";
             else output += "+";
 
-            output += vars[Random.Range(0, 4)];
+            output += vars[Random.Range(0, vars.Length)];
         }
 
         return output;
@@ -42,7 +47,7 @@ public static class RandomFunction
 
         for (int i = 0; i < Random.Range(2, 4); i++)
         {
-            if (i != 2 || Random.Range(0, 8) == 0)
+            if (i != 2 || Random.Range(0, 12) == 0)
             {
                 if (i != 0) output += "*";
                 output += randVar();
@@ -58,7 +63,21 @@ public static class RandomFunction
     {
         string output = "";
         if (Random.Range(0, 3) == 0) output += "-";
-        return output + vars[Random.Range(0,4)];
+
+        //pick var letter
+        string v = char.ToString(vars[Random.Range(0, vars.Length)]);
+
+        if (Random.Range(0, 8) == 0)
+        {
+            if (Random.Range(0, 3) == 0) v = "-" + v;
+
+            int trigFunc = Random.Range(0, 3);
+            if (trigFunc == 0) return output + "Cos(" + v + ")";
+            if (trigFunc == 1) return output + "Sin(" + v + ")";
+            if (trigFunc == 2) return output + "Tan(" + v + ")";
+        }
+
+        return output + v;
     }
 
 }

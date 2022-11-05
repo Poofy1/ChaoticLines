@@ -20,17 +20,8 @@ This simulation offers many different customization options, allowing the user t
 
 ### Installing
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
-
-### Executing program
-
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
-
+* Current Unity builds may be very unstable / unfinished
+* Releases may be more stable to play test
 
 ## License
 

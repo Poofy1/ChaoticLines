@@ -899,7 +899,7 @@ public class ChaosDynamic : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            customInput[i].GetComponent<TMP_InputField>().text = RandomFunction.Create(6);
+            //customInput[i].GetComponent<TMP_InputField>().text = RandomFunction.Create(6, func);
         }
     }
 
