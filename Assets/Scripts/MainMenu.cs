@@ -84,9 +84,9 @@ public class MainMenu : MonoBehaviour
     }
 
     //Return random system from list
-    public List<FunctionInput> RandomSystem()
+    public void RandomSystem()
     {
-        return saveHandler.saveList[UnityEngine.Random.Range(0, saveHandler.saveList.Count)].CustomFunctions;
+        saveHandler.currentSelected = UnityEngine.Random.Range(0, saveHandler.saveList.Count);
     }
 
     IEnumerator ResetScene()
@@ -94,22 +94,12 @@ public class MainMenu : MonoBehaviour
         //Reset
         yield return 0;
 
-        List<FunctionInput> randSystem = RandomSystem();
-        for (int i = 0; i < randSystem.Count; i++)
-        {
-            if(i > mainEvents.func.Count - 1)
-            {
-                mainEvents.func.Add(new FunctionInput(mainEvents.CreateVarInput(randSystem[i].name).GetComponent<TMP_InputField>(), randSystem[i].name, randSystem[i].function));
-                mainEvents.func[i].textInput.text = randSystem[i].function;
-            }
-            else
-            {
-                mainEvents.func[i].function = randSystem[i].function;
-                mainEvents.func[i].textInput.text = randSystem[i].function;
-            }
-            
-        }
-            
+        //Select random system from saves
+        saveHandler.currentSelected = UnityEngine.Random.Range(0, saveHandler.saveList.Count);
+
+        //Load system
+        saveHandler.LoadSystem();
+
         mainEvents.Color(UnityEngine.Random.Range(1, 10));
         mainEvents.On();
         StartCoroutine(FadeOut(fade, .005f, 0));

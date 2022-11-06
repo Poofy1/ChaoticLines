@@ -21,7 +21,7 @@ public class MapRotate : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         var delta = (Vector2)Input.mousePosition - offset;
         offset = Input.mousePosition;
 
-        delta = new Vector2(-delta.y, delta.x);
+        delta = new Vector2(delta.y, -delta.x);
 
         rotator.Rotate(delta, Space.Self);
     }
@@ -30,8 +30,6 @@ public class MapRotate : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         if (!hovering) return;
         float delta = eventData.scrollDelta.y * 10000;
-
-        Debug.Log(cam.orthographicSize / 100000);
 
         if (cam.orthographicSize < 25000)
         {

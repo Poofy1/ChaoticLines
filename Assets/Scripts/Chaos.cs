@@ -179,9 +179,9 @@ public class Chaos : MonoBehaviour
 
             //Initialize inputs and vars
             exp = new Expression[func.Count];
-            boxBound = bounds * 200;
+            boxBound = bounds * 2000;
             mapBounds.localScale = new Vector3(boxBound, boxBound, boxBound);
-            mapRotator.maxZoomOut = boxBound / 2;
+            mapRotator.maxZoomOut = boxBound / 20;
 
 
             for (int i = 0; i < func.Count; i++)
@@ -218,6 +218,7 @@ public class Chaos : MonoBehaviour
         else
         {
             ActivateText.text = "Start";
+            percentActive.text = "Diverged: 0%";
             Activate.GetComponent<Image>().color = new Color(.6f, .6f, .6f);
             pauseTemp = false;
             t = 0;

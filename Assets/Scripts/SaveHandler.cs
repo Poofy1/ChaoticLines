@@ -21,10 +21,11 @@ public class SaveHandler : MonoBehaviour
     public GameObject[] functionButtons;
     public GameObject renamePanel;
     public TMP_InputField renameInput;
+    public GameObject hud;
 
 
     private GameObject[] spawnedButtons;
-    private int currentSelected;
+    public int currentSelected;
     private bool appliedRename;
     private string newName;
 
@@ -53,38 +54,7 @@ public class SaveHandler : MonoBehaviour
         }
     }
 
-
-    //Save Custom
-    public void SaveCurrent()
-    {
-        StartCoroutine(SaveCurrentCall());
-    }
-
-    IEnumerator SaveCurrentCall()
-    {
-        if (mainEvents.TestCustom())
-        {
-            yield return StartCoroutine(RenameSystemCall());
-
-            List<FunctionInput> temp = mainEvents.func;
-            for (int i = 0; i < temp.Count; i++) temp[i].mainCords = null;
-            for (int i = 0; i < temp.Count; i++) temp[i].textInput = null;
-
-            saveList.Add(new SaveList
-            {
-                CustomFunctions = temp,
-                SaveName = newName
-            });
-
-            WriteSave();
-            ResetSelected();
-        }
-        else
-        {
-            mainEvents.errors[3].SetActive(true);
-        }
-        
-    }
+    //SETTINGS:
 
     //Save Settings
     public void SaveSettings()
@@ -118,6 +88,53 @@ public class SaveHandler : MonoBehaviour
         mouse.SensitivityChanged(0);
         settings.UpdateAll();
     }
+
+
+
+    //SYSTEMS:
+
+    //Save Custom
+    public void SaveCurrent()
+    {
+        StartCoroutine(SaveCurrentCall());
+    }
+
+    IEnumerator SaveCurrentCall()
+    {
+        if (mainEvents.TestCustom())
+        {
+            
+            //Wait for rename
+            yield return StartCoroutine(RenameSystemCall());
+
+            //Take screenshot
+            yield return StartCoroutine(ScreenShot());
+            
+
+
+            //Create json save 
+            List<FunctionInput> temp = mainEvents.func;
+            for (int i = 0; i < temp.Count; i++) temp[i].mainCords = null;
+            for (int i = 0; i < temp.Count; i++) temp[i].textInput = null;
+
+            saveList.Add(new SaveList
+            {
+                CustomFunctions = temp,
+                SaveName = newName
+            });
+
+            //WriteSave and reset
+            WriteSave();
+            ResetSelected();
+        }
+        else
+        {
+            mainEvents.errors[3].SetActive(true);
+        }
+        
+    }
+
+    
 
     //Write Custom Save
     public void WriteSave()
@@ -197,7 +214,7 @@ public class SaveHandler : MonoBehaviour
     //Load System
     public void LoadSystem()
     {
-        
+        mainEvents.SystemTitle.text = saveList[currentSelected].SaveName;
 
         while(mainEvents.func.Count > 3)
         {
@@ -244,6 +261,8 @@ public class SaveHandler : MonoBehaviour
         ResetSelected();
         WriteSave();
     }
+
+    //Set Name
     IEnumerator RenameSystemCall()
     {
         renamePanel.SetActive(true);
@@ -254,7 +273,7 @@ public class SaveHandler : MonoBehaviour
         renameInput.text = "";
     }
 
-    //Apply Rename
+    //Apply Name
     public void ApplyRename()
     {
         appliedRename = true;
@@ -269,7 +288,15 @@ public class SaveHandler : MonoBehaviour
     }
 
 
-
+    //ScreenShot
+    IEnumerator ScreenShot()
+    {
+        yield return null;
+        hud.SetActive(false);
+        yield return new WaitForEndOfFrame();
+        ScreenCapture.CaptureScreenshot(Application.dataPath + "/PreviewImages/" + newName + ".png");
+        hud.SetActive(true);
+    }
 
 
 
@@ -280,6 +307,7 @@ public class SaveHandler : MonoBehaviour
     public class SaveList
     {
         public List<FunctionInput> CustomFunctions { get; set; }
+        public int LayerNum { get; set; }
         public string SaveName { get; set; }
     }
 
