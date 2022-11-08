@@ -22,12 +22,14 @@ public class SaveHandler : MonoBehaviour
     public GameObject renamePanel;
     public TMP_InputField renameInput;
     public GameObject hud;
+    public RawImage preview;
 
 
     private GameObject[] spawnedButtons;
     public int currentSelected;
     private bool appliedRename;
     private string newName;
+    private string newDate;
 
     private void Start()
     {
@@ -120,6 +122,7 @@ public class SaveHandler : MonoBehaviour
             saveList.Add(new SaveList
             {
                 CustomFunctions = temp,
+                date = newDate,
                 SaveName = newName
             });
 
@@ -195,12 +198,24 @@ public class SaveHandler : MonoBehaviour
     //When Save is clicked
     public void ButtonClicked(int a)
     {
+        
         for (int i = 1; i < functionButtons.Length; i++) functionButtons[i].GetComponent<Button>().interactable = true;
 
         currentSelected = a;
         for (int i = 0; i < spawnedButtons.Length; i++) buttonList[i].button.GetComponent<Image>().color = new Color(.098f, .098f, .098f, .6749f);
 
         buttonList[a].button.GetComponent<Image>().color = new Color(0, 0, 0, .6749f);
+
+        //show preview
+        Texture2D tex = null;
+        string filePath = Application.dataPath + "/PreviewImages/" + saveList[a].date + ".png";
+
+        if (File.Exists(filePath))
+        {
+            tex = new Texture2D(2, 2);
+            tex.LoadImage(File.ReadAllBytes(filePath));
+            preview.texture = tex;
+        }
     }
 
     //Reset currently Selected
@@ -294,12 +309,22 @@ public class SaveHandler : MonoBehaviour
         yield return null;
         hud.SetActive(false);
         yield return new WaitForEndOfFrame();
-        ScreenCapture.CaptureScreenshot(Application.dataPath + "/PreviewImages/" + newName + ".png");
+
+        int res = 0;
+        if (Screen.height < Screen.width) res = Screen.height;
+        else res = Screen.width;
+
+        newDate = System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff");
+
+        Texture2D currentCapture = new Texture2D(res, res, TextureFormat.RGB24, false);
+        currentCapture.ReadPixels(new Rect(res / 2, 0, res, res), 0, 0, false);
+
+        currentCapture.Apply();
         hud.SetActive(true);
+
+        byte[] bytes = currentCapture.EncodeToPNG();
+        System.IO.File.WriteAllBytes(Application.dataPath + "/PreviewImages/" + newDate + ".png", bytes);
     }
-
-
-
 
 
 
@@ -307,7 +332,7 @@ public class SaveHandler : MonoBehaviour
     public class SaveList
     {
         public List<FunctionInput> CustomFunctions { get; set; }
-        public int LayerNum { get; set; }
+        public string date { get; set; }
         public string SaveName { get; set; }
     }
 

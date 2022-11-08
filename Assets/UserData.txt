@@ -4,191 +4,59 @@
       {
         "textInput": null,
         "name": "x",
-        "function": "(t*-t)-(-t*-t)-x+t",
+        "function": "(-y*x)+(-x*y*Sin(z))+t",
         "mainCords": null
       },
       {
         "textInput": null,
         "name": "y",
-        "function": "(z*z)-(z*-z)-(z*-z)+z-x",
+        "function": "(Cos(-z)*x)+(r*-x)-z-r",
         "mainCords": null
       },
       {
         "textInput": null,
         "name": "z",
-        "function": "(-Tan(x)*-y)+(y*x)+x",
+        "function": "(-Sin(-y)*-r)+(t*y)+y+t-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "r",
+        "function": "(-t*t*z)+(r*Sin(x))",
         "mainCords": null
       }
     ],
-    "LayerNum": 0,
-    "SaveName": "1"
+    "date": "2022-11-07-19-12-14-97",
+    "SaveName": "woah"
   },
   {
     "CustomFunctions": [
       {
         "textInput": null,
         "name": "x",
-        "function": "(x*Tan(t))-(x*-z)-(-z*y)-a+t+z",
+        "function": "(x*t)-(r*-Cos(-x))",
         "mainCords": null
       },
       {
         "textInput": null,
         "name": "y",
-        "function": "(y*-x)-(Tan(z)*y)-(t*x)",
+        "function": "(y*r)-(z*-y)-(t*-t)-z-t",
         "mainCords": null
       },
       {
         "textInput": null,
         "name": "z",
-        "function": "(-Cos(z)*-a)+(-x*a)+t",
+        "function": "(-t*r)+(t*x)+r",
         "mainCords": null
       },
       {
         "textInput": null,
-        "name": "a",
-        "function": "(t*Cos(y))-(a*-Tan(t))-(Tan(z)*a*z)+y",
+        "name": "r",
+        "function": "(t*t)+x",
         "mainCords": null
       }
     ],
-    "LayerNum": 0,
-    "SaveName": "cust"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
-        "function": "(y*y)-(z*y)+(-Sin(-y)*z)+b+z-t+b",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(b*z)+x",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(z*t)+(z*Cos(-x))-(-x*-y)",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "b",
-        "function": "(y*z)-(Tan(z)*x)+x",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(-y*x)",
-        "mainCords": null
-      }
-    ],
-    "LayerNum": 0,
-    "SaveName": "beep boob"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
-        "function": "(y*-z)-(x*z)-(z*Cos(-z))-t",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(t*t)+(y*z)+t",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(b*b)-(Sin(b)*z)+t-x+t",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "b",
-        "function": "(-t*b)+(z*-x)-z-t-y",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(-z*-Cos(z))-(-x*-Sin(y))-b-b+z-z",
-        "mainCords": null
-      }
-    ],
-    "LayerNum": 0,
-    "SaveName": "oandoawnd"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
-        "function": "(y*x)+z-z",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(-x*-t)+x",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(x*-z)-(x*-t)+x",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "b",
-        "function": "(t*-y)+(-t*-z)+z",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(z*x)+z+z",
-        "mainCords": null
-      }
-    ],
-    "LayerNum": 0,
-    "SaveName": "adbuwdebwa"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
-        "function": "(-a*t)+y-a-t",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(-a*-z)-(Cos(-z)*x)",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(-Sin(y)*Tan(a))-t",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "a",
-        "function": "(-x*z)+(z*a)",
-        "mainCords": null
-      }
-    ],
-    "LayerNum": 0,
-    "SaveName": "ppspfels"
+    "date": "2022-11-07-19-13-28-10",
+    "SaveName": "c:"
   }
 ]
