@@ -64,7 +64,7 @@ public class Chaos : MonoBehaviour
     public Text SystemTitle;
     public Text SystemDisplay;
     public Button Activate;
-    public Text ActivateText;
+    public RawImage pause;
     public Button createRand;
     public Button loadButton;
     public Button[] ColBut;
@@ -124,7 +124,7 @@ public class Chaos : MonoBehaviour
     {
         if (pauseTemp == false && outsideOveride == false) step = StepSlider.value;
         else StepSlider.value = step;
-        StepText.text = (StepSlider.value * 50).ToString("0.00");
+        StepText.text = StepSlider.value.ToString("0.00");
     }
 
     public void UpdateThickness()
@@ -168,8 +168,7 @@ public class Chaos : MonoBehaviour
         if (on)
         {
             pauseTemp = false;
-            ActivateText.text = "Clear";
-            Activate.GetComponent<Image>().color = new Color(.4f, 0, 0);
+            Activate.GetComponent<RawImage>().color = new Color(.2352941f, .2352941f, .2352941f);
             UpdateAmount();
             UpdateStep();
             Amount.interactable = false;
@@ -217,9 +216,8 @@ public class Chaos : MonoBehaviour
         }
         else
         {
-            ActivateText.text = "Start";
             percentActive.text = "Diverged: 0%";
-            Activate.GetComponent<Image>().color = new Color(.6f, .6f, .6f);
+            Activate.GetComponent<RawImage>().color = new Color(.8f, .8f, .8f);
             pauseTemp = false;
             t = 0;
             Amount.interactable = true;
@@ -233,8 +231,16 @@ public class Chaos : MonoBehaviour
     //Pausing
     public void Pause()
     {
-        if (pauseTemp == false) pauseTemp = true;
-        else pauseTemp = false;
+        if (pauseTemp == false)
+        {
+            pause.color = new Color(.2352941f, .2352941f, .2352941f);
+            pauseTemp = true;
+        }
+        else
+        {
+            pause.color = new Color(.8f, .8f, .8f);
+            pauseTemp = false;
+        }
     }
 
     //Color Helpers
@@ -477,11 +483,11 @@ public class Chaos : MonoBehaviour
 
     private void FixedUpdate()
     {
-        TimeText.text = "Time: " + t.ToString("0.00000");
+        TimeText.text = "Time: " + t.ToString("0.000000");
 
         if (on && !pauseTemp)
         {
-            t += step * (2 + step) * 0.05f;
+            t += step * step * step * 0.01f;
 
             UpdateEquations();
             UpdateLines();

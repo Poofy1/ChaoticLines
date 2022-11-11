@@ -113,12 +113,14 @@ public class SaveHandler : MonoBehaviour
             yield return StartCoroutine(ScreenShot());
             
 
-
+            
             //Create json save 
-            List<FunctionInput> temp = mainEvents.func;
-            for (int i = 0; i < temp.Count; i++) temp[i].mainCords = null;
-            for (int i = 0; i < temp.Count; i++) temp[i].textInput = null;
-
+            List<FunctionInput> temp = new List<FunctionInput>();
+            for (int i = 0; i < mainEvents.func.Count; i++)
+            {
+                temp.Add(new FunctionInput(null, mainEvents.func[i].name, mainEvents.func[i].function));
+            }
+            
             saveList.Add(new SaveList
             {
                 CustomFunctions = temp,
@@ -129,6 +131,7 @@ public class SaveHandler : MonoBehaviour
             //WriteSave and reset
             WriteSave();
             ResetSelected();
+            
         }
         else
         {
@@ -178,6 +181,9 @@ public class SaveHandler : MonoBehaviour
                 //Create List
                 buttonList.Add(new SaveButton(saveList[i].SaveName, saveList[i].CustomFunctions, spawnedButtons[i]));
 
+                //Add details
+                spawnedButtons[i].transform.GetChild(1).GetComponent<Text>().text = "Layers: " + saveList[i].CustomFunctions.Count + "\nDate Created: " + saveList[i].date.Substring(0, 10);
+
                 //Set Listener
                 setButtonListener(i);
             }
@@ -202,7 +208,7 @@ public class SaveHandler : MonoBehaviour
         for (int i = 1; i < functionButtons.Length; i++) functionButtons[i].GetComponent<Button>().interactable = true;
 
         currentSelected = a;
-        for (int i = 0; i < spawnedButtons.Length; i++) buttonList[i].button.GetComponent<Image>().color = new Color(.098f, .098f, .098f, .6749f);
+        for (int i = 0; i < spawnedButtons.Length; i++) buttonList[i].button.GetComponent<Image>().color = new Color(.235294f, .235294f, .235294f, 1);
 
         buttonList[a].button.GetComponent<Image>().color = new Color(0, 0, 0, .6749f);
 
@@ -222,7 +228,7 @@ public class SaveHandler : MonoBehaviour
     public void ResetSelected()
     {
         for (int i = 1; i < functionButtons.Length; i++) functionButtons[i].GetComponent<Button>().interactable = false;
-        for (int i = 0; i < spawnedButtons.Length; i++) buttonList[i].button.GetComponent<Image>().color = new Color(.098f, .098f, .098f, .6749f);
+        for (int i = 0; i < spawnedButtons.Length; i++) buttonList[i].button.GetComponent<Image>().color = new Color(.235294f, .235294f, .235294f, 1);
     }
 
 
@@ -297,6 +303,11 @@ public class SaveHandler : MonoBehaviour
     //Delete System
     public void DeleteSystem()
     {
+        //Delete preview
+        string filePath = Application.dataPath + "/PreviewImages/" + saveList[currentSelected].date + ".png";
+        if (File.Exists(filePath)) File.Delete(filePath);
+
+        //Remove from list
         saveList.RemoveAt(currentSelected);
         ResetSelected();
         WriteSave();

@@ -4,59 +4,59 @@
       {
         "textInput": null,
         "name": "x",
-        "function": "(-y*x)+(-x*y*Sin(z))+t",
+        "function": "(r*-y*-z)-y",
         "mainCords": null
       },
       {
         "textInput": null,
         "name": "y",
-        "function": "(Cos(-z)*x)+(r*-x)-z-r",
+        "function": "(Cos(y)*t)+(x*z)-r-r-r",
         "mainCords": null
       },
       {
         "textInput": null,
         "name": "z",
-        "function": "(-Sin(-y)*-r)+(t*y)+y+t-y",
+        "function": "(x*-x)+(x*t)+z",
         "mainCords": null
       },
       {
         "textInput": null,
         "name": "r",
-        "function": "(-t*t*z)+(r*Sin(x))",
+        "function": "(-z*z)+(Cos(x)*t)+(-t*t)-z+z+r",
         "mainCords": null
       }
     ],
-    "date": "2022-11-07-19-12-14-97",
-    "SaveName": "woah"
+    "date": "2022-11-08-00-23-19-27",
+    "SaveName": "a"
   },
   {
     "CustomFunctions": [
       {
         "textInput": null,
         "name": "x",
-        "function": "(x*t)-(r*-Cos(-x))",
+        "function": "(y*z)+(t*z)+(z*x)-r",
         "mainCords": null
       },
       {
         "textInput": null,
         "name": "y",
-        "function": "(y*r)-(z*-y)-(t*-t)-z-t",
+        "function": "(r*r)+(y*-x*-Tan(-t))-z",
         "mainCords": null
       },
       {
         "textInput": null,
         "name": "z",
-        "function": "(-t*r)+(t*x)+r",
+        "function": "(y*t)-x+z",
         "mainCords": null
       },
       {
         "textInput": null,
         "name": "r",
-        "function": "(t*t)+x",
+        "function": "(r*y)",
         "mainCords": null
       }
     ],
-    "date": "2022-11-07-19-13-28-10",
-    "SaveName": "c:"
+    "date": "2022-11-08-00-24-02-02",
+    "SaveName": "popopop"
   }
 ]
