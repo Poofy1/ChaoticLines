@@ -22,6 +22,7 @@ public class SaveHandler : MonoBehaviour
     public GameObject renamePanel;
     public TMP_InputField renameInput;
     public GameObject hud;
+    public GameObject photoHud;
     public RawImage preview;
 
 
@@ -105,15 +106,20 @@ public class SaveHandler : MonoBehaviour
     {
         if (mainEvents.TestCustom())
         {
-            
+
+
+            //Wait For Screenshot
+            photoHud.SetActive(true);
+            yield return StartCoroutine(ScreenShot());
+
             //Wait for rename
             yield return StartCoroutine(RenameSystemCall());
 
-            //Take screenshot
-            yield return StartCoroutine(ScreenShot());
-            
+            photoHud.SetActive(false);
 
-            
+
+
+
             //Create json save 
             List<FunctionInput> temp = new List<FunctionInput>();
             for (int i = 0; i < mainEvents.func.Count; i++)
@@ -140,7 +146,36 @@ public class SaveHandler : MonoBehaviour
         
     }
 
-    
+
+    //ScreenShot
+    IEnumerator ScreenShot()
+    {
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        yield return null;
+        hud.SetActive(false);
+        yield return new WaitForEndOfFrame();
+
+        int res = 0;
+        if (Screen.height < Screen.width) res = Screen.height;
+        else res = Screen.width;
+
+        newDate = System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff");
+
+        Texture2D currentCapture = new Texture2D(res, res, TextureFormat.RGB24, false);
+        currentCapture.ReadPixels(new Rect(res / 2, 0, res, res), 0, 0, false);
+
+        currentCapture.Apply();
+        hud.SetActive(true);
+
+        byte[] bytes = currentCapture.EncodeToPNG();
+        System.IO.File.WriteAllBytes(Application.dataPath + "/PreviewImages/" + newDate + ".png", bytes);
+    }
+
+
 
     //Write Custom Save
     public void WriteSave()
@@ -253,7 +288,7 @@ public class SaveHandler : MonoBehaviour
             {
                 GameObject cus = mainEvents.CreateVarInput(funcName);
 
-                mainEvents.func.Add(new FunctionInput(cus.gameObject.GetComponent<TMP_InputField>(), funcName, funcText));
+                mainEvents.func.Add(new FunctionInput(cus.gameObject.GetComponentInChildren<TMP_InputField>(), funcName, funcText));
                 mainEvents.func[i].textInput.text = funcText;
             }
             else
@@ -314,28 +349,7 @@ public class SaveHandler : MonoBehaviour
     }
 
 
-    //ScreenShot
-    IEnumerator ScreenShot()
-    {
-        yield return null;
-        hud.SetActive(false);
-        yield return new WaitForEndOfFrame();
-
-        int res = 0;
-        if (Screen.height < Screen.width) res = Screen.height;
-        else res = Screen.width;
-
-        newDate = System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff");
-
-        Texture2D currentCapture = new Texture2D(res, res, TextureFormat.RGB24, false);
-        currentCapture.ReadPixels(new Rect(res / 2, 0, res, res), 0, 0, false);
-
-        currentCapture.Apply();
-        hud.SetActive(true);
-
-        byte[] bytes = currentCapture.EncodeToPNG();
-        System.IO.File.WriteAllBytes(Application.dataPath + "/PreviewImages/" + newDate + ".png", bytes);
-    }
+    
 
 
 

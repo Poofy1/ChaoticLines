@@ -475,8 +475,8 @@ public class Chaos : MonoBehaviour
     {
         var obj = Instantiate(customInputButton, new Vector3(0, 0, 0), Quaternion.identity, varParent);
         obj.gameObject.name = "CustomVarInput";
-        obj.GetComponent<TMP_InputField>().onValueChanged.AddListener(delegate { SetCustomVars(); });
-        obj.gameObject.transform.GetChild(0).GetComponent<Text>().text = name + "=";
+        obj.GetComponentInChildren<TMP_InputField>().onValueChanged.AddListener(delegate { SetCustomVars(); });
+        obj.gameObject.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = name + ":";
         return obj;
     }
 

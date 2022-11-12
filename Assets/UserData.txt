@@ -58,5 +58,95 @@
     ],
     "date": "2022-11-08-00-24-02-02",
     "SaveName": "popopop"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(x*z)+(x*x*t)+r",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(x*Sin(r))+(-x*y)-(-y*-r)-x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(r*t)-(-z*-r)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "r",
+        "function": "(r*-z)+(-t*z)+x-y",
+        "mainCords": null
+      }
+    ],
+    "date": "2022-11-11-20-18-13-60",
+    "SaveName": "retard"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(Tan(-x)*r)+(r*x)+r-z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(z*y)-(t*-z)-r-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(z*x)-t-x-z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "r",
+        "function": "(t*-Cos(-y))-(y*x)+r+y-y",
+        "mainCords": null
+      }
+    ],
+    "date": "2022-11-11-20-23-26-50",
+    "SaveName": "sus"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(r*-y*-z)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(Cos(y)*t)+(x*z)-r-r-r",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(x*-x)+(x*t)+z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "r",
+        "function": "(-z*z)+(Cos(x)*t)+(-t*t)-z+z+r",
+        "mainCords": null
+      }
+    ],
+    "date": "2022-11-11-21-04-49-77",
+    "SaveName": "ssss"
   }
 ]

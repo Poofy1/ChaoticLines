@@ -64,12 +64,7 @@ public class AnimationHandler : MonoBehaviour
         mmController.StartScene();
         hudFade.alpha = 0;
 
-        LeanTween.moveLocalX(ControlButton[0], ControlButton[1].transform.localPosition.x, 1).setEaseInOutCubic();
-        LeanTween.moveLocalX(CustomButton[0], CustomButton[1].transform.localPosition.x, 1).setEaseInOutCubic();
-        LeanTween.moveLocalX(OptionButtons[0], OptionButtons[1].transform.localPosition.x, 1).setEaseInOutCubic();
-        LeanTween.moveLocalX(DetailButtons[0], DetailButtons[1].transform.localPosition.x, 1).setEaseInOutCubic();
-
-        for (int i = 0; i < 2; i++) LeanTween.moveLocalY(hints[i], hints[2].transform.localPosition.y, 1).setEaseInOutCubic();
+        ShowHud();
         
 
         hudFade.gameObject.SetActive(false);
@@ -87,19 +82,10 @@ public class AnimationHandler : MonoBehaviour
         hudFade.gameObject.SetActive(true);
         StartCoroutine(mmController.FadeIn(hudFade, .01f, 0));
 
-
         //remove hud
-        LeanTween.moveLocalX(ControlButton[0], OffPositions[1].transform.localPosition.x, 1).setEaseInOutCubic();
-        LeanTween.moveLocalX(CustomButton[0], OffPositions[1].transform.localPosition.x, 1).setEaseInOutCubic();
-        LeanTween.moveLocalX(OptionButtons[0], OffPositions[0].transform.localPosition.x, 1).setEaseInOutCubic();
-        LeanTween.moveLocalX(DetailButtons[0], OffPositions[0].transform.localPosition.x, 1).setEaseInOutCubic();
-        if (ControlButton[0].GetComponent<SelfAni>().open) ControlButton[0].GetComponent<SelfAni>().open = false;
-        if (CustomButton[0].GetComponent<SelfAni>().open) CustomButton[0].GetComponent<SelfAni>().open = false;
-        if (OptionButtons[0].GetComponent<SelfAni>().open) OptionButtons[0].GetComponent<SelfAni>().open = false;
-        if (DetailButtons[0].GetComponent<SelfAni>().open) DetailButtons[0].GetComponent<SelfAni>().open = false;
+        HideHud();
 
-        for (int i = 0; i < 2; i++) LeanTween.moveLocalY(hints[i], -800 * (hud.GetComponent<CanvasScaler>().referenceResolution.x/1000), 1).setEaseInOutCubic();
-
+        
 
         //reset menu positions
         for (int i = 0; i < 3; i++) titles[i].localPosition = new Vector3(TitlePos[i].transform.localPosition.x, titles[i].localPosition.y, titles[i].localPosition.z);
@@ -109,5 +95,31 @@ public class AnimationHandler : MonoBehaviour
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < 4; i++) MMButtons[i].gameObject.GetComponent<Button>().interactable = true;
         mmController.GetComponent<MainMenu>().StartMainMenu();
+    }
+
+
+    public void HideHud()
+    {
+        LeanTween.moveLocalX(ControlButton[0], OffPositions[1].transform.localPosition.x, 1).setEaseInOutCubic();
+        LeanTween.moveLocalX(CustomButton[0], OffPositions[1].transform.localPosition.x, 1).setEaseInOutCubic();
+        LeanTween.moveLocalX(OptionButtons[0], OffPositions[0].transform.localPosition.x, 1).setEaseInOutCubic();
+        LeanTween.moveLocalX(DetailButtons[0], OffPositions[0].transform.localPosition.x, 1).setEaseInOutCubic();
+
+        if (ControlButton[0].GetComponent<SelfAni>().open) ControlButton[0].GetComponent<SelfAni>().open = false;
+        if (CustomButton[0].GetComponent<SelfAni>().open) CustomButton[0].GetComponent<SelfAni>().open = false;
+        if (OptionButtons[0].GetComponent<SelfAni>().open) OptionButtons[0].GetComponent<SelfAni>().open = false;
+        if (DetailButtons[0].GetComponent<SelfAni>().open) DetailButtons[0].GetComponent<SelfAni>().open = false;
+
+        for (int i = 0; i < 2; i++) LeanTween.moveLocalY(hints[i], -800 * (hud.GetComponent<CanvasScaler>().referenceResolution.x / 1000), 1).setEaseInOutCubic();
+    }
+
+    public void ShowHud()
+    {
+        LeanTween.moveLocalX(ControlButton[0], ControlButton[1].transform.localPosition.x, 1).setEaseInOutCubic();
+        LeanTween.moveLocalX(CustomButton[0], CustomButton[1].transform.localPosition.x, 1).setEaseInOutCubic();
+        LeanTween.moveLocalX(OptionButtons[0], OptionButtons[1].transform.localPosition.x, 1).setEaseInOutCubic();
+        LeanTween.moveLocalX(DetailButtons[0], DetailButtons[1].transform.localPosition.x, 1).setEaseInOutCubic();
+
+        for (int i = 0; i < 2; i++) LeanTween.moveLocalY(hints[i], hints[2].transform.localPosition.y, 1).setEaseInOutCubic();
     }
 }
