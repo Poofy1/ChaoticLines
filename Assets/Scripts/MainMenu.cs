@@ -94,26 +94,30 @@ public class MainMenu : MonoBehaviour
         //Reset
         yield return 0;
 
-        //Select random system from saves
-        saveHandler.currentSelected = UnityEngine.Random.Range(0, saveHandler.saveList.Count);
-
-        //Load system
+        //Load random system
+        saveHandler.ButtonClicked(UnityEngine.Random.Range(0, saveHandler.saveList.Count));
         saveHandler.LoadSystem();
 
+        //random color
         mainEvents.Color(UnityEngine.Random.Range(1, 10));
         mainEvents.On();
         StartCoroutine(FadeOut(fade, .005f, 0));
 
-        float tempStep = UnityEngine.Random.Range(.025f, .075f);
+        //random thickness 
+        mainEvents.ThicknessSlider.value = UnityEngine.Random.Range(0.1f, 1f);
+        mainEvents.UpdateThickness();
+
+        //Random step
+        float tempStep = UnityEngine.Random.Range(.25f, 1f);
         if (UnityEngine.Random.Range(0, 2) == 0) tempStep *= -1;
         mainEvents.step = tempStep;
         mainEvents.UpdateStep(true);
 
         //Reset Camera
-        randSceneTime = UnityEngine.Random.Range(15f, 45f);
+        randSceneTime = UnityEngine.Random.Range(15f, 30f);
 
-        randZoomRange[0] = new Vector3(0, 0, UnityEngine.Random.Range(-5f, -2f));
-        randZoomRange[1] = new Vector3(0, 0, UnityEngine.Random.Range(-20f, -10f));
+        randZoomRange[0] = new Vector3(0, 0, UnityEngine.Random.Range(-25f, -10f));
+        randZoomRange[1] = new Vector3(0, 0, UnityEngine.Random.Range(-50f, -30f));
         zoom = (randZoomRange[1] - randZoomRange[0]) / (randSceneTime * 50);
         mainOri.transform.localPosition = randZoomRange[0];
 

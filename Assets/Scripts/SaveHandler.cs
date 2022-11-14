@@ -274,7 +274,7 @@ public class SaveHandler : MonoBehaviour
 
         while(mainEvents.func.Count > 3)
         {
-            Destroy(mainEvents.func[mainEvents.func.Count - 1].textInput.gameObject);
+            Destroy(mainEvents.func[mainEvents.func.Count - 1].textInput.transform.parent.gameObject);
             mainEvents.func.RemoveAt(mainEvents.func.Count - 1);
         }
 

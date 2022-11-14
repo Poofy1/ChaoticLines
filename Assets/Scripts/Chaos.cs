@@ -64,6 +64,7 @@ public class Chaos : MonoBehaviour
     public Text SystemTitle;
     public Text SystemDisplay;
     public Button Activate;
+    public GameObject stopButton;
     public RawImage pause;
     public Button createRand;
     public Button loadButton;
@@ -168,10 +169,11 @@ public class Chaos : MonoBehaviour
         if (on)
         {
             pauseTemp = false;
-            Activate.GetComponent<RawImage>().color = new Color(.2352941f, .2352941f, .2352941f);
+            Activate.gameObject.SetActive(false);
+            stopButton.gameObject.SetActive(true);
             UpdateAmount();
             UpdateStep();
-            Amount.interactable = false;
+
             createRand.interactable = false;
             loadButton.interactable = false;
             activeCount = 0;
@@ -217,10 +219,15 @@ public class Chaos : MonoBehaviour
         else
         {
             percentActive.text = "Diverged: 0%";
-            Activate.GetComponent<RawImage>().color = new Color(.8f, .8f, .8f);
+
+            pause.color = new Color(.8f, .8f, .8f);
             pauseTemp = false;
+
             t = 0;
-            Amount.interactable = true;
+
+            Activate.gameObject.SetActive(true);
+            stopButton.gameObject.SetActive(false);
+
             createRand.interactable = true;
             loadButton.interactable = true;
             for (int i = 0; i < func.Count; i++) func[i].textInput.interactable = true;
@@ -231,9 +238,11 @@ public class Chaos : MonoBehaviour
     //Pausing
     public void Pause()
     {
+        if (!on) return;
+
         if (pauseTemp == false)
         {
-            pause.color = new Color(.2352941f, .2352941f, .2352941f);
+            pause.color = new Color(.0862745f, .0862745f, .0862745f);
             pauseTemp = true;
         }
         else
@@ -320,6 +329,7 @@ public class Chaos : MonoBehaviour
     //Tester
     public bool TestCustom()
     {
+        bool faultSearch = true;
         for (int i = 0; i < func.Count; i++)
         {
 
@@ -339,12 +349,12 @@ public class Chaos : MonoBehaviour
                 func[i].textInput.GetComponent<Image>().color = new Color(.5f, .098f, .098f);
                 errors[0].SetActive(true);
                 Activate.interactable = false;
-                
 
-                return false;
+
+                faultSearch = false;
             }
         }
-        return true;
+        return faultSearch;
     }
 
     //Create Random System
@@ -457,7 +467,7 @@ public class Chaos : MonoBehaviour
 
         //Spawn + Add to list
         GameObject cus = CreateVarInput(nameInput.text);
-        func.Add(new FunctionInput(cus.gameObject.GetComponent<TMP_InputField>(), nameInput.text, ""));
+        func.Add(new FunctionInput(cus.gameObject.GetComponentInChildren<TMP_InputField>(), nameInput.text, ""));
 
         //Reset
         appliedRename = false;
@@ -474,12 +484,28 @@ public class Chaos : MonoBehaviour
     public GameObject CreateVarInput(string name)
     {
         var obj = Instantiate(customInputButton, new Vector3(0, 0, 0), Quaternion.identity, varParent);
-        obj.gameObject.name = "CustomVarInput";
+        obj.gameObject.name = name;
         obj.GetComponentInChildren<TMP_InputField>().onValueChanged.AddListener(delegate { SetCustomVars(); });
-        obj.gameObject.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = name + ":";
+        obj.GetComponentInChildren<Button>().onClick.AddListener(delegate { DestoryVarInput(name); });
+        obj.gameObject.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = char.ToUpper(name[0]) + ":";
         return obj;
     }
 
+    public void DestoryVarInput(string name)
+    {
+        for (int i = 0; i < func.Count; i++)
+        {
+            if (func[i].name.Equals(name))
+            {
+                Destroy(func[i].textInput.transform.parent.gameObject);
+                func.RemoveAt(i);
+                if (on) On();
+                TestCustom();
+                return;
+            }
+        }
+        
+    }
 
     private void FixedUpdate()
     {
