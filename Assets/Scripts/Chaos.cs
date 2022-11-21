@@ -30,7 +30,6 @@ public class Chaos : MonoBehaviour
     //Main Render Pipe
     public List<FunctionInput> func;
     public TMP_InputField[] defaultInput;
-    public GameObject[] errors;
     public GameObject randomButton;
     public SaveHandler saveHandler;
     private bool customOn;
@@ -54,20 +53,19 @@ public class Chaos : MonoBehaviour
 
     //Canvas vars
     public GameObject canvas;
-    public GameObject savedSystems;
     public TMP_InputField Amount;
     public TMP_Text AmountText;
     public TMP_Text warningText;
     public Slider StepSlider;
     public Text StepText;
-    public Text TimeText;
+    public TMP_Text TimeText;
     public Text SystemTitle;
     public Text SystemDisplay;
     public Button Activate;
+    public Button SaveButton;
     public GameObject stopButton;
     public RawImage pause;
     public Button createRand;
-    public Button loadButton;
     public Button[] ColBut;
 
     public Slider ThicknessSlider;
@@ -103,20 +101,26 @@ public class Chaos : MonoBehaviour
             {
                 trail_Amount = 1;
                 warningText.text = "Please enter a positve whole number";
-                AmountText.text = "";
+                Amount.text = "";
+                Activate.interactable = false;
             }
             else if (trail_Amount > 5000)
             {
                 warningText.text = "It is recommended to not go above 5,000";
             }
-            else warningText.text = "";
+            else
+            {
+                warningText.text = "";
+                Activate.interactable = true;
+            }
 
         }
         else
         {
             trail_Amount = 1;
             warningText.text = "Please enter a positve whole number";
-            AmountText.text = "";
+            Amount.text = "";
+            Activate.interactable = false;
         }
 
     }
@@ -162,7 +166,6 @@ public class Chaos : MonoBehaviour
     public void On()
     {
         on = !on;
-        UpdateAmount();
         crosshair.GetComponent<Billboard>().ToggleCrosshair();
 
 
@@ -171,11 +174,12 @@ public class Chaos : MonoBehaviour
             pauseTemp = false;
             Activate.gameObject.SetActive(false);
             stopButton.gameObject.SetActive(true);
+            Amount.interactable = false;
+
             UpdateAmount();
             UpdateStep();
 
             createRand.interactable = false;
-            loadButton.interactable = false;
             activeCount = 0;
 
             //Initialize inputs and vars
@@ -227,9 +231,8 @@ public class Chaos : MonoBehaviour
 
             Activate.gameObject.SetActive(true);
             stopButton.gameObject.SetActive(false);
-
+            Amount.interactable = true;
             createRand.interactable = true;
-            loadButton.interactable = true;
             for (int i = 0; i < func.Count; i++) func[i].textInput.interactable = true;
             for (int i = 0; i < trail_Amount; i++) Destroy(trails[i].gameObject);
         }
@@ -322,6 +325,7 @@ public class Chaos : MonoBehaviour
                 func[i].function = func[i].textInput.text;
 
             Activate.interactable = true;
+            SaveButton.interactable = true;
             SystemDisplay.text = "X="+ func[0].textInput.text+ "\nY=" + func[1].textInput.text + "\nZ=" + func[2].textInput.text;
         }
     }
@@ -343,13 +347,11 @@ public class Chaos : MonoBehaviour
                 test.Evaluate();
 
                 func[i].textInput.GetComponent<Image>().color = new Color(.098f, .098f, .098f);
-                errors[0].SetActive(false);
             }
             catch {
                 func[i].textInput.GetComponent<Image>().color = new Color(.5f, .098f, .098f);
-                errors[0].SetActive(true);
                 Activate.interactable = false;
-
+                SaveButton.interactable = false;
 
                 faultSearch = false;
             }

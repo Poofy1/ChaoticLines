@@ -83,11 +83,6 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    //Return random system from list
-    public void RandomSystem()
-    {
-        saveHandler.currentSelected = UnityEngine.Random.Range(0, saveHandler.saveList.Count);
-    }
 
     IEnumerator ResetScene()
     {
@@ -95,8 +90,9 @@ public class MainMenu : MonoBehaviour
         yield return 0;
 
         //Load random system
-        saveHandler.ButtonClicked(UnityEngine.Random.Range(0, saveHandler.saveList.Count));
-        saveHandler.LoadSystem();
+        int rand = UnityEngine.Random.Range(0, saveHandler.saveList.Count);
+        saveHandler.ButtonClicked(rand);
+        saveHandler.LoadSystem(saveHandler.saveList[rand].SaveName);
 
         //random color
         mainEvents.Color(UnityEngine.Random.Range(1, 10));

@@ -18,7 +18,6 @@ public class SaveHandler : MonoBehaviour
     public MouseLook mouse;
     public GameObject button;
     public GameObject buttonParent;
-    public GameObject[] functionButtons;
     public GameObject renamePanel;
     public TMP_InputField renameInput;
     public GameObject hud;
@@ -139,10 +138,7 @@ public class SaveHandler : MonoBehaviour
             ResetSelected();
             
         }
-        else
-        {
-            mainEvents.errors[3].SetActive(true);
-        }
+
         
     }
 
@@ -217,7 +213,7 @@ public class SaveHandler : MonoBehaviour
                 buttonList.Add(new SaveButton(saveList[i].SaveName, saveList[i].CustomFunctions, spawnedButtons[i]));
 
                 //Add details
-                spawnedButtons[i].transform.GetChild(1).GetComponent<Text>().text = "Layers: " + saveList[i].CustomFunctions.Count + "\nDate Created: " + saveList[i].date.Substring(0, 10);
+                spawnedButtons[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Layers: " + saveList[i].CustomFunctions.Count + "\nDate Created: " + saveList[i].date.Substring(0, 10);
 
                 //Set Listener
                 setButtonListener(i);
@@ -233,14 +229,15 @@ public class SaveHandler : MonoBehaviour
     private void setButtonListener(int i)
     {
         buttonList[i].button.GetComponent<Button>().onClick.AddListener(delegate { ButtonClicked(i); });
+        buttonList[i].button.transform.GetChild(2).GetComponentInChildren<Button>().onClick.AddListener(delegate { DeleteSystem(saveList[i].SaveName); });
+        buttonList[i].button.transform.GetChild(3).GetComponentInChildren<Button>().onClick.AddListener(delegate { RenameSystem(saveList[i].SaveName); });
+        buttonList[i].button.transform.GetChild(4).GetComponentInChildren<Button>().onClick.AddListener(delegate { LoadSystem(saveList[i].SaveName); });
     }
 
 
     //When Save is clicked
     public void ButtonClicked(int a)
     {
-        
-        for (int i = 1; i < functionButtons.Length; i++) functionButtons[i].GetComponent<Button>().interactable = true;
 
         currentSelected = a;
         for (int i = 0; i < spawnedButtons.Length; i++) buttonList[i].button.GetComponent<Image>().color = new Color(.235294f, .235294f, .235294f, 1);
@@ -262,27 +259,38 @@ public class SaveHandler : MonoBehaviour
     //Reset currently Selected
     public void ResetSelected()
     {
-        for (int i = 1; i < functionButtons.Length; i++) functionButtons[i].GetComponent<Button>().interactable = false;
         for (int i = 0; i < spawnedButtons.Length; i++) buttonList[i].button.GetComponent<Image>().color = new Color(.235294f, .235294f, .235294f, 1);
     }
 
+    //Reset currently Selected Load
+    public void ResetLoadColor()
+    {
+        for (int i = 0; i < spawnedButtons.Length; i++) buttonList[i].button.transform.GetChild(4).GetChild(2).GetComponent<RawImage>().color = new Color(.8f, .8f, .8f, 1);
+    }
 
     //Load System
-    public void LoadSystem()
+    public void LoadSystem(string name)
     {
-        mainEvents.SystemTitle.text = saveList[currentSelected].SaveName;
+        if (mainEvents.on == true) mainEvents.On();
 
-        while(mainEvents.func.Count > 3)
+        int buttonIndex = LocateButton(name);
+        mainEvents.SystemTitle.text = saveList[buttonIndex].SaveName;
+
+        //Reset Load Color
+        ResetLoadColor();
+        buttonList[buttonIndex].button.transform.GetChild(4).GetChild(2).GetComponent<RawImage>().color = new Color(.4823529f, 0, 0, 1);
+
+        while (mainEvents.func.Count > 3)
         {
             Destroy(mainEvents.func[mainEvents.func.Count - 1].textInput.transform.parent.gameObject);
             mainEvents.func.RemoveAt(mainEvents.func.Count - 1);
         }
 
-        for (int i = 0; i < saveList[currentSelected].CustomFunctions.Count; i++)
+        for (int i = 0; i < saveList[buttonIndex].CustomFunctions.Count; i++)
         {
 
-            string funcText = saveList[currentSelected].CustomFunctions[i].function;
-            string funcName = saveList[currentSelected].CustomFunctions[i].name;
+            string funcText = saveList[buttonIndex].CustomFunctions[i].function;
+            string funcName = saveList[buttonIndex].CustomFunctions[i].name;
 
             if (i > 2)
             {
@@ -306,15 +314,14 @@ public class SaveHandler : MonoBehaviour
     }
 
     //Rename System
-    public void RenameSystem()
+    public void RenameSystem(string name)
     {
-        StartCoroutine(RenameSystem1());
+        StartCoroutine(RenameSystem1(LocateButton(name)));
     }
-    IEnumerator RenameSystem1()
+    IEnumerator RenameSystem1(int i)
     {
         yield return StartCoroutine(RenameSystemCall());
-        saveList[currentSelected].SaveName = newName;
-        ResetSelected();
+        saveList[i].SaveName = newName;
         WriteSave();
     }
 
@@ -335,22 +342,37 @@ public class SaveHandler : MonoBehaviour
         appliedRename = true;
     }
 
-    //Delete System
-    public void DeleteSystem()
+    //Delete System 
+    public void DeleteSystem(string name)
     {
-        //Delete preview
-        string filePath = Application.dataPath + "/PreviewImages/" + saveList[currentSelected].date + ".png";
-        if (File.Exists(filePath)) File.Delete(filePath);
+        int i = LocateButton(name);
+        if(i != -1)
+        {
+            //Destroy button
+            Destroy(buttonList[i].button);
 
-        //Remove from list
-        saveList.RemoveAt(currentSelected);
-        ResetSelected();
-        WriteSave();
+            //Delete preview
+            string filePath = Application.dataPath + "/PreviewImages/" + saveList[i].date + ".png";
+            if (File.Exists(filePath)) File.Delete(filePath);
+
+            //Remove from list
+            saveList.RemoveAt(i);
+            buttonList.RemoveAt(i);
+
+            WriteSave();
+        }
     }
 
 
-    
-
+    //Locates button refrence (Improve later probably)
+    public int LocateButton(string name)
+    {
+        for (int i = 0; i < saveList.Count; i++)
+        {
+            if (saveList[i].SaveName.Equals(name)) return i;
+        }
+        return -1;
+    }
 
 
     //SaveSystem
@@ -388,7 +410,7 @@ public class SaveHandler : MonoBehaviour
             name = nameInput;
             button = obj;
 
-            button.transform.GetChild(0).GetComponent<Text>().text = name;
+            button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = name;
         }
     }
 

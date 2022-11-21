@@ -6,5 +6,5 @@
   "sound": 0.0,
   "fov": 107.800766,
   "hudScale": 1.0,
-  "safety": false
+  "safety": true
 }
