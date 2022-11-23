@@ -67,7 +67,7 @@ public class Settings : MonoBehaviour
     public void hudScaleApply(int index)
     {
         hudSlider.value = hudSlider.value;
-        huds.referenceResolution = new Vector2(hudSlider.value * 1000, hudSlider.value * 1000);
+        huds.referenceResolution = new Vector2(0, hudSlider.value * 500);
     }
 
     //FullScreen

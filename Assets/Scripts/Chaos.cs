@@ -12,27 +12,24 @@ using System.Threading.Tasks;
 public class Chaos : MonoBehaviour
 {
     //System vars
-    public GameObject trail;
+    public GameObject line;
     public GameObject crosshair;
     public MapRotate mapRotator;
     public Transform mapBounds;
-    public PlayerMovement player;
     public int bounds = 10000;
     public int trail_Amount = 1;
     public float t;
     public float step;
     public bool safety = true;
-    public float speedLimit;
     private int color;
     private int boxBound = 0;
+    private bool pauseTemp = false;
 
 
     //Main Render Pipe
     public List<FunctionInput> func;
     public TMP_InputField[] defaultInput;
-    public GameObject randomButton;
     public SaveHandler saveHandler;
-    private bool customOn;
     private Expression[] exp;
 
     //Secondary Render Pipe
@@ -40,16 +37,14 @@ public class Chaos : MonoBehaviour
     public GameObject varNaming;
     public TMP_InputField nameInput;
     public Transform varParent;
-    private GameObject[] varGameObjects;
 
     //private vars
     private bool[] active;
     private Transform[] trails;
-    private int system;
     public bool on = false;
-    private float trailLength;
+    public bool absolute = false;
     private float lineThickness;
-    private Vector3[] pastLoc;
+    private float trailLength;
 
     //Canvas vars
     public GameObject canvas;
@@ -60,20 +55,17 @@ public class Chaos : MonoBehaviour
     public Text StepText;
     public TMP_Text TimeText;
     public Text SystemTitle;
-    public Text SystemDisplay;
     public Button Activate;
     public Button SaveButton;
     public GameObject stopButton;
-    public RawImage pause;
+    public Image pause;
     public Button createRand;
+    public Button createVar;
     public Button[] ColBut;
-
     public Slider ThicknessSlider;
     public Text ThicknessText;
     public Slider LengthSlider;
     public Text LengthText;
-
-    private bool pauseTemp = false;
 
     //Stats
     public Text percentActive;
@@ -175,11 +167,12 @@ public class Chaos : MonoBehaviour
             Activate.gameObject.SetActive(false);
             stopButton.gameObject.SetActive(true);
             Amount.interactable = false;
+            createVar.interactable = false;
+            createRand.interactable = false;
 
             UpdateAmount();
             UpdateStep();
 
-            createRand.interactable = false;
             activeCount = 0;
 
             //Initialize inputs and vars
@@ -196,8 +189,6 @@ public class Chaos : MonoBehaviour
                 exp[i] = new Expression(func[i].function);
             }
             
-
-            pastLoc = new Vector3[trail_Amount];
             active = new bool[trail_Amount];
             for (int i = 0; i < trail_Amount; i++)
             {
@@ -209,13 +200,12 @@ public class Chaos : MonoBehaviour
             for (int i = 0; i < trail_Amount; i++)
             {
                 //Create and Find
-                var name = Instantiate(trail, new Vector3(0, 0, 0), Quaternion.identity);
+                var name = Instantiate(line, new Vector3(0, 0, 0), Quaternion.identity);
                 name.gameObject.name = "Trail" + i;
                 trails[i] = name.transform;
             }
 
             //Update Prefrences
-            UpdateLength();
             UpdateThickness();
             Color(color);
 
@@ -233,6 +223,7 @@ public class Chaos : MonoBehaviour
             stopButton.gameObject.SetActive(false);
             Amount.interactable = true;
             createRand.interactable = true;
+            createVar.interactable = true;
             for (int i = 0; i < func.Count; i++) func[i].textInput.interactable = true;
             for (int i = 0; i < trail_Amount; i++) Destroy(trails[i].gameObject);
         }
@@ -326,7 +317,6 @@ public class Chaos : MonoBehaviour
 
             Activate.interactable = true;
             SaveButton.interactable = true;
-            SystemDisplay.text = "X="+ func[0].textInput.text+ "\nY=" + func[1].textInput.text + "\nZ=" + func[2].textInput.text;
         }
     }
 
@@ -388,6 +378,45 @@ public class Chaos : MonoBehaviour
         }
     }
 
+    //Calculate
+    int resetPoint = 0;
+    public void AbsCalc(int a, int i)
+    {
+
+        for (int b = 0; b < func.Count; b++)
+        {
+            if (i < Mathf.Floor(trail_Amount / 2))
+            {
+                exp[a].Parameters[func[b].name] = func[b].mainCords[i - 1];
+                exp[a].Parameters["t"] = t;
+            }
+            else if(i == Mathf.Floor(trail_Amount / 2))
+            {
+                resetPoint = i;
+                exp[a].Parameters[func[b].name] = func[b].mainCords[0];
+                exp[a].Parameters["t"] = -t;
+            }
+            else
+            {
+                exp[a].Parameters[func[b].name] = func[b].mainCords[i - 1];
+                exp[a].Parameters["t"] = -t;
+            }
+        }
+
+        
+
+        try
+        {
+            func[a].mainCords[i] = Convert.ToSingle(exp[a].Evaluate());
+            func[a].mainCords[i] = SaftyCheck(func[a].mainCords[i], i);
+        }
+        catch
+        {
+            Debug.Log("input Error");
+            func[a].mainCords[i] = 0;
+        }
+    }
+
 
     private void UpdateEquations()
     {
@@ -405,37 +434,22 @@ public class Chaos : MonoBehaviour
 
                 for (int a = 0; a < func.Count; a++)
                 {
-
                     //Calculate
-                    CordCalc(a, i);
+                    if (absolute)
+                        AbsCalc(a, i);
+                    else
+                        CordCalc(a, i);
                 }
-
-                /*
-                if (safety && false) //keep off for now
-                {
-                    //THERE IS VECTOR3.DISTANCE DUMBY
-                    float distance = 0;//Distance(pastLoc[i][0], pastLoc[i][1], pastLoc[i][2], mainCords[0][i], mainCords[1][i], mainCords[2][i]);
-                    if (distance > speedLimit)
-                    {
-                        trails[i].GetComponent<TrailRenderer>().emitting = false;
-                        active[i] = false;
-                    }
-                    //else trails[i].GetComponent<TrailRenderer>().emitting = true;
-                }
-
-                
-
-                //pastLoc[i] = new Vector3(func[0].mainCords[i], func[1].mainCords[i], func[2].mainCords[i]);
-                */
                 
                 if (active[i] == false) activeCount++;
             }
         }
     }
 
+    
     private void UpdateLines()
     {
-        for (int i = 0; i < trail_Amount; i++) if(active[i]) trails[i].position = new Vector3(func[0].mainCords[i] * 20, func[1].mainCords[i] * 20, func[0].mainCords[2] * 20);
+        for (int i = 0; i < trail_Amount; i++) if (active[i]) trails[i].transform.position = new Vector3(func[0].mainCords[i] * 20, func[1].mainCords[i] * 20, func[0].mainCords[2] * 20);
     }
 
     private float SaftyCheck(float input, int i)

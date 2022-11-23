@@ -265,7 +265,7 @@ public class SaveHandler : MonoBehaviour
     //Reset currently Selected Load
     public void ResetLoadColor()
     {
-        for (int i = 0; i < spawnedButtons.Length; i++) buttonList[i].button.transform.GetChild(4).GetChild(2).GetComponent<RawImage>().color = new Color(.8f, .8f, .8f, 1);
+        for (int i = 0; i < spawnedButtons.Length; i++) buttonList[i].button.transform.GetChild(4).GetChild(2).GetComponent<Image>().color = new Color(.8f, .8f, .8f, 1);
     }
 
     //Load System
@@ -278,7 +278,7 @@ public class SaveHandler : MonoBehaviour
 
         //Reset Load Color
         ResetLoadColor();
-        buttonList[buttonIndex].button.transform.GetChild(4).GetChild(2).GetComponent<RawImage>().color = new Color(.4823529f, 0, 0, 1);
+        buttonList[buttonIndex].button.transform.GetChild(4).GetChild(2).GetComponent<Image>().color = new Color(.4823529f, 0, 0, 1);
 
         while (mainEvents.func.Count > 3)
         {

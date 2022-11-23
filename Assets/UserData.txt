@@ -70,66 +70,6 @@
       {
         "textInput": null,
         "name": "x",
-        "function": "(g*-y)-t-y",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(g*-g)+(t*-t)+z+y",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(z*t)+(-x*z)-z",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "g",
-        "function": "(t*Cos(y))-(y*-t)+y",
-        "mainCords": null
-      }
-    ],
-    "date": "2022-11-20-20-11-05-35",
-    "SaveName": "adwaww"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
-        "function": "(t*x)-(z*z)+z+y+x",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(-z*Tan(g))+g+y+z",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(x*z)+y+y",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "g",
-        "function": "(-Sin(-x)*x)+(g*x)",
-        "mainCords": null
-      }
-    ],
-    "date": "2022-11-20-20-25-02-55",
-    "SaveName": "balck"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
         "function": "(-z*-g)-(z*y)",
         "mainCords": null
       },
@@ -184,5 +124,71 @@
     ],
     "date": "2022-11-20-20-25-40-60",
     "SaveName": "lame"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-Sin(-g)*g)-(g*g)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(Sin(x)*t)-(z*-g)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(t*z)-g+g-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "g",
+        "function": "(-g*-t)+(x*x)-y",
+        "mainCords": null
+      }
+    ],
+    "date": "2022-11-21-19-27-00-16",
+    "SaveName": "akjdbikwa"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-z*t)+(-t*x)-(-x*-g)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(y*z)+(t*x)+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(t*x)+c",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "g",
+        "function": "(-x*x)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "c",
+        "function": "(-y*y)",
+        "mainCords": null
+      }
+    ],
+    "date": "2022-11-22-18-04-58-86",
+    "SaveName": "cool one 2"
   }
 ]
