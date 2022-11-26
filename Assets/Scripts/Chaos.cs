@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 public class Chaos : MonoBehaviour
 {
     //System vars
-    public GameObject line;
+    public GameObject[] lines;
+    public int lineSelection;
     public GameObject crosshair;
     public MapRotate mapRotator;
     public Transform mapBounds;
@@ -70,6 +71,11 @@ public class Chaos : MonoBehaviour
     //Stats
     public Text percentActive;
     private float activeCount = 0;
+
+    //Customizer
+    public RectTransform colorTexture;
+    public Texture2D colorRef;
+
 
     public void Start()
     {
@@ -200,14 +206,19 @@ public class Chaos : MonoBehaviour
             for (int i = 0; i < trail_Amount; i++)
             {
                 //Create and Find
-                var name = Instantiate(line, new Vector3(0, 0, 0), Quaternion.identity);
+                var name = Instantiate(lines[lineSelection], new Vector3(0, 0, 0), Quaternion.identity);
                 name.gameObject.name = "Trail" + i;
                 trails[i] = name.transform;
             }
 
             //Update Prefrences
-            UpdateThickness();
-            Color(color);
+            if (lineSelection == 0)
+            {
+                UpdateLength();
+                UpdateThickness();
+                Color(color);
+            }
+            
 
         }
         else
@@ -283,6 +294,25 @@ public class Chaos : MonoBehaviour
             }
         }
     }
+
+    public void GetColor()
+    {
+        Vector2 delta;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(colorTexture, Input.mousePosition, null, out delta);
+
+        float width = colorTexture.rect.width;
+        float height = colorTexture.rect.height;
+
+        delta += new Vector2(width / 2, height / 2);
+
+        float x = Mathf.Clamp(delta.x / width, 0f, 1f);
+        float y = Mathf.Clamp(delta.y / height, 0f, 1f);
+
+        Color c = colorRef.GetPixel(Mathf.RoundToInt(x * colorRef.width), Mathf.RoundToInt(y * colorRef.height));
+
+        pause.color = c;
+    }
+
 
     public void ColorConfig()
     {

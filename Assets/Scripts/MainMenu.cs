@@ -94,14 +94,19 @@ public class MainMenu : MonoBehaviour
         saveHandler.ButtonClicked(rand);
         saveHandler.LoadSystem(saveHandler.saveList[rand].SaveName);
 
-        //random color
-        mainEvents.Color(UnityEngine.Random.Range(1, 10));
-        mainEvents.On();
-        StartCoroutine(FadeOut(fade, .005f, 0));
 
-        //random thickness 
-        mainEvents.ThicknessSlider.value = UnityEngine.Random.Range(0.1f, 1f);
-        mainEvents.UpdateThickness();
+        if (mainEvents.lineSelection == 0)
+        {
+            //random color
+            mainEvents.Color(UnityEngine.Random.Range(1, 10));
+            mainEvents.On();
+            StartCoroutine(FadeOut(fade, .005f, 0));
+
+            //random thickness 
+            mainEvents.ThicknessSlider.value = UnityEngine.Random.Range(0.1f, 1f);
+            mainEvents.UpdateThickness();
+        }
+        
 
         //Random step
         float tempStep = UnityEngine.Random.Range(.25f, 1f);
