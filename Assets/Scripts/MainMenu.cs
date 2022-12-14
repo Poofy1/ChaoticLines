@@ -98,7 +98,7 @@ public class MainMenu : MonoBehaviour
         if (mainEvents.lineSelection == 0)
         {
             //random color
-            mainEvents.Color(UnityEngine.Random.Range(1, 10));
+            //mainEvents.Color(UnityEngine.Random.Range(1, 10));
             mainEvents.On();
             StartCoroutine(FadeOut(fade, .005f, 0));
 

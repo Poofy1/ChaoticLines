@@ -24,6 +24,9 @@ public class SaveHandler : MonoBehaviour
     public GameObject photoHud;
     public RawImage preview;
 
+    public ColorButton ColorObj;
+    public Transform ColorObjParent;
+    public List<ColorSet> currentColorSet;
 
     private GameObject[] spawnedButtons;
     public int currentSelected;
@@ -37,6 +40,9 @@ public class SaveHandler : MonoBehaviour
         saveList = new List<SaveList>();
         buttonList = new List<SaveButton>();
         savedSet = new SettingItem();
+
+        currentColorSet = new List<ColorSet>();
+
         spawnedButtons = new GameObject[0];
         LoadAll();
 
@@ -364,7 +370,7 @@ public class SaveHandler : MonoBehaviour
     }
 
 
-    //Locates button refrence (Improve later probably)
+    //Locates button refrence
     public int LocateButton(string name)
     {
         for (int i = 0; i < saveList.Count; i++)
@@ -374,14 +380,77 @@ public class SaveHandler : MonoBehaviour
         return -1;
     }
 
-
-    //SaveSystem
-    public class SaveList
+    //Locates color var button refrence
+    public void DeleteColorVar(int name)
     {
-        public List<FunctionInput> CustomFunctions { get; set; }
-        public string date { get; set; }
-        public string SaveName { get; set; }
+        for (int i = 0; i < currentColorSet.Count; i++)
+        {
+            if (currentColorSet[i].identifier == name)
+            {
+                Destroy(currentColorSet[i].obj.gameObject);
+                currentColorSet.RemoveAt(i);
+
+                //Update colors real time
+                mainEvents.UpdateColor();
+                return;
+            }
+        }
     }
+
+
+
+
+
+
+
+
+    //Colors
+    int colorIndex = 0;
+    public void NewColor()
+    {
+        //Spawn New
+        var name = Instantiate(ColorObj, new Vector3(0, 0, 0), Quaternion.identity, ColorObjParent);
+        name.gameObject.name = "Color";
+
+        //Set Color
+        Color c = mainEvents.GetColor();
+        name.SetColor(c);
+
+        //Set Delete Button
+        int copy = colorIndex;
+        name.delButton.onClick.AddListener(delegate { DeleteColorVar(copy); });
+
+        //Add to list
+        currentColorSet.Add(new ColorSet(colorIndex, name, c));
+
+        colorIndex++;
+
+        //Update colors real time
+        mainEvents.UpdateColor();
+    }
+
+
+    //Delete Color in set 
+    public void DeleteColor(string name)
+    {
+        int i = LocateButton(name);
+        if (i != -1)
+        {
+            //Destroy button
+            Destroy(buttonList[i].button);
+
+            //Delete preview
+            string filePath = Application.dataPath + "/PreviewImages/" + saveList[i].date + ".png";
+            if (File.Exists(filePath)) File.Delete(filePath);
+
+            //Remove from list
+            saveList.RemoveAt(i);
+            buttonList.RemoveAt(i);
+
+            WriteSave();
+        }
+    }
+
 
     //SaveSettings
     public class SettingItem
@@ -394,6 +463,14 @@ public class SaveHandler : MonoBehaviour
         public float fov { get; set; }
         public float hudScale { get; set; }
         public bool safety { get; set; }
+    }
+
+    //SaveSystem
+    public class SaveList
+    {
+        public List<FunctionInput> CustomFunctions { get; set; }
+        public string date { get; set; }
+        public string SaveName { get; set; }
     }
 
     //Save Item List
@@ -412,6 +489,14 @@ public class SaveHandler : MonoBehaviour
 
             button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = name;
         }
+    }
+
+
+    //Save Color Sets as List
+    public class SaveColors
+    {
+        public List<List<ColorSet>> CustomColors { get; set; }
+        public string SaveName { get; set; }
     }
 
 }

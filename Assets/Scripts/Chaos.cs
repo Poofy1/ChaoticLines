@@ -12,9 +12,10 @@ using System.Threading.Tasks;
 public class Chaos : MonoBehaviour
 {
     //System vars
-    public GameObject[] lines;
+    //public GameObject[] lines;
     public int lineSelection;
     public GameObject crosshair;
+    public TrailTemplate mainTrail;
     public MapRotate mapRotator;
     public Transform mapBounds;
     public int bounds = 10000;
@@ -41,7 +42,7 @@ public class Chaos : MonoBehaviour
 
     //private vars
     private bool[] active;
-    private Transform[] trails;
+    private TrailTemplate[] trails;
     public bool on = false;
     public bool absolute = false;
     private float lineThickness;
@@ -62,11 +63,12 @@ public class Chaos : MonoBehaviour
     public Image pause;
     public Button createRand;
     public Button createVar;
-    public Button[] ColBut;
     public Slider ThicknessSlider;
     public Text ThicknessText;
     public Slider LengthSlider;
     public Text LengthText;
+    public Image[] polarToggles;
+    public Image[] cartToggles;
 
     //Stats
     public Text percentActive;
@@ -80,7 +82,7 @@ public class Chaos : MonoBehaviour
     public void Start()
     {
         func = new List<FunctionInput>();
-        
+        for (int i = 0; i < 3; i++) SetCart(i);
     }
 
     public void InitializeMainCords()
@@ -134,13 +136,10 @@ public class Chaos : MonoBehaviour
     {
         lineThickness = ThicknessSlider.value;
         ThicknessText.text = lineThickness.ToString("0.0");
+        lineThickness /= 5;
         if (on)
         {
-            for (int i = 0; i < trail_Amount; i++)
-            {
-                trails[i].GetComponent<TrailRenderer>().startWidth = lineThickness / 5f;
-                trails[i].GetComponent<TrailRenderer>().endWidth = lineThickness / 10f;
-            }
+            for (int i = 0; i < trail_Amount; i++) trails[i].SetWidth(lineThickness);
         }
     }
 
@@ -154,9 +153,10 @@ public class Chaos : MonoBehaviour
             LengthText.text = "∞";
         }
 
+        trailLength *= 5;
         if (on)
         {
-            for (int i = 0; i < trail_Amount; i++) trails[i].GetComponent<TrailRenderer>().time = trailLength * 5;
+            for (int i = 0; i < trail_Amount; i++) trails[i].SetLength(trailLength);
         }
     }
 
@@ -202,13 +202,14 @@ public class Chaos : MonoBehaviour
             }
 
             //Initialize trails
-            trails = new Transform[trail_Amount];
+            trails = new TrailTemplate[trail_Amount];
             for (int i = 0; i < trail_Amount; i++)
             {
                 //Create and Find
-                var name = Instantiate(lines[lineSelection], new Vector3(0, 0, 0), Quaternion.identity);
+                var name = Instantiate(mainTrail, new Vector3(0, 0, 0), Quaternion.identity);
+                name.gameObject.SetActive(true);
                 name.gameObject.name = "Trail" + i;
-                trails[i] = name.transform;
+                trails[i] = name;
             }
 
             //Update Prefrences
@@ -216,7 +217,7 @@ public class Chaos : MonoBehaviour
             {
                 UpdateLength();
                 UpdateThickness();
-                Color(color);
+                UpdateColor();
             }
             
 
@@ -257,45 +258,8 @@ public class Chaos : MonoBehaviour
         }
     }
 
-    //Color Helpers
-    private void SetColorRange(float r1, float r2, float g1, float g2, float b1, float b2)
-    {
-        if (on)
-        {
-            for (int i = 0; i < trail_Amount; i++)
-            {
-                float c1 = UnityEngine.Random.Range(r1, r2);
-                float c2 = UnityEngine.Random.Range(g1, g2);
-                float c3 = UnityEngine.Random.Range(b1, b2);
-                trails[i].GetComponent<TrailRenderer>().startColor = new Color(c1, c2, c3, 1);
-                trails[i].GetComponent<TrailRenderer>().endColor = new Color(c1, c2, c3, .5f);
-            }
-        }
-    }
-
-    private void SetColorChoice(float r1, float r2, float g1, float g2, float b1, float b2)
-    {
-        if (on)
-        {
-            for (int i = 0; i < trail_Amount; i++)
-            {
-                float rand = UnityEngine.Random.Range(0, 2);
-                if (rand == 0)
-                {
-                    trails[i].GetComponent<TrailRenderer>().startColor = new Color(r1, g1, b1, 1);
-                    trails[i].GetComponent<TrailRenderer>().endColor = new Color(r1, g1, b1, .5f);
-                }
-                else
-                {
-                    trails[i].GetComponent<TrailRenderer>().startColor = new Color(r2, g2, b2, 1);
-                    trails[i].GetComponent<TrailRenderer>().endColor = new Color(r2, g2, b2, .5f);
-                }
-
-            }
-        }
-    }
-
-    public void GetColor()
+    //Find selected color on color panel
+    public Color GetColor()
     {
         Vector2 delta;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(colorTexture, Input.mousePosition, null, out delta);
@@ -308,24 +272,32 @@ public class Chaos : MonoBehaviour
         float x = Mathf.Clamp(delta.x / width, 0f, 1f);
         float y = Mathf.Clamp(delta.y / height, 0f, 1f);
 
-        Color c = colorRef.GetPixel(Mathf.RoundToInt(x * colorRef.width), Mathf.RoundToInt(y * colorRef.height));
-
-        pause.color = c;
+        return colorRef.GetPixel(Mathf.RoundToInt(x * colorRef.width), Mathf.RoundToInt(y * colorRef.height));
     }
 
-
-    public void ColorConfig()
-    {
-        for (int i = 0; i < ColBut.Length; i++)
-            ColBut[i].GetComponent<Image>().color = new Color(.4f, .4f, .4f);
-        ColBut[color - 1].GetComponent<Image>().color = new Color(.2f, .2f, .2f);
-    }
 
     //Color Options
-    public void Color(int input)
+    public void UpdateColor()
     {
-        color = input;
-        ColorConfig();
+        if (on)
+        {
+            int colorNum = saveHandler.currentColorSet.Count;
+            if(colorNum == 0)
+            {
+                for (int i = 0; i < trails.Length; i++) trails[i].SetColor(new Color(1, 1, 1, 1));
+            }
+            else
+            {
+                int a = 0;
+                for (int i = 0; i < trails.Length; i++)
+                {
+                    if (a >= colorNum) a = 0;
+                    trails[i].SetColor(saveHandler.currentColorSet[a].col);
+                    a++;
+                }
+            }
+        }
+        /*
         if (input == 1) SetColorRange(0f, 1f, 0f, 1f, 0f, 1f);
         else if (input == 2) SetColorChoice(0.25f, 1f, .65f, .37f, .95f, .86f);
         else if (input == 3) SetColorChoice(0.86f, .5f, .08f, .08f, .82f, .84f);
@@ -335,7 +307,48 @@ public class Chaos : MonoBehaviour
         else if (input == 7) SetColorChoice(1f, .1f, 1f, .56f, 1f, .89f);
         else if (input == 8) SetColorRange(.5f, .1f, .1f, .4f, .3f, .5f);
         else if (input == 9) SetColorChoice(1f, 1f, 1f, 1f, 1f, 1f);
+        */
     }
+
+    //True = polar //False == cart
+    private bool[] cordSystem = new bool[3];
+    public void SetPolar(int index)
+    {
+        if (on) On();
+        polarToggles[index].color = new Color(0, 0, 0, 1);
+        cartToggles[index].color = new Color(.8f, .8f, .8f, 1);
+        cordSystem[index] = true;
+    }
+
+    public void SetCart(int index)
+    {
+        if (on) On();
+        cartToggles[index].color = new Color(0, 0, 0, 1);
+        polarToggles[index].color = new Color(.8f, .8f, .8f, 1);
+        cordSystem[index] = false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //Ready Custom Equations for use
     public void SetCustomVars()
@@ -447,6 +460,29 @@ public class Chaos : MonoBehaviour
         }
     }
 
+    //Calculate
+    public void PolCalc(int a, int i)
+    {
+
+        for (int b = 0; b < func.Count; b++)
+        {
+            exp[a].Parameters[func[b].name] = func[b].mainCords[i - 1];
+        }
+
+        exp[a].Parameters["t"] = t;
+
+        try
+        {
+            func[a].mainCords[i] = Convert.ToSingle(exp[a].Evaluate());
+            func[a].mainCords[i] = SaftyCheck(func[a].mainCords[i], i);
+        }
+        catch
+        {
+            Debug.Log("input Error");
+            func[a].mainCords[i] = 0;
+        }
+    }
+
 
     private void UpdateEquations()
     {
@@ -469,6 +505,7 @@ public class Chaos : MonoBehaviour
                         AbsCalc(a, i);
                     else
                         CordCalc(a, i);
+
                 }
                 
                 if (active[i] == false) activeCount++;
@@ -479,7 +516,14 @@ public class Chaos : MonoBehaviour
     
     private void UpdateLines()
     {
-        for (int i = 0; i < trail_Amount; i++) if (active[i]) trails[i].transform.position = new Vector3(func[0].mainCords[i] * 20, func[1].mainCords[i] * 20, func[0].mainCords[2] * 20);
+        for (int i = 0; i < trail_Amount; i++)
+        {
+            if (active[i])
+            {
+                trails[i].TrailPos(new Vector3(func[0].mainCords[i] * 20, func[1].mainCords[i] * 20, func[2].mainCords[2] * 20), cordSystem);
+                trails[i].PolarRotate(new Vector3(func[0].mainCords[i], func[1].mainCords[i], func[1].mainCords[i]), cordSystem);
+            }
+        }
     }
 
     private float SaftyCheck(float input, int i)
@@ -564,6 +608,7 @@ public class Chaos : MonoBehaviour
             UpdateEquations();
             UpdateLines();
 
+
             percentActive.text = "Diverged: " + 100*(activeCount/trail_Amount) + "%";
 
         }
@@ -597,3 +642,16 @@ public class FunctionInput
 
 }
 
+public class ColorSet
+{
+    public int identifier;
+    public ColorButton obj;
+    public Color col;
+
+    public ColorSet(int id, ColorButton objIn, Color colIn)
+    {
+        identifier = id;
+        obj = objIn;
+        col = colIn;
+    }
+}

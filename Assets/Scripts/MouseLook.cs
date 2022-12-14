@@ -22,6 +22,8 @@ public class MouseLook : MonoBehaviour
 
     public bool locked = false;
 
+    private bool toggleOn;
+
     // Update is called once per frame
     void Update()
     {
@@ -34,6 +36,7 @@ public class MouseLook : MonoBehaviour
             mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            toggleOn = true;
 
             yRotation += mouseX;
             xRotation -= mouseY;
@@ -46,7 +49,11 @@ public class MouseLook : MonoBehaviour
         else
         {
             Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            if (toggleOn)
+            {
+                toggleOn = false;
+                Cursor.visible = true;
+            }
         }
     }
 
