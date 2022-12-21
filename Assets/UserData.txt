@@ -100,36 +100,6 @@
       {
         "textInput": null,
         "name": "x",
-        "function": "(t*t)",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(y*-x)-x+t",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(t*-z)-(g*z)-(z*t)-t-g-y",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "g",
-        "function": "(t*g)-(x*-t)-(Cos(-t)*-z)-g",
-        "mainCords": null
-      }
-    ],
-    "date": "2022-11-20-20-25-40-60",
-    "SaveName": "lame"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
         "function": "(-Sin(-g)*g)-(g*g)",
         "mainCords": null
       },

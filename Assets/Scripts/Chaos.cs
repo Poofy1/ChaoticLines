@@ -13,6 +13,7 @@ public class Chaos : MonoBehaviour
 {
     //System vars
     //public GameObject[] lines;
+    public PlayerMovement playerMovement;
     public int lineSelection;
     public GameObject crosshair;
     public TrailTemplate mainTrail;
@@ -23,9 +24,11 @@ public class Chaos : MonoBehaviour
     public float t;
     public float step;
     public bool safety = true;
+    public GameObject[] cursor3D;
     private int color;
     private int boxBound = 0;
     private bool pauseTemp = false;
+    private Vector3[] prevPos;
 
 
     //Main Render Pipe
@@ -134,9 +137,9 @@ public class Chaos : MonoBehaviour
 
     public void UpdateThickness()
     {
-        lineThickness = ThicknessSlider.value;
-        ThicknessText.text = lineThickness.ToString("0.0");
-        lineThickness /= 5;
+        //lineThickness = ThicknessSlider.value;
+        //ThicknessText.text = lineThickness.ToString("0.0");
+        //lineThickness /= 5;
         if (on)
         {
             for (int i = 0; i < trail_Amount; i++) trails[i].SetWidth(lineThickness);
@@ -203,6 +206,7 @@ public class Chaos : MonoBehaviour
 
             //Initialize trails
             trails = new TrailTemplate[trail_Amount];
+            prevPos = new Vector3[trail_Amount];
             for (int i = 0; i < trail_Amount; i++)
             {
                 //Create and Find
@@ -297,17 +301,6 @@ public class Chaos : MonoBehaviour
                 }
             }
         }
-        /*
-        if (input == 1) SetColorRange(0f, 1f, 0f, 1f, 0f, 1f);
-        else if (input == 2) SetColorChoice(0.25f, 1f, .65f, .37f, .95f, .86f);
-        else if (input == 3) SetColorChoice(0.86f, .5f, .08f, .08f, .82f, .84f);
-        else if (input == 4) SetColorRange(.5f, .9f, .1f, .4f, .1f, .5f);
-        else if (input == 5) SetColorChoice(1f, .89f, 1f, .03f, 1f, .16f);
-        else if (input == 6) SetColorRange(.89f, .9f, .1f, .68f, .1f, .11f);
-        else if (input == 7) SetColorChoice(1f, .1f, 1f, .56f, 1f, .89f);
-        else if (input == 8) SetColorRange(.5f, .1f, .1f, .4f, .3f, .5f);
-        else if (input == 9) SetColorChoice(1f, 1f, 1f, 1f, 1f, 1f);
-        */
     }
 
     //True = polar //False == cart
@@ -318,6 +311,10 @@ public class Chaos : MonoBehaviour
         polarToggles[index].color = new Color(0, 0, 0, 1);
         cartToggles[index].color = new Color(.8f, .8f, .8f, 1);
         cordSystem[index] = true;
+
+        //Change Cursor
+        cursor3D[index].SetActive(false);
+        cursor3D[index + 3].SetActive(true);
     }
 
     public void SetCart(int index)
@@ -326,6 +323,10 @@ public class Chaos : MonoBehaviour
         cartToggles[index].color = new Color(0, 0, 0, 1);
         polarToggles[index].color = new Color(.8f, .8f, .8f, 1);
         cordSystem[index] = false;
+
+        //Change Cursor
+        cursor3D[index].SetActive(true);
+        cursor3D[index + 3].SetActive(false);
     }
 
 
@@ -483,16 +484,20 @@ public class Chaos : MonoBehaviour
         }
     }
 
-
+    public double f1 = 0; //
+    public double f2 = 0;
+    double average = 0;
+    float distance = 0;
     private void UpdateEquations()
     {
         //Initialize equations 
         for (int a = 0; a < func.Count; a++)
         {
             func[a].mainCords[0] = t;
-
-            
         }
+        prevPos[0] = new Vector3(0, 0, 0);
+
+        average = 0;
         for (int i = 1; i < trail_Amount; i++)
         {
             if (active[i])
@@ -506,11 +511,29 @@ public class Chaos : MonoBehaviour
                     else
                         CordCalc(a, i);
 
+
+                    //Find Distance from last pos -> average
+                    Vector3 currentPos = new Vector3(func[0].mainCords[i], func[1].mainCords[i], func[2].mainCords[i]);
+                    average += Vector3.Distance(prevPos[i], currentPos);
+                    prevPos[i] = currentPos;
                 }
                 
                 if (active[i] == false) activeCount++;
             }
         }
+
+        //Calc average distance traveled
+        average /= trail_Amount;
+
+        step = (float)Math.Pow(f1 / average, f2);
+
+        if (step > 1.5f) step = 1.5f;
+
+
+        Debug.Log("Average Speed: " + average + " Step: " + step);
+
+
+
     }
 
     
@@ -601,21 +624,28 @@ public class Chaos : MonoBehaviour
     {
         TimeText.text = "Time: " + t.ToString("0.000000");
 
-        if (on && !pauseTemp)
+        if (on)
         {
-            t += step * step * step * 0.01f;
+            //Update Thickness
+            lineThickness = playerMovement.dis * .01f;
+            UpdateThickness();
 
-            UpdateEquations();
-            UpdateLines();
+            if (!pauseTemp)
+            {
+                t += step * step * step * 0.01f;
+
+                UpdateEquations();
+                UpdateLines();
 
 
-            percentActive.text = "Diverged: " + 100*(activeCount/trail_Amount) + "%";
-
+                percentActive.text = "Diverged: " + 100 * (activeCount / trail_Amount) + "%";
+            }
         }
+
+
 
         
     }
-
 }
 
 //Input List
