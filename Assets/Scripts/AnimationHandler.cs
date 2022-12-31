@@ -109,8 +109,6 @@ public class AnimationHandler : MonoBehaviour
         if (CustomButton[0].GetComponent<SelfAni>().open) CustomButton[0].GetComponent<SelfAni>().open = false;
         if (OptionButtons[0].GetComponent<SelfAni>().open) OptionButtons[0].GetComponent<SelfAni>().open = false;
         if (DetailButtons[0].GetComponent<SelfAni>().open) DetailButtons[0].GetComponent<SelfAni>().open = false;
-
-        for (int i = 0; i < 2; i++) LeanTween.moveLocalY(hints[i], -800 * (hud.GetComponent<CanvasScaler>().referenceResolution.x / 1000), 1).setEaseInOutCubic();
     }
 
     public void ShowHud()
@@ -119,7 +117,5 @@ public class AnimationHandler : MonoBehaviour
         LeanTween.moveLocalX(CustomButton[0], CustomButton[1].transform.localPosition.x, 1).setEaseInOutCubic();
         LeanTween.moveLocalX(OptionButtons[0], OptionButtons[1].transform.localPosition.x, 1).setEaseInOutCubic();
         LeanTween.moveLocalX(DetailButtons[0], DetailButtons[1].transform.localPosition.x, 1).setEaseInOutCubic();
-
-        for (int i = 0; i < 2; i++) LeanTween.moveLocalY(hints[i], hints[2].transform.localPosition.y, 1).setEaseInOutCubic();
     }
 }

@@ -40,6 +40,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartMainMenu()
     {
+        
         if (mainEvents.on == true) mainEvents.On();
         movementController.active = false;
         mouseLook.active = false;
@@ -94,25 +95,14 @@ public class MainMenu : MonoBehaviour
         saveHandler.ButtonClicked(rand);
         saveHandler.LoadSystem(saveHandler.saveList[rand].SaveName);
 
+        //random color
+        //mainEvents.Color(UnityEngine.Random.Range(1, 10));
+        mainEvents.On();
+        StartCoroutine(FadeOut(fade, .005f, 0));
 
-        if (mainEvents.lineSelection == 0)
-        {
-            //random color
-            //mainEvents.Color(UnityEngine.Random.Range(1, 10));
-            mainEvents.On();
-            StartCoroutine(FadeOut(fade, .005f, 0));
-
-            //random thickness 
-            mainEvents.ThicknessSlider.value = UnityEngine.Random.Range(0.1f, 1f);
-            mainEvents.UpdateThickness();
-        }
-        
-
-        //Random step
-        float tempStep = UnityEngine.Random.Range(.25f, 1f);
-        if (UnityEngine.Random.Range(0, 2) == 0) tempStep *= -1;
-        mainEvents.step = tempStep;
-        mainEvents.UpdateStep(true);
+        //random thickness 
+        mainEvents.ThicknessSlider.value = UnityEngine.Random.Range(0.1f, 1f);
+        mainEvents.UpdateThickness();
 
         //Reset Camera
         randSceneTime = UnityEngine.Random.Range(15f, 30f);

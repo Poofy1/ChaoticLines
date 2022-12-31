@@ -14,7 +14,6 @@ public class Chaos : MonoBehaviour
     //System vars
     //public GameObject[] lines;
     public PlayerMovement playerMovement;
-    public int lineSelection;
     public GameObject crosshair;
     public TrailTemplate mainTrail;
     public MapRotate mapRotator;
@@ -29,7 +28,10 @@ public class Chaos : MonoBehaviour
     private int boxBound = 0;
     private bool pauseTemp = false;
     private Vector3[] prevPos;
-
+    public double targetSpeed = 0;
+    public double exponent = 0;
+    public float dampen = 0;
+    private float average = 0;
 
     //Main Render Pipe
     public List<FunctionInput> func;
@@ -39,8 +41,6 @@ public class Chaos : MonoBehaviour
 
     //Secondary Render Pipe
     public GameObject customInputButton;
-    public GameObject varNaming;
-    public TMP_InputField nameInput;
     public Transform varParent;
 
     //private vars
@@ -56,8 +56,8 @@ public class Chaos : MonoBehaviour
     public TMP_InputField Amount;
     public TMP_Text AmountText;
     public TMP_Text warningText;
-    public Slider StepSlider;
-    public Text StepText;
+    public Slider TargetSlider;
+    public Text TargetText;
     public TMP_Text TimeText;
     public Text SystemTitle;
     public Button Activate;
@@ -74,7 +74,9 @@ public class Chaos : MonoBehaviour
     public Image[] cartToggles;
 
     //Stats
-    public Text percentActive;
+    public TMP_Text percentActive;
+    public TMP_Text avgSpeed;
+    public TMP_Text stepText;
     private float activeCount = 0;
 
     //Customizer
@@ -90,9 +92,9 @@ public class Chaos : MonoBehaviour
 
     public void InitializeMainCords()
     {
-        func.Add(new FunctionInput(defaultInput[0], "x", ""));
-        func.Add(new FunctionInput(defaultInput[1], "y", ""));
-        func.Add(new FunctionInput(defaultInput[2], "z", ""));
+        func.Add(new FunctionInput(defaultInput[0], 'x', ""));
+        func.Add(new FunctionInput(defaultInput[1], 'y', ""));
+        func.Add(new FunctionInput(defaultInput[2], 'z', ""));
     }
 
     //Canvas Updates
@@ -128,11 +130,11 @@ public class Chaos : MonoBehaviour
 
     }
 
-    public void UpdateStep(bool outsideOveride = false)
+    public void UpdateTarget(bool outsideOveride = false)
     {
-        if (pauseTemp == false && outsideOveride == false) step = StepSlider.value;
-        else StepSlider.value = step;
-        StepText.text = StepSlider.value.ToString("0.00");
+        if (pauseTemp == false && outsideOveride == false) targetSpeed = TargetSlider.value;
+        else TargetSlider.value = step * 1000;
+        TargetText.text = TargetSlider.value.ToString("0.00");
     }
 
     public void UpdateThickness()
@@ -167,8 +169,6 @@ public class Chaos : MonoBehaviour
     public void On()
     {
         on = !on;
-        crosshair.GetComponent<Billboard>().ToggleCrosshair();
-
 
         if (on)
         {
@@ -180,7 +180,7 @@ public class Chaos : MonoBehaviour
             createRand.interactable = false;
 
             UpdateAmount();
-            UpdateStep();
+            UpdateTarget();
 
             activeCount = 0;
 
@@ -217,18 +217,17 @@ public class Chaos : MonoBehaviour
             }
 
             //Update Prefrences
-            if (lineSelection == 0)
-            {
-                UpdateLength();
-                UpdateThickness();
-                UpdateColor();
-            }
-            
+            UpdateLength();
+            UpdateThickness();
+            UpdateColor();
+
 
         }
         else
         {
             percentActive.text = "Diverged: 0%";
+            avgSpeed.text = "Average SPeed: 0";
+            stepText.text = "Step: 0";
 
             pause.color = new Color(.8f, .8f, .8f);
             pauseTemp = false;
@@ -375,7 +374,7 @@ public class Chaos : MonoBehaviour
             {
                 Expression test = new Expression(func[i].textInput.text);
                 for (int a = 0; a < func.Count; a++)
-                    test.Parameters[func[a].name] = 0;
+                    test.Parameters[func[a].name.ToString()] = 0;
 
                 test.Parameters["t"] = 0;
                 test.Evaluate();
@@ -405,7 +404,7 @@ public class Chaos : MonoBehaviour
 
         for (int b = 0; b < func.Count; b++)
         {
-            exp[a].Parameters[func[b].name] = func[b].mainCords[i - 1];
+            exp[a].Parameters[func[b].name.ToString()] = func[b].mainCords[i - 1];
         }
             
         exp[a].Parameters["t"] = t;
@@ -431,18 +430,18 @@ public class Chaos : MonoBehaviour
         {
             if (i < Mathf.Floor(trail_Amount / 2))
             {
-                exp[a].Parameters[func[b].name] = func[b].mainCords[i - 1];
+                exp[a].Parameters[func[b].name.ToString()] = func[b].mainCords[i - 1];
                 exp[a].Parameters["t"] = t;
             }
             else if(i == Mathf.Floor(trail_Amount / 2))
             {
                 resetPoint = i;
-                exp[a].Parameters[func[b].name] = func[b].mainCords[0];
+                exp[a].Parameters[func[b].name.ToString()] = func[b].mainCords[0];
                 exp[a].Parameters["t"] = -t;
             }
             else
             {
-                exp[a].Parameters[func[b].name] = func[b].mainCords[i - 1];
+                exp[a].Parameters[func[b].name.ToString()] = func[b].mainCords[i - 1];
                 exp[a].Parameters["t"] = -t;
             }
         }
@@ -467,7 +466,7 @@ public class Chaos : MonoBehaviour
 
         for (int b = 0; b < func.Count; b++)
         {
-            exp[a].Parameters[func[b].name] = func[b].mainCords[i - 1];
+            exp[a].Parameters[func[b].name.ToString()] = func[b].mainCords[i - 1];
         }
 
         exp[a].Parameters["t"] = t;
@@ -484,10 +483,7 @@ public class Chaos : MonoBehaviour
         }
     }
 
-    public double f1 = 0; //
-    public double f2 = 0;
-    double average = 0;
-    float distance = 0;
+    
     private void UpdateEquations()
     {
         //Initialize equations 
@@ -525,17 +521,12 @@ public class Chaos : MonoBehaviour
         //Calc average distance traveled
         average /= trail_Amount;
 
-        step = (float)Math.Pow(f1 / average, f2);
+        step = dampen * (float)Math.Pow(targetSpeed / average, exponent);
+
 
         if (step > 1.5f) step = 1.5f;
 
-
-        Debug.Log("Average Speed: " + average + " Step: " + step);
-
-
-
     }
-
     
     private void UpdateLines()
     {
@@ -566,45 +557,47 @@ public class Chaos : MonoBehaviour
 
 
     //Secondary List Stuff
-    private bool appliedRename;
-    public void NewSecondary()
+    public void CreateCustomVar()
     {
-        StartCoroutine(CreateVar());
+        char newName = '0';
+        List<char> letters = new List<char>();
+
+        for (int i = 0; i < func.Count; i++)
+        {
+            letters.Add(func[i].name);
+        }
+
+
+        for (int i = 'a'; i <= 'w'; i++)
+        {
+            char letter = (char)i;
+            if (!letters.Contains(letter))
+            {
+                newName = letter;
+                break;
+            }
+        }
+
+        if (!newName.Equals('0'))
+        {
+            //Spawn + Add to list
+            GameObject cus = CreateVarInput(newName);
+            func.Add(new FunctionInput(cus.gameObject.GetComponentInChildren<TMP_InputField>(), newName, ""));
+        }
+        
     }
 
-    IEnumerator CreateVar()
+    public GameObject CreateVarInput(char name)
     {
-        //Wait for name
-        varNaming.SetActive(true);
-        yield return new WaitUntil(() => appliedRename);
-
-        //Spawn + Add to list
-        GameObject cus = CreateVarInput(nameInput.text);
-        func.Add(new FunctionInput(cus.gameObject.GetComponentInChildren<TMP_InputField>(), nameInput.text, ""));
-
-        //Reset
-        appliedRename = false;
-        varNaming.SetActive(false);
-        nameInput.text = "";
-}
-
-    //Apply Rename
-    public void ApplyRename()
-    {
-        appliedRename = true;
-    }
-
-    public GameObject CreateVarInput(string name)
-    {
-        var obj = Instantiate(customInputButton, new Vector3(0, 0, 0), Quaternion.identity, varParent);
-        obj.gameObject.name = name;
+        GameObject obj = Instantiate(customInputButton, new Vector3(0, 0, 0), Quaternion.identity, varParent);
+        obj.gameObject.name = name.ToString();
         obj.GetComponentInChildren<TMP_InputField>().onValueChanged.AddListener(delegate { SetCustomVars(); });
         obj.GetComponentInChildren<Button>().onClick.AddListener(delegate { DestoryVarInput(name); });
-        obj.gameObject.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = char.ToUpper(name[0]) + ":";
+        obj.gameObject.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = char.ToUpper(name) + ":";
         return obj;
     }
 
-    public void DestoryVarInput(string name)
+    public void DestoryVarInput(char name)
     {
         for (int i = 0; i < func.Count; i++)
         {
@@ -637,8 +630,9 @@ public class Chaos : MonoBehaviour
                 UpdateEquations();
                 UpdateLines();
 
-
                 percentActive.text = "Diverged: " + 100 * (activeCount / trail_Amount) + "%";
+                avgSpeed.text = "Average Speed: " + (average).ToString("0.000000");
+                stepText.text = "Step: " + step.ToString("0.0000");
             }
         }
 
@@ -653,12 +647,12 @@ public class FunctionInput
 {
 
     public TMP_InputField textInput;
-    public string name;
+    public char name;
     public string function;
     public float[] mainCords;
 
     //Constructor
-    public FunctionInput(TMP_InputField obj, string nameIn, string funcIn)
+    public FunctionInput(TMP_InputField obj, char nameIn, string funcIn)
     {
         textInput = obj;
         name = nameIn;

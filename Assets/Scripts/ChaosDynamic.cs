@@ -161,7 +161,6 @@ public class ChaosDynamic : MonoBehaviour
     {
         on = !on;
         UpdateAmount();
-        crosshair.GetComponent<Billboard>().ToggleCrosshair();
 
 
         if (on)

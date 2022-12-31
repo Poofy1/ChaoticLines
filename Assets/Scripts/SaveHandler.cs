@@ -296,7 +296,7 @@ public class SaveHandler : MonoBehaviour
         {
 
             string funcText = saveList[buttonIndex].CustomFunctions[i].function;
-            string funcName = saveList[buttonIndex].CustomFunctions[i].name;
+            char funcName = saveList[buttonIndex].CustomFunctions[i].name;
 
             if (i > 2)
             {

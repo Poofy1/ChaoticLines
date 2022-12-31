@@ -160,5 +160,35 @@
     ],
     "date": "2022-11-22-18-04-58-86",
     "SaveName": "cool one 2"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(g*-t)+(-z*g)+z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(z*y)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-Tan(-z)*Tan(x)*Tan(y))+(-t*x)+t-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "g",
+        "function": "(-t*Sin(z))+(t*-z)-x+t+z",
+        "mainCords": null
+      }
+    ],
+    "date": "2022-12-22-16-21-37-56",
+    "SaveName": "cool c:"
   }
 ]
