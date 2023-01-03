@@ -190,5 +190,35 @@
     ],
     "date": "2022-12-22-16-21-37-56",
     "SaveName": "cool c:"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(g*z)+(x*-g)-(g*g)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(Cos(-z)*z)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-x*Sin(t))-(z*-t)-y+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "g",
+        "function": "(y*g)-(x*-t)-(-t*z)+x+g",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-01-03-12-23-16-00",
+    "SaveName": "yee this is neat"
   }
 ]

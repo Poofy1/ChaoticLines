@@ -59,7 +59,7 @@ public class Chaos : MonoBehaviour
     public Slider TargetSlider;
     public Text TargetText;
     public TMP_Text TimeText;
-    public Text SystemTitle;
+    public TMP_Text SystemTitle;
     public Button Activate;
     public Button SaveButton;
     public GameObject stopButton;
@@ -301,6 +301,7 @@ public class Chaos : MonoBehaviour
             }
         }
     }
+
 
     //True = polar //False == cart
     private bool[] cordSystem = new bool[3];

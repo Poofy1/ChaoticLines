@@ -5,6 +5,6 @@
   "mouseSen": 49.5630226,
   "sound": 0.0,
   "fov": 107.800766,
-  "hudScale": 1.23836029,
+  "hudScale": 1.0,
   "safety": true
 }

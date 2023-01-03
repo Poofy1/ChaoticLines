@@ -23,6 +23,7 @@ public class SaveHandler : MonoBehaviour
     public GameObject hud;
     public GameObject photoHud;
     public RawImage preview;
+    public Camera cam;
 
     public ColorButton ColorObj;
     public Transform ColorObjParent;
@@ -401,13 +402,32 @@ public class SaveHandler : MonoBehaviour
 
 
 
+    //Reseting ForeGround??
+    private bool waitingColor = false;
+    public void RequestForeground()
+    {
+        waitingColor = !waitingColor;
+        Debug.Log("Waiting for color: " + waitingColor);
+    }
 
+    public void ChangeForeground()
+    {
+        cam.backgroundColor = mainEvents.GetColor();
+    }
 
 
     //Colors
     int colorIndex = 0;
     public void NewColor()
     {
+        if (waitingColor)
+        {
+            ChangeForeground();
+            waitingColor = false;
+            return;
+        }
+
+
         //Spawn New
         var name = Instantiate(ColorObj, new Vector3(0, 0, 0), Quaternion.identity, ColorObjParent);
         name.gameObject.name = "Color";
