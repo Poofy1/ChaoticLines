@@ -1,9 +1,7 @@
 using Newtonsoft.Json;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,6 +26,9 @@ public class SaveHandler : MonoBehaviour
     public ColorButton ColorObj;
     public Transform ColorObjParent;
     public List<ColorSet> currentColorSet;
+    public ColorScheme SchemeObj;
+    public Transform ColorSchemeParent;
+    public Color currentBackground;
 
     private GameObject[] spawnedButtons;
     public int currentSelected;
@@ -371,6 +372,9 @@ public class SaveHandler : MonoBehaviour
     }
 
 
+
+
+
     //Locates button refrence
     public int LocateButton(string name)
     {
@@ -398,8 +402,25 @@ public class SaveHandler : MonoBehaviour
         }
     }
 
+    
 
 
+    public void SaveColorScheme()
+    {
+        var obj = Instantiate(SchemeObj, new Vector3(0, 0, 0), Quaternion.identity, ColorSchemeParent);
+
+        Color[] temp = new Color[10];
+        for (int i = 0; i < 10; i++)
+        {
+            if (currentColorSet.Count > i)
+            {
+                temp[i] = currentColorSet[i].col;
+            }
+        }
+            
+
+        obj.UpdateAll(temp, currentBackground);
+    }
 
 
     //Reseting ForeGround??
@@ -412,7 +433,8 @@ public class SaveHandler : MonoBehaviour
 
     public void ChangeForeground()
     {
-        cam.backgroundColor = mainEvents.GetColor();
+        currentBackground = mainEvents.GetColor();
+        cam.backgroundColor = currentBackground;
     }
 
 
@@ -429,19 +451,19 @@ public class SaveHandler : MonoBehaviour
 
 
         //Spawn New
-        var name = Instantiate(ColorObj, new Vector3(0, 0, 0), Quaternion.identity, ColorObjParent);
-        name.gameObject.name = "Color";
+        var obj = Instantiate(ColorObj, new Vector3(0, 0, 0), Quaternion.identity, ColorObjParent);
+        obj.gameObject.name = "Color";
 
         //Set Color
         Color c = mainEvents.GetColor();
-        name.SetColor(c);
+        obj.SetColor(c);
 
         //Set Delete Button
         int copy = colorIndex;
-        name.delButton.onClick.AddListener(delegate { DeleteColorVar(copy); });
+        obj.delButton.onClick.AddListener(delegate { DeleteColorVar(copy); });
 
         //Add to list
-        currentColorSet.Add(new ColorSet(colorIndex, name, c));
+        currentColorSet.Add(new ColorSet(colorIndex, obj, c));
 
         colorIndex++;
 

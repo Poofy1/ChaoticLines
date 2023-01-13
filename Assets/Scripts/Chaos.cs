@@ -621,7 +621,7 @@ public class Chaos : MonoBehaviour
         if (on)
         {
             //Update Thickness
-            lineThickness = playerMovement.dis * .01f;
+            lineThickness = playerMovement.dis * .005f;
             UpdateThickness();
 
             if (!pauseTemp)
