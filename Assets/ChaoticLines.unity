@@ -9587,7 +9587,7 @@ MonoBehaviour:
   customInputButton: {fileID: 8523059483370082243, guid: 6812bda5e2ebbc648a32edd100048b5d, type: 3}
   varParent: {fileID: 527446760}
   on: 0
-  absolute: 0
+  absolute: 1
   canvas: {fileID: 173289165067891648}
   Amount: {fileID: 141194238}
   AmountText: {fileID: 1414025451}
@@ -29610,6 +29610,7 @@ MonoBehaviour:
   animHandle: {fileID: 2008228325}
   mainEvents: {fileID: 692205447}
   saveHandler: {fileID: 441955525}
+  saveColor: {fileID: 1688214895}
   player: {fileID: 767495049}
   camera: {fileID: 1478915682}
   mainOri: {fileID: 686299220}

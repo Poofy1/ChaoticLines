@@ -285,7 +285,7 @@ public class SaveHandler : MonoBehaviour
             Destroy(mainEvents.func[mainEvents.func.Count - 1].textInput.transform.parent.gameObject);
             mainEvents.func.RemoveAt(mainEvents.func.Count - 1);
         }
-
+         
         for (int i = 0; i < saveList[buttonIndex].CustomFunctions.Count; i++)
         {
 

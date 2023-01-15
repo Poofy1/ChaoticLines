@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour
     //Scene 
     public Chaos mainEvents;
     public SaveHandler saveHandler;
+    public SaveColor saveColor;
     public Transform player;
     public Transform camera;
     public GameObject mainOri;

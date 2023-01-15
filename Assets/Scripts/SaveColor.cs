@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -18,13 +19,16 @@ public class SaveColor : MonoBehaviour
     public Camera cam;
 
     public List<SaveScheme> saveList;
-
+    private List<GameObject> buttonList;
 
     private void Start()
     {
         //JsonConvert.DefaultSettings().Converters.Add(new ColorConverter());
         saveList = new List<SaveScheme>();
         currentColorSet = new List<ColorSet>();
+
+        buttonList = new List<GameObject>();
+        LoadAll();
     }
 
 
@@ -135,16 +139,41 @@ public class SaveColor : MonoBehaviour
             temp.Add(new PlainColor(currentColorSet[i].col));
         }
 
+        //Find IdentifierSpot
+        int listSpace = 0;
+        while (true)
+        {
+            bool found = false;
+            for (int i = 0; i < saveList.Count; i++)
+            {
+                if (saveList[i].identifier == listSpace)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) break;
+
+            listSpace++;
+        }
+
+
         //Create json save 
         saveList.Add(new SaveScheme
         {
+            identifier = listSpace,
             colors = temp,
             foreground = new PlainColor(currentBackground)
         });
 
+        //Add to button list
+        buttonList.Add(obj.gameObject);
+        buttonList[buttonList.Count - 1].GetComponentInChildren<ColorScheme>().delButton.onClick.AddListener(delegate { DeleteColor(listSpace); });
+
         //WriteSave and reset
         WriteSave();
-        //ResetSelected();
+
+        
     }
 
 
@@ -162,30 +191,81 @@ public class SaveColor : MonoBehaviour
 
 
 
+    //Load All Custom Data
+    public void LoadAll()
+    {
+        if (File.Exists(Application.dataPath + "/ColorData.txt"))
+        {
+            //Deserialize
+            string saveString = File.ReadAllText(Application.dataPath + "/ColorData.txt");
+            saveList = JsonConvert.DeserializeObject<List<SaveScheme>>(saveString);
 
-    /*
+            //Delete Buttons
+            for (int i = 0; i < buttonList.Count; i++)
+            {
+                Destroy(buttonList[i]);
+            }
+            buttonList = new List<GameObject>();
+
+            //Spawn Buttons
+            for (int i = 0; i < saveList.Count; i++)
+            {
+                //Spawn
+                var name = Instantiate(SchemeObj, new Vector3(0, 0, 0), Quaternion.identity, ColorSchemeParent);
+                name.gameObject.name = "Button" + i;
+
+                //Add Details
+                Color[] current = new Color[10];
+                for (int a = 0; a < 10; a++)
+                {
+                    if (saveList[i].colors.Count > a)
+                    {
+                        current[a] = saveList[i].colors[a].ToUnityColor();
+                    }
+                }
+                
+                //Update Save pallette 
+                name.UpdateAll(current, saveList[i].foreground.ToUnityColor());
+
+
+                //Create List
+                buttonList.Add(name.gameObject);
+
+
+
+                //Set Listener
+                int tempVar = i;
+                buttonList[i].GetComponentInChildren<ColorScheme>().delButton.onClick.AddListener(delegate { DeleteColor(tempVar); });
+            }
+        }
+        else
+        {
+            Debug.Log("No Save!"); //UI This in the future
+        }
+    }
+
+
     //Locates button refrence
-    public int LocateButton(string name)
+    public int LocateButton(int name)
     {
         for (int i = 0; i < saveList.Count; i++)
         {
-            if (saveList[i].SaveName.Equals(name)) return i;
+            Debug.Log(saveList[i].identifier + " " + name);
+            if (saveList[i].identifier == name) return i;
         }
         return -1;
     }
 
     //Delete Color in set 
-    public void DeleteColor(string name)
+    public void DeleteColor(int name)
     {
         int i = LocateButton(name);
+        Debug.Log(i);
         if (i != -1)
         {
             //Destroy button
-            Destroy(buttonList[i].button);
+            Destroy(buttonList[i]);
 
-            //Delete preview
-            string filePath = Application.dataPath + "/PreviewImages/" + saveList[i].date + ".png";
-            if (File.Exists(filePath)) File.Delete(filePath);
 
             //Remove from list
             saveList.RemoveAt(i);
@@ -194,7 +274,7 @@ public class SaveColor : MonoBehaviour
             WriteSave();
         }
     }
-    */
+
 
 
 
@@ -205,6 +285,7 @@ public class SaveColor : MonoBehaviour
     //Save Color Sets as List
     public class SaveScheme
     {
+        public int identifier;
         public List<PlainColor> colors { get; set; }
         public PlainColor foreground { get; set; }
     }
