@@ -21,14 +21,8 @@ public class SaveHandler : MonoBehaviour
     public GameObject hud;
     public GameObject photoHud;
     public RawImage preview;
-    public Camera cam;
 
-    public ColorButton ColorObj;
-    public Transform ColorObjParent;
-    public List<ColorSet> currentColorSet;
-    public ColorScheme SchemeObj;
-    public Transform ColorSchemeParent;
-    public Color currentBackground;
+    
 
     private GameObject[] spawnedButtons;
     public int currentSelected;
@@ -42,8 +36,6 @@ public class SaveHandler : MonoBehaviour
         saveList = new List<SaveList>();
         buttonList = new List<SaveButton>();
         savedSet = new SettingItem();
-
-        currentColorSet = new List<ColorSet>();
 
         spawnedButtons = new GameObject[0];
         LoadAll();
@@ -385,114 +377,6 @@ public class SaveHandler : MonoBehaviour
         return -1;
     }
 
-    //Locates color var button refrence
-    public void DeleteColorVar(int name)
-    {
-        for (int i = 0; i < currentColorSet.Count; i++)
-        {
-            if (currentColorSet[i].identifier == name)
-            {
-                Destroy(currentColorSet[i].obj.gameObject);
-                currentColorSet.RemoveAt(i);
-
-                //Update colors real time
-                mainEvents.UpdateColor();
-                return;
-            }
-        }
-    }
-
-    
-
-
-    public void SaveColorScheme()
-    {
-        var obj = Instantiate(SchemeObj, new Vector3(0, 0, 0), Quaternion.identity, ColorSchemeParent);
-
-        Color[] temp = new Color[10];
-        for (int i = 0; i < 10; i++)
-        {
-            if (currentColorSet.Count > i)
-            {
-                temp[i] = currentColorSet[i].col;
-            }
-        }
-            
-
-        obj.UpdateAll(temp, currentBackground);
-    }
-
-
-    //Reseting ForeGround??
-    private bool waitingColor = false;
-    public void RequestForeground()
-    {
-        waitingColor = !waitingColor;
-        Debug.Log("Waiting for color: " + waitingColor);
-    }
-
-    public void ChangeForeground()
-    {
-        currentBackground = mainEvents.GetColor();
-        cam.backgroundColor = currentBackground;
-    }
-
-
-    //Colors
-    int colorIndex = 0;
-    public void NewColor()
-    {
-        if (waitingColor)
-        {
-            ChangeForeground();
-            waitingColor = false;
-            return;
-        }
-
-
-        //Spawn New
-        var obj = Instantiate(ColorObj, new Vector3(0, 0, 0), Quaternion.identity, ColorObjParent);
-        obj.gameObject.name = "Color";
-
-        //Set Color
-        Color c = mainEvents.GetColor();
-        obj.SetColor(c);
-
-        //Set Delete Button
-        int copy = colorIndex;
-        obj.delButton.onClick.AddListener(delegate { DeleteColorVar(copy); });
-
-        //Add to list
-        currentColorSet.Add(new ColorSet(colorIndex, obj, c));
-
-        colorIndex++;
-
-        //Update colors real time
-        mainEvents.UpdateColor();
-    }
-
-
-    //Delete Color in set 
-    public void DeleteColor(string name)
-    {
-        int i = LocateButton(name);
-        if (i != -1)
-        {
-            //Destroy button
-            Destroy(buttonList[i].button);
-
-            //Delete preview
-            string filePath = Application.dataPath + "/PreviewImages/" + saveList[i].date + ".png";
-            if (File.Exists(filePath)) File.Delete(filePath);
-
-            //Remove from list
-            saveList.RemoveAt(i);
-            buttonList.RemoveAt(i);
-
-            WriteSave();
-        }
-    }
-
 
     //SaveSettings
     public class SettingItem
@@ -534,11 +418,6 @@ public class SaveHandler : MonoBehaviour
     }
 
 
-    //Save Color Sets as List
-    public class SaveColors
-    {
-        public List<List<ColorSet>> CustomColors { get; set; }
-        public string SaveName { get; set; }
-    }
+    
 
 }

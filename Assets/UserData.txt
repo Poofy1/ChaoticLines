@@ -220,5 +220,41 @@
     ],
     "date": "2023-01-03-12-23-16-00",
     "SaveName": "yee this is neat"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-x*y)-y+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(-x*x)-(-t*-Sin(-x))-r+r-a",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-t*-z)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "r",
+        "function": "(z*-x)-(-t*-r)+y+y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "a",
+        "function": "(-Cos(-x)*t)+a",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-01-14-14-12-49-27",
+    "SaveName": "90 Degree"
   }
 ]

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 public class Chaos : MonoBehaviour
 {
     //System vars
-    //public GameObject[] lines;
+    public SaveColor saveColor;
     public PlayerMovement playerMovement;
     public GameObject crosshair;
     public TrailTemplate mainTrail;
@@ -58,6 +58,8 @@ public class Chaos : MonoBehaviour
     public TMP_Text warningText;
     public Slider TargetSlider;
     public Text TargetText;
+    public Slider directionSlider;
+    public Text directionText;
     public TMP_Text TimeText;
     public TMP_Text SystemTitle;
     public Button Activate;
@@ -145,6 +147,25 @@ public class Chaos : MonoBehaviour
         if (on)
         {
             for (int i = 0; i < trail_Amount; i++) trails[i].SetWidth(lineThickness);
+        }
+    }
+
+    public void UpdateDirection()
+    {
+        if (directionSlider.value == 0)
+        {
+            directionText.text = "-";
+            absolute = false;
+        }
+        else if (directionSlider.value == 1)
+        {
+            directionText.text = "-/+";
+            absolute = true;
+        }
+        else if(directionSlider.value == 2)
+        {
+            directionText.text = "+";
+            absolute = false;
         }
     }
 
@@ -284,7 +305,7 @@ public class Chaos : MonoBehaviour
     {
         if (on)
         {
-            int colorNum = saveHandler.currentColorSet.Count;
+            int colorNum = saveColor.currentColorSet.Count;
             if(colorNum == 0)
             {
                 for (int i = 0; i < trails.Length; i++) trails[i].SetColor(new Color(1, 1, 1, 1));
@@ -295,7 +316,7 @@ public class Chaos : MonoBehaviour
                 for (int i = 0; i < trails.Length; i++)
                 {
                     if (a >= colorNum) a = 0;
-                    trails[i].SetColor(saveHandler.currentColorSet[a].col);
+                    trails[i].SetColor(saveColor.currentColorSet[a].col);
                     a++;
                 }
             }
@@ -667,16 +688,3 @@ public class FunctionInput
 
 }
 
-public class ColorSet
-{
-    public int identifier;
-    public ColorButton obj;
-    public Color col;
-
-    public ColorSet(int id, ColorButton objIn, Color colIn)
-    {
-        identifier = id;
-        obj = objIn;
-        col = colIn;
-    }
-}
