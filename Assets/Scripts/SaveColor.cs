@@ -61,7 +61,6 @@ public class SaveColor : MonoBehaviour
 
     public void ChangeForeground()
     {
-        currentBackground = mainEvents.GetColor();
         cam.backgroundColor = currentBackground;
         foregroundImage.color = currentBackground;
     }
@@ -73,6 +72,7 @@ public class SaveColor : MonoBehaviour
     {
         if (waitingColor)
         {
+            currentBackground = mainEvents.GetColor();
             ChangeForeground();
             waitingColor = false;
             return;
@@ -169,6 +169,7 @@ public class SaveColor : MonoBehaviour
         //Add to button list
         buttonList.Add(obj.gameObject);
         buttonList[buttonList.Count - 1].GetComponentInChildren<ColorScheme>().delButton.onClick.AddListener(delegate { DeleteColor(listSpace); });
+        buttonList[buttonList.Count - 1].GetComponentInChildren<ColorScheme>().loadButton.onClick.AddListener(delegate { loadScheme(listSpace); });
 
         //WriteSave and reset
         WriteSave();
@@ -236,6 +237,7 @@ public class SaveColor : MonoBehaviour
                 //Set Listener
                 int tempVar = i;
                 buttonList[i].GetComponentInChildren<ColorScheme>().delButton.onClick.AddListener(delegate { DeleteColor(tempVar); });
+                buttonList[i].GetComponentInChildren<ColorScheme>().loadButton.onClick.AddListener(delegate { loadScheme(tempVar); });
             }
         }
         else
@@ -250,7 +252,6 @@ public class SaveColor : MonoBehaviour
     {
         for (int i = 0; i < saveList.Count; i++)
         {
-            Debug.Log(saveList[i].identifier + " " + name);
             if (saveList[i].identifier == name) return i;
         }
         return -1;
@@ -260,7 +261,6 @@ public class SaveColor : MonoBehaviour
     public void DeleteColor(int name)
     {
         int i = LocateButton(name);
-        Debug.Log(i);
         if (i != -1)
         {
             //Destroy button
@@ -275,7 +275,50 @@ public class SaveColor : MonoBehaviour
         }
     }
 
+    //Load Color Scheme
+    public void loadScheme(int name)
+    {
+        colorIndex = 0;
+        int i = LocateButton(name);
 
+        //Clear current color set
+        while (currentColorSet.Count > 0)
+        {
+            Destroy(currentColorSet[0].obj.gameObject);
+            currentColorSet.RemoveAt(0);
+        }
+
+        if (i != -1)
+        {
+            //Foreground
+            currentBackground = saveList[i].foreground.ToUnityColor();
+            ChangeForeground();
+            waitingColor = false;
+
+            //Spawn Colors
+            for (int a = 0; a < saveList[i].colors.Count; a++)
+            {
+                //Spawn New
+                var obj = Instantiate(ColorObj, new Vector3(0, 0, 0), Quaternion.identity, ColorObjParent);
+                obj.gameObject.name = "Color";
+
+                Color c = saveList[i].colors[a].ToUnityColor();
+                obj.SetColor(c);
+
+                //Set Delete Button
+                int copy = colorIndex;
+                obj.delButton.onClick.AddListener(delegate { DeleteColorVar(copy); });
+
+                //Add to list
+                currentColorSet.Add(new ColorSet(colorIndex, obj, c));
+
+                colorIndex++;
+            }
+
+            //Update colors real time
+            mainEvents.UpdateColor();
+        }
+    }
 
 
 

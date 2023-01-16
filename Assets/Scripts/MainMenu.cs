@@ -97,7 +97,9 @@ public class MainMenu : MonoBehaviour
         saveHandler.LoadSystem(saveHandler.saveList[rand].SaveName);
 
         //random color
-        //mainEvents.Color(UnityEngine.Random.Range(1, 10));
+        saveColor.loadScheme(UnityEngine.Random.Range(0, saveColor.saveList.Count - 1));
+
+        //Start
         mainEvents.On();
         StartCoroutine(FadeOut(fade, .005f, 0));
 
@@ -106,16 +108,16 @@ public class MainMenu : MonoBehaviour
         mainEvents.UpdateThickness();
 
         //Reset Camera
-        randSceneTime = UnityEngine.Random.Range(15f, 30f);
+        randSceneTime = UnityEngine.Random.Range(15f, 25f);
 
         randZoomRange[0] = new Vector3(0, 0, UnityEngine.Random.Range(-25f, -10f));
         randZoomRange[1] = new Vector3(0, 0, UnityEngine.Random.Range(-50f, -30f));
         zoom = (randZoomRange[1] - randZoomRange[0]) / (randSceneTime * 50);
         mainOri.transform.localPosition = randZoomRange[0];
 
-        randRotation = new Vector3(UnityEngine.Random.Range(-.25f, .25f),
-                                   UnityEngine.Random.Range(-.25f, .25f),
-                                   UnityEngine.Random.Range(-.25f, .25f));
+        randRotation = new Vector3(UnityEngine.Random.Range(-.2f, .2f),
+                                   UnityEngine.Random.Range(-.2f, .2f),
+                                   UnityEngine.Random.Range(-.2f, .2f));
 
         //Wait
         yield return new WaitForSeconds(randSceneTime);

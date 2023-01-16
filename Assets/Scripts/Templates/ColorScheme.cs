@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ColorScheme : MonoBehaviour
 {
+    public Button loadButton;
     public Button delButton;
     public Image[] colors;
     public Image background;
