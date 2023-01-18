@@ -97,15 +97,18 @@ public class MainMenu : MonoBehaviour
         saveHandler.LoadSystem(saveHandler.saveList[rand].SaveName);
 
         //random color
-        saveColor.loadScheme(UnityEngine.Random.Range(0, saveColor.saveList.Count - 1));
+        int name = saveColor.saveList[UnityEngine.Random.Range(0, saveColor.saveList.Count)].identifier;
+        saveColor.loadScheme(name);
+
 
         //Start
         mainEvents.On();
         StartCoroutine(FadeOut(fade, .005f, 0));
 
         //random thickness 
-        mainEvents.ThicknessSlider.value = UnityEngine.Random.Range(0.1f, 1f);
+        mainEvents.ThicknessSlider.value = UnityEngine.Random.Range(0.1f, 2f);
         mainEvents.UpdateThickness();
+
 
         //Reset Camera
         randSceneTime = UnityEngine.Random.Range(15f, 25f);

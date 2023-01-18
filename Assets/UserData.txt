@@ -256,5 +256,137 @@
     ],
     "date": "2023-01-14-14-12-49-27",
     "SaveName": "90 Degree"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(x*t)+(a*z)-r+r-x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(-r*t)+(a*t)+(z*y)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(t*Sin(x))+r+y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "r",
+        "function": "(Tan(y)*Tan(a))-(-a*Tan(r))+t+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "a",
+        "function": "(t*t)+(t*Tan(t))+y+y",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-01-17-14-49-32-63",
+    "SaveName": "test2"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-a*x)+(-r*y)+z-t+t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(a*x)-y+r",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-a*r)+(y*-y)-z+r",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "r",
+        "function": "(-z*r)-z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "a",
+        "function": "(-t*y)-x",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-01-17-14-49-58-20",
+    "SaveName": "test3"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(x*x)-x-z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(-Sin(z)*x)+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-y*-a)+(z*t)+t+t+x+t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "r",
+        "function": "(r*-z)+(z*x)-(y*a)-a-a",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "a",
+        "function": "(r*-t)-(Cos(t)*x)-(-Tan(y)*z)+x+z",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-01-17-14-55-01-76",
+    "SaveName": "test1231452135"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(z*-y)+(t*x*t)-(-Tan(-x)*z)-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(x*-Sin(z))+(x*y)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(y*t)+(z*-z)+t",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-01-17-19-50-24-37",
+    "SaveName": "Pretty Cool"
   }
 ]

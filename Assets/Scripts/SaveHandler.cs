@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class SaveHandler : MonoBehaviour
 {
     public Chaos mainEvents;
+    public AnimationHandler animHandler;
     public Settings settings;
     public List<SaveList> saveList;
     public List<SaveButton> buttonList;
@@ -109,11 +110,13 @@ public class SaveHandler : MonoBehaviour
 
             //Wait For Screenshot
             photoHud.SetActive(true);
+            animHandler.HideHud();
             yield return StartCoroutine(ScreenShot());
 
             //Wait for rename
             yield return StartCoroutine(RenameSystemCall());
 
+            animHandler.ShowHud();
             photoHud.SetActive(false);
 
 

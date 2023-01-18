@@ -48,7 +48,9 @@ public class Chaos : MonoBehaviour
     private TrailTemplate[] trails;
     public bool on = false;
     public bool absolute = false;
+    private bool negitive = false;
     private float lineThickness;
+    private float lineMulti;
     private float trailLength;
 
     //Canvas vars
@@ -74,6 +76,7 @@ public class Chaos : MonoBehaviour
     public Text LengthText;
     public Image[] polarToggles;
     public Image[] cartToggles;
+    public GameObject cursor;
 
     //Stats
     public TMP_Text percentActive;
@@ -90,6 +93,7 @@ public class Chaos : MonoBehaviour
     {
         func = new List<FunctionInput>();
         for (int i = 0; i < 3; i++) SetCart(i);
+        step = 1e-05f;
     }
 
     public void InitializeMainCords()
@@ -132,22 +136,18 @@ public class Chaos : MonoBehaviour
 
     }
 
-    public void UpdateTarget(bool outsideOveride = false)
+    public void UpdateTarget()
     {
-        if (pauseTemp == false && outsideOveride == false) targetSpeed = TargetSlider.value;
-        else TargetSlider.value = step * 1000;
+        targetSpeed = TargetSlider.value;
         TargetText.text = TargetSlider.value.ToString("0.00");
+        targetSpeed *= targetSpeed;
     }
 
     public void UpdateThickness()
     {
-        //lineThickness = ThicknessSlider.value;
-        //ThicknessText.text = lineThickness.ToString("0.0");
-        //lineThickness /= 5;
-        if (on)
-        {
-            for (int i = 0; i < trail_Amount; i++) trails[i].SetWidth(lineThickness);
-        }
+        lineMulti = ThicknessSlider.value;
+        ThicknessText.text = lineMulti.ToString("0.0");
+        lineMulti *= 2;
     }
 
     public void UpdateDirection()
@@ -156,30 +156,37 @@ public class Chaos : MonoBehaviour
         {
             directionText.text = "-";
             absolute = false;
+            negitive = true;
         }
         else if (directionSlider.value == 1)
         {
             directionText.text = "-/+";
             absolute = true;
+            negitive = false;
         }
         else if(directionSlider.value == 2)
         {
             directionText.text = "+";
             absolute = false;
+            negitive = false;
         }
     }
 
     public void UpdateLength()
     {
         trailLength = LengthSlider.value;
-        LengthText.text = trailLength.ToString("0.0");
-        if (trailLength == 20)
+        
+        if (trailLength == 3)
         {
             trailLength = 9999999999999;
             LengthText.text = "∞";
         }
+        else
+        {
+            LengthText.text = trailLength.ToString("0.0");
+            trailLength *= 3;
+        }
 
-        trailLength *= 5;
         if (on)
         {
             for (int i = 0; i < trail_Amount; i++) trails[i].SetLength(trailLength);
@@ -199,6 +206,7 @@ public class Chaos : MonoBehaviour
             Amount.interactable = false;
             createVar.interactable = false;
             createRand.interactable = false;
+            cursor.SetActive(false);
 
             UpdateAmount();
             UpdateTarget();
@@ -260,6 +268,7 @@ public class Chaos : MonoBehaviour
             Amount.interactable = true;
             createRand.interactable = true;
             createVar.interactable = true;
+            cursor.SetActive(true);
             for (int i = 0; i < func.Count; i++) func[i].textInput.interactable = true;
             for (int i = 0; i < trail_Amount; i++) Destroy(trails[i].gameObject);
         }
@@ -378,7 +387,11 @@ public class Chaos : MonoBehaviour
         if (TestCustom())
         {
             for (int i = 0; i < func.Count; i++)
+            {
                 func[i].function = func[i].textInput.text;
+            }
+                
+            
 
             Activate.interactable = true;
             SaveButton.interactable = true;
@@ -505,7 +518,9 @@ public class Chaos : MonoBehaviour
         }
     }
 
-    
+    public float maxSpeed = 0.001f;
+    public float dist_multi = 500;
+    public float target = 0.0001f;
     private void UpdateEquations()
     {
         //Initialize equations 
@@ -514,6 +529,9 @@ public class Chaos : MonoBehaviour
             func[a].mainCords[0] = t;
         }
         prevPos[0] = new Vector3(0, 0, 0);
+
+
+        step = maxSpeed; // step * .99f + delta * .01f;
 
         average = 0;
         for (int i = 1; i < trail_Amount; i++)
@@ -528,26 +546,24 @@ public class Chaos : MonoBehaviour
                         AbsCalc(a, i);
                     else
                         CordCalc(a, i);
-
-
-                    //Find Distance from last pos -> average
-                    Vector3 currentPos = new Vector3(func[0].mainCords[i], func[1].mainCords[i], func[2].mainCords[i]);
-                    average += Vector3.Distance(prevPos[i], currentPos);
-                    prevPos[i] = currentPos;
                 }
+                //Find Distance from last pos -> average
+                Vector3 currentPos = new Vector3(func[0].mainCords[i], func[1].mainCords[i], func[2].mainCords[i]);
+
+                float dist = Vector3.Distance(prevPos[i], currentPos);
+                average += dist;
                 
+                step = Math.Min(step, target / ((dist * dist_multi) + .001f));
+
+                prevPos[i] = currentPos;
+
+
                 if (active[i] == false) activeCount++;
             }
         }
 
         //Calc average distance traveled
         average /= trail_Amount;
-
-        step = dampen * (float)Math.Pow(targetSpeed / average, exponent);
-
-
-        if (step > 1.5f) step = 1.5f;
-
     }
     
     private void UpdateLines()
@@ -556,7 +572,7 @@ public class Chaos : MonoBehaviour
         {
             if (active[i])
             {
-                trails[i].TrailPos(new Vector3(func[0].mainCords[i] * 20, func[1].mainCords[i] * 20, func[2].mainCords[2] * 20), cordSystem);
+                trails[i].TrailPos(new Vector3(func[0].mainCords[i], func[1].mainCords[i], func[2].mainCords[i]), cordSystem);
                 trails[i].PolarRotate(new Vector3(func[0].mainCords[i], func[1].mainCords[i], func[1].mainCords[i]), cordSystem);
             }
         }
@@ -637,24 +653,26 @@ public class Chaos : MonoBehaviour
 
     private void FixedUpdate()
     {
-        TimeText.text = "Time: " + t.ToString("0.000000");
+        TimeText.text = "Time: " + t.ToString("0.0000000");
 
         if (on)
         {
             //Update Thickness
             lineThickness = playerMovement.dis * .005f;
-            UpdateThickness();
+            for (int i = 0; i < trail_Amount; i++) trails[i].SetWidth(lineThickness * lineMulti);
+
 
             if (!pauseTemp)
             {
-                t += step * step * step * 0.01f;
+                if (negitive) step *= -1;
+                t += step;
 
                 UpdateEquations();
                 UpdateLines();
 
                 percentActive.text = "Diverged: " + 100 * (activeCount / trail_Amount) + "%";
-                avgSpeed.text = "Average Speed: " + (average).ToString("0.000000");
-                stepText.text = "Step: " + step.ToString("0.0000");
+                avgSpeed.text = "Average Speed: " + (average).ToString("0.0000000");
+                stepText.text = "Step: " + step.ToString("0.0000000");
             }
         }
 

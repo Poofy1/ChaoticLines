@@ -235,7 +235,7 @@ public class SaveColor : MonoBehaviour
 
 
                 //Set Listener
-                int tempVar = i;
+                int tempVar = saveList[i].identifier;
                 buttonList[i].GetComponentInChildren<ColorScheme>().delButton.onClick.AddListener(delegate { DeleteColor(tempVar); });
                 buttonList[i].GetComponentInChildren<ColorScheme>().loadButton.onClick.AddListener(delegate { loadScheme(tempVar); });
             }
