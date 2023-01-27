@@ -27,8 +27,7 @@ public class Chaos : MonoBehaviour
     private int color;
     private int boxBound = 0;
     private bool pauseTemp = false;
-    private Vector3[] prevPos;
-    public double targetSpeed = 0;
+    public float targetSpeed = 0;
     public double exponent = 0;
     public float dampen = 0;
     private float average = 0;
@@ -235,7 +234,6 @@ public class Chaos : MonoBehaviour
 
             //Initialize trails
             trails = new TrailTemplate[trail_Amount];
-            prevPos = new Vector3[trail_Amount];
             for (int i = 0; i < trail_Amount; i++)
             {
                 //Create and Find
@@ -518,9 +516,13 @@ public class Chaos : MonoBehaviour
         }
     }
 
-    public float maxSpeed = 0.001f;
+    public float maxSpeed = 0.1f;
     public float dist_multi = 500;
     public float target = 0.0001f;
+
+
+    private Vector3 prevPos = new Vector3(0, 0, 0);
+
     private void UpdateEquations()
     {
         //Initialize equations 
@@ -528,8 +530,6 @@ public class Chaos : MonoBehaviour
         {
             func[a].mainCords[0] = t;
         }
-        prevPos[0] = new Vector3(0, 0, 0);
-
 
         step = maxSpeed; // step * .99f + delta * .01f;
 
@@ -550,12 +550,14 @@ public class Chaos : MonoBehaviour
                 //Find Distance from last pos -> average
                 Vector3 currentPos = new Vector3(func[0].mainCords[i], func[1].mainCords[i], func[2].mainCords[i]);
 
-                float dist = Vector3.Distance(prevPos[i], currentPos);
+                float dist = Vector3.Distance(prevPos, currentPos);
+                float originDist = Vector3.Distance(new Vector3(0, 0, 0), currentPos);
                 average += dist;
-                
-                step = Math.Min(step, target / ((dist * dist_multi) + .001f));
 
-                prevPos[i] = currentPos;
+                step = Math.Min(step, targetSpeed / ((dist * dist_multi) + .001f));
+                //step = Math.Min(step, (.001f + (.000001f * (float)Math.Pow(originDist, 2))) / ((dist * .01f) + targetSpeed));
+
+                prevPos = currentPos;
 
 
                 if (active[i] == false) activeCount++;
