@@ -18,12 +18,12 @@ public class SoundFX : MonoBehaviour, IPointerClickHandler
     public void Start()
     {
         //Adds a listener to the main slider and invokes a method when the value changes.
-        GetComponent<Slider>().onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        //GetComponent<Slider>().onValueChanged.AddListener(delegate { ValueChangeCheck(); });
     }
 
     // Invoked when the value of the slider changes.
     public void ValueChangeCheck()
     {
-        player.PlayOneShot(sound);
+        //if (GetComponent<Slider>() != null) player.PlayOneShot(sound);
     }
 }

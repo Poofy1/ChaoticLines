@@ -100,7 +100,29 @@ public class SaveColor : MonoBehaviour
         mainEvents.UpdateColor();
     }
 
+    //If No Saves Exist
+    public void NewRandomColor()
+    {
+        //Spawn New
+        var obj = Instantiate(ColorObj, new Vector3(0, 0, 0), Quaternion.identity, ColorObjParent);
+        obj.gameObject.name = "Color";
 
+        //Set Color
+        Color c = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
+        obj.SetColor(c);
+
+        //Set Delete Button
+        int copy = colorIndex;
+        obj.delButton.onClick.AddListener(delegate { DeleteColorVar(copy); });
+
+        //Add to list
+        currentColorSet.Add(new ColorSet(colorIndex, obj, c));
+
+        colorIndex++;
+
+        //Update colors real time
+        mainEvents.UpdateColor();
+    }
 
 
 

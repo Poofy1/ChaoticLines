@@ -10,19 +10,8 @@ public class TrailTemplate : MonoBehaviour
 
 
     //Positioning 
-    public void PolarRotate(Vector3 rot, bool[] cordSystem)
+    public void TrailPos(Vector3 pos)
     {
-        if (cordSystem[0] == false) rot.z = 0;
-        if (cordSystem[1] == false) rot.y = 0;
-        if (cordSystem[2] == false) rot.x = 0;
-        polarTransform.eulerAngles = rot;
-    }
-
-    public void TrailPos(Vector3 pos, bool[] cordSystem)
-    {
-        if (cordSystem[0] == true) pos.z = 0;
-        if (cordSystem[1] == true) pos.y = 0;
-        if (cordSystem[2] == true) pos.x = 0;
         trailTransform.localPosition = pos;
     }
 

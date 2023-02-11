@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -13,7 +14,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Keybinds")]
     public KeyCode runKey = KeyCode.LeftShift;
 
+    [Header("Objects")]
     public Transform orientation;
+    public Material crosshair;
+
     public float dis;
     public bool active;
 
@@ -49,12 +53,14 @@ public class PlayerMovement : MonoBehaviour
         dis = Vector3.Distance(new Vector3(0, 0, 0), transform.position);
 
         if (Input.GetKey(runKey)) {
-            moveSpeed = (dis + walkSpeed) * sprintSpeed;
+            moveSpeed = (Math.Max(0, dis - 3) + walkSpeed) * sprintSpeed;
         }
         else
         {
-            moveSpeed = dis + walkSpeed;
+            moveSpeed = Math.Max(0, dis - 3) + walkSpeed;
         }
+
+        if (dis < 3) crosshair.color = new Color(1, 1, 1, Math.Max(0, (float) Math.Pow(dis, 2) - 2));
 
         if (Input.GetKeyDown("r")) transform.position = new Vector3(0, 0, 0);
     }

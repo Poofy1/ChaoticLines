@@ -20,14 +20,14 @@ public class Chaos : MonoBehaviour
     public Transform mapBounds;
     public int bounds = 10000;
     public int trail_Amount = 1;
-    public float t;
-    public float step;
+    public double t;
+    public double step;
     public bool safety = true;
     public GameObject[] cursor3D;
     private int color;
     private int boxBound = 0;
     private bool pauseTemp = false;
-    public float targetSpeed = 0;
+    public double targetSpeed = 0;
     public double exponent = 0;
     public float dampen = 0;
     private float average = 0;
@@ -37,6 +37,7 @@ public class Chaos : MonoBehaviour
     public TMP_InputField[] defaultInput;
     public SaveHandler saveHandler;
     private Expression[] exp;
+    private Vector3[] prevPos;
 
     //Secondary Render Pipe
     public GameObject customInputButton;
@@ -91,8 +92,6 @@ public class Chaos : MonoBehaviour
     public void Start()
     {
         func = new List<FunctionInput>();
-        for (int i = 0; i < 3; i++) SetCart(i);
-        step = 1e-05f;
     }
 
     public void InitializeMainCords()
@@ -137,9 +136,8 @@ public class Chaos : MonoBehaviour
 
     public void UpdateTarget()
     {
-        targetSpeed = TargetSlider.value;
+        targetSpeed = (double)TargetSlider.value;
         TargetText.text = TargetSlider.value.ToString("0.00");
-        targetSpeed *= targetSpeed;
     }
 
     public void UpdateThickness()
@@ -211,6 +209,7 @@ public class Chaos : MonoBehaviour
             UpdateTarget();
 
             activeCount = 0;
+            step = 1e-04d;
 
             //Initialize inputs and vars
             exp = new Expression[func.Count];
@@ -234,6 +233,7 @@ public class Chaos : MonoBehaviour
 
             //Initialize trails
             trails = new TrailTemplate[trail_Amount];
+            prevPos = new Vector3[trail_Amount];
             for (int i = 0; i < trail_Amount; i++)
             {
                 //Create and Find
@@ -253,7 +253,7 @@ public class Chaos : MonoBehaviour
         else
         {
             percentActive.text = "Diverged: 0%";
-            avgSpeed.text = "Average SPeed: 0";
+            avgSpeed.text = "Average Speed: 0";
             stepText.text = "Step: 0";
 
             pause.color = new Color(.8f, .8f, .8f);
@@ -329,34 +329,6 @@ public class Chaos : MonoBehaviour
             }
         }
     }
-
-
-    //True = polar //False == cart
-    private bool[] cordSystem = new bool[3];
-    public void SetPolar(int index)
-    {
-        if (on) On();
-        polarToggles[index].color = new Color(0, 0, 0, 1);
-        cartToggles[index].color = new Color(.8f, .8f, .8f, 1);
-        cordSystem[index] = true;
-
-        //Change Cursor
-        cursor3D[index].SetActive(false);
-        cursor3D[index + 3].SetActive(true);
-    }
-
-    public void SetCart(int index)
-    {
-        if (on) On();
-        cartToggles[index].color = new Color(0, 0, 0, 1);
-        polarToggles[index].color = new Color(.8f, .8f, .8f, 1);
-        cordSystem[index] = false;
-
-        //Change Cursor
-        cursor3D[index].SetActive(true);
-        cursor3D[index + 3].SetActive(false);
-    }
-
 
 
 
@@ -437,14 +409,16 @@ public class Chaos : MonoBehaviour
 
         for (int b = 0; b < func.Count; b++)
         {
-            exp[a].Parameters[func[b].name.ToString()] = func[b].mainCords[i - 1];
+            exp[a].Parameters[func[b].name.ToString()] = (double)func[b].mainCords[i - 1];
         }
             
         exp[a].Parameters["t"] = t;
 
+        func[a].mainCords[i] = Convert.ToSingle(exp[a].Evaluate());
+
         try
         {
-            func[a].mainCords[i] = Convert.ToSingle(exp[a].Evaluate());
+            
             func[a].mainCords[i] = SaftyCheck(func[a].mainCords[i], i);
         }
         catch
@@ -455,54 +429,21 @@ public class Chaos : MonoBehaviour
     }
 
     //Calculate
-    int resetPoint = 0;
     public void AbsCalc(int a, int i)
     {
 
         for (int b = 0; b < func.Count; b++)
         {
-            if (i < Mathf.Floor(trail_Amount / 2))
-            {
-                exp[a].Parameters[func[b].name.ToString()] = func[b].mainCords[i - 1];
-                exp[a].Parameters["t"] = t;
-            }
-            else if(i == Mathf.Floor(trail_Amount / 2))
-            {
-                resetPoint = i;
-                exp[a].Parameters[func[b].name.ToString()] = func[b].mainCords[0];
-                exp[a].Parameters["t"] = -t;
-            }
+            if (i == Mathf.Floor(trail_Amount / 2))
+                exp[a].Parameters[func[b].name.ToString()] = (double)func[b].mainCords[0];
             else
-            {
-                exp[a].Parameters[func[b].name.ToString()] = func[b].mainCords[i - 1];
-                exp[a].Parameters["t"] = -t;
-            }
+                exp[a].Parameters[func[b].name.ToString()] = (double)func[b].mainCords[i - 1]; 
         }
 
-        
-
-        try
-        {
-            func[a].mainCords[i] = Convert.ToSingle(exp[a].Evaluate());
-            func[a].mainCords[i] = SaftyCheck(func[a].mainCords[i], i);
-        }
-        catch
-        {
-            Debug.Log("input Error");
-            func[a].mainCords[i] = 0;
-        }
-    }
-
-    //Calculate
-    public void PolCalc(int a, int i)
-    {
-
-        for (int b = 0; b < func.Count; b++)
-        {
-            exp[a].Parameters[func[b].name.ToString()] = func[b].mainCords[i - 1];
-        }
-
-        exp[a].Parameters["t"] = t;
+        if (i < Mathf.Floor(trail_Amount / 2))
+            exp[a].Parameters["t"] = t;
+        else
+            exp[a].Parameters["t"] = -t;
 
         try
         {
@@ -515,23 +456,25 @@ public class Chaos : MonoBehaviour
             func[a].mainCords[i] = 0;
         }
     }
+
 
     public float maxSpeed = 0.1f;
-    public float dist_multi = 500;
+    public double dist_multi = 500;
     public float target = 0.0001f;
 
+    public double topSpeed = 0;
 
-    private Vector3 prevPos = new Vector3(0, 0, 0);
+    public double testVar;
 
     private void UpdateEquations()
     {
         //Initialize equations 
         for (int a = 0; a < func.Count; a++)
         {
-            func[a].mainCords[0] = t;
+            func[a].mainCords[0] = (float) t;
         }
 
-        step = maxSpeed; // step * .99f + delta * .01f;
+        topSpeed = 0.00000001d;
 
         average = 0;
         for (int i = 1; i < trail_Amount; i++)
@@ -547,22 +490,26 @@ public class Chaos : MonoBehaviour
                     else
                         CordCalc(a, i);
                 }
-                //Find Distance from last pos -> average
+                //Find Distance from last pos
                 Vector3 currentPos = new Vector3(func[0].mainCords[i], func[1].mainCords[i], func[2].mainCords[i]);
 
-                float dist = Vector3.Distance(prevPos, currentPos);
+                double dist = Vector3.Distance(prevPos[i], currentPos);
                 float originDist = Vector3.Distance(new Vector3(0, 0, 0), currentPos);
-                average += dist;
+                average += (float)dist;
 
-                step = Math.Min(step, targetSpeed / ((dist * dist_multi) + .001f));
-                //step = Math.Min(step, (.001f + (.000001f * (float)Math.Pow(originDist, 2))) / ((dist * .01f) + targetSpeed));
-
-                prevPos = currentPos;
+                prevPos[i] = currentPos;
 
 
                 if (active[i] == false) activeCount++;
+                else topSpeed = Math.Max(topSpeed, dist);
+
             }
         }
+
+        Debug.Log("D:" + 100 * (activeCount / trail_Amount) + "   TopS:" + topSpeed + "  step:" + step + "  T:" + t + "  ActiveC:" + activeCount);
+        step = targetSpeed / ((topSpeed * dist_multi) + testVar);
+
+        
 
         //Calc average distance traveled
         average /= trail_Amount;
@@ -574,8 +521,7 @@ public class Chaos : MonoBehaviour
         {
             if (active[i])
             {
-                trails[i].TrailPos(new Vector3(func[0].mainCords[i], func[1].mainCords[i], func[2].mainCords[i]), cordSystem);
-                trails[i].PolarRotate(new Vector3(func[0].mainCords[i], func[1].mainCords[i], func[1].mainCords[i]), cordSystem);
+                trails[i].TrailPos(new Vector3(func[0].mainCords[i] * 10, func[1].mainCords[i] * 10, func[2].mainCords[i] * 10));
             }
         }
     }

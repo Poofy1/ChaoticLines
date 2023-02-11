@@ -388,5 +388,107 @@
     ],
     "date": "2023-01-17-19-50-24-37",
     "SaveName": "Pretty Cool"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-t*-x)-y+z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(z*z)-(y*z)+(y*z)-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(y*z*y)+(y*t)-x",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-11-12-36-04-28",
+    "SaveName": "REALLY COOL!"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-t*-x)-y+z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(z*z)-(y*z)+(y*z)-a",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(y*z*y)+(y*t)-x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "a",
+        "function": "(x*t) + a",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-11-13-46-49-87",
+    "SaveName": "COOL 183762"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(x*z)+(x*-x)-z-y+t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(-Cos(x)*-t)+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-z*x)+(Tan(-x)*-z)-z+z",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-11-14-43-50-01",
+    "SaveName": "woahhhh"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-Tan(z)*y)+t-z-x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(Tan(z)*-y)-z-z-x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-z*t)-(-x*y)+t-t-x+y",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-11-14-48-32-23",
+    "SaveName": "KEEP"
   }
 ]

@@ -155,6 +155,7 @@ GameObject:
   - component: {fileID: 2025367700229860126}
   - component: {fileID: 6868244359952642036}
   - component: {fileID: 1025356328833398069}
+  - component: {fileID: 6030283299570526132}
   m_Layer: 0
   m_Name: 'Delete '
   m_TagString: Untagged
@@ -276,6 +277,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6030283299570526132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2463595880660892953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e7088e59e88d943b4e2f45bbde2bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Delete
 --- !u!1 &4012154113297582908
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +378,7 @@ GameObject:
   - component: {fileID: 9211714060606826968}
   - component: {fileID: 1319153059696547599}
   - component: {fileID: 7649310018903675527}
+  - component: {fileID: 1431371071598141197}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -485,6 +500,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1431371071598141197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4109220525282787419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e7088e59e88d943b4e2f45bbde2bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Rename
 --- !u!1 &5980038028110800377
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,6 +677,7 @@ GameObject:
   - component: {fileID: 2874795341074885185}
   - component: {fileID: 6910745251084740264}
   - component: {fileID: 4756309463523531343}
+  - component: {fileID: 7010330434756256468}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -758,6 +787,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6972446425270770808}
   m_CullTransparentMesh: 1
+--- !u!114 &7010330434756256468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6972446425270770808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e7088e59e88d943b4e2f45bbde2bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Load
 --- !u!1 &7362190823812611736
 GameObject:
   m_ObjectHideFlags: 0

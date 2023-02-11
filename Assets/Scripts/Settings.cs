@@ -66,7 +66,7 @@ public class Settings : MonoBehaviour
     }
     public void hudScaleApply(int index)
     {
-        hudSlider.value = hudSlider.value;
+        hudSlider.SetValueWithoutNotify(hudSlider.value);
         huds.referenceResolution = new Vector2(0, hudSlider.value * 500);
     }
 

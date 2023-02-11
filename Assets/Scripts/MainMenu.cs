@@ -92,13 +92,28 @@ public class MainMenu : MonoBehaviour
         yield return 0;
 
         //Load random system
-        int rand = UnityEngine.Random.Range(0, saveHandler.saveList.Count);
-        saveHandler.ButtonClicked(rand);
-        saveHandler.LoadSystem(saveHandler.saveList[rand].SaveName);
+        if (saveHandler.saveList.Count == 0)
+        {
+            mainEvents.GenRand();
+        }
+        else
+        {
+            int rand = UnityEngine.Random.Range(0, saveHandler.saveList.Count);
+            saveHandler.ButtonClicked(rand);
+            saveHandler.LoadSystem(saveHandler.saveList[rand].SaveName);
+        }
+
 
         //random color
-        int name = saveColor.saveList[UnityEngine.Random.Range(0, saveColor.saveList.Count)].identifier;
-        saveColor.loadScheme(name);
+        if (saveColor.saveList.Count == 0)
+        {
+            for (int i = 0; i < 3; i++) saveColor.NewRandomColor();
+        }
+        else
+        {
+            int name = saveColor.saveList[UnityEngine.Random.Range(0, saveColor.saveList.Count)].identifier;
+            saveColor.loadScheme(name);
+        }
 
 
         //Start
@@ -106,7 +121,7 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(FadeOut(fade, .005f, 0));
 
         //random thickness 
-        mainEvents.ThicknessSlider.value = UnityEngine.Random.Range(0.1f, 2f);
+        mainEvents.ThicknessSlider.SetValueWithoutNotify(UnityEngine.Random.Range(0.1f, 2f));
         mainEvents.UpdateThickness();
 
 
