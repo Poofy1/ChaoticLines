@@ -76,8 +76,6 @@ public class Chaos : MonoBehaviour
     public Text ThicknessText;
     public Slider LengthSlider;
     public Text LengthText;
-    public Image[] polarToggles;
-    public Image[] cartToggles;
     public GameObject cursor;
 
     //Stats
@@ -138,7 +136,7 @@ public class Chaos : MonoBehaviour
 
     public void UpdateTarget()
     {
-        targetSpeed = (decimal)TargetSlider.value;
+        targetSpeed = (decimal) ( 2 / (1 + Math.Pow( Math.E, -15 * (TargetSlider.value - 1))  ));
         TargetText.text = TargetSlider.value.ToString("0.00");
     }
 
@@ -211,7 +209,7 @@ public class Chaos : MonoBehaviour
             UpdateTarget();
 
             activeCount = 0;
-            step = 1e-04m;
+            step = 1e-07m;
 
             //Initialize inputs and vars
             exp = new Expression[func.Count];
@@ -466,6 +464,8 @@ public class Chaos : MonoBehaviour
 
     public decimal topSpeed;
     public decimal preTop;
+    private decimal originTopDis;
+    public double originCurve;
 
     public decimal testVar = 0.0001m;
 
@@ -478,6 +478,7 @@ public class Chaos : MonoBehaviour
         }
 
         topSpeed = 0.00000001m;
+        originTopDis = 0;
 
         average = 0;
         for (int i = 1; i < trail_Amount; i++)
@@ -503,7 +504,15 @@ public class Chaos : MonoBehaviour
                 prevPos[i] = currentPos;
 
                 if (active[i] == false) activeCount++;
-                else topSpeed = Math.Max(topSpeed, dist);
+                else
+                {
+                    if (topSpeed < dist)
+                    {
+                        topSpeed = dist;
+                        originTopDis =  (decimal)originDist;
+                    }
+                    
+                }
 
             }
         }
@@ -513,8 +522,7 @@ public class Chaos : MonoBehaviour
         if (topSpeed < preTop) topSpeed = preTop / 2;
         preTop = topSpeed;
 
-        step = targetSpeed / ((topSpeed * Math.Max(topSpeed, 500)) + testVar);
-
+        step = (targetSpeed / ((topSpeed * Math.Max(topSpeed, 500)) + testVar)) * (1 + (originTopDis/ (decimal)originCurve));
 
         //Calc average distance traveled
         average /= trail_Amount;

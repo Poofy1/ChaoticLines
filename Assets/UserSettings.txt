@@ -3,7 +3,7 @@
   "AA": 2,
   "vSync": true,
   "mouseSen": 49.5630226,
-  "sound": 0.145988032,
+  "sound": 0.0,
   "fov": 107.800766,
   "hudScale": 1.0,
   "safety": true
