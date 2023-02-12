@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = Math.Max(0, dis - 3) + walkSpeed;
         }
 
-        if (dis < 3) crosshair.color = new Color(1, 1, 1, Math.Max(0, (float) Math.Pow(dis, 2) - 2));
+        crosshair.color = new Color(1, 1, 1, Math.Max(0, (float) Math.Pow(dis, 2) - 2));
 
         if (Input.GetKeyDown("r")) transform.position = new Vector3(0, 0, 0);
     }

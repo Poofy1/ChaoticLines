@@ -54,6 +54,7 @@ public class SaveHandler : MonoBehaviour
         else
         {
             Screen.fullScreen = true;
+            settings.hudScaleApply();
         }
     }
 
@@ -69,7 +70,6 @@ public class SaveHandler : MonoBehaviour
         savedSet.sound = settings.musicSlider.value;
         savedSet.fov = settings.fovSlider.value;
         savedSet.hudScale = settings.hudSlider.value;
-        savedSet.safety = mainEvents.safety;
 
         //Write
         string json = JsonConvert.SerializeObject(savedSet, Formatting.Indented);
@@ -86,7 +86,6 @@ public class SaveHandler : MonoBehaviour
         settings.musicSlider.value = savedSet.sound;
         settings.fovSlider.value = savedSet.fov;
         settings.hudSlider.value = savedSet.hudScale;
-        mainEvents.safety = !savedSet.safety;
 
         mouse.SensitivityChanged(0);
         settings.UpdateAll();
@@ -391,7 +390,6 @@ public class SaveHandler : MonoBehaviour
         public float sound { get; set; }
         public float fov { get; set; }
         public float hudScale { get; set; }
-        public bool safety { get; set; }
     }
 
     //SaveSystem

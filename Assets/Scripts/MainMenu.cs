@@ -121,14 +121,14 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(FadeOut(fade, .005f, 0));
 
         //random thickness 
-        mainEvents.ThicknessSlider.SetValueWithoutNotify(UnityEngine.Random.Range(0.1f, 2f));
+        mainEvents.ThicknessSlider.SetValueWithoutNotify(UnityEngine.Random.Range(0.1f, 1.5f));
         mainEvents.UpdateThickness();
 
 
         //Reset Camera
         randSceneTime = UnityEngine.Random.Range(15f, 25f);
 
-        randZoomRange[0] = new Vector3(0, 0, UnityEngine.Random.Range(-25f, -10f));
+        randZoomRange[0] = new Vector3(0, 0, UnityEngine.Random.Range(-15f, -5f));
         randZoomRange[1] = new Vector3(0, 0, UnityEngine.Random.Range(-50f, -30f));
         zoom = (randZoomRange[1] - randZoomRange[0]) / (randSceneTime * 50);
         mainOri.transform.localPosition = randZoomRange[0];

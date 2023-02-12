@@ -516,7 +516,7 @@ public class Chaos : MonoBehaviour
 
             }
         }
-        Debug.Log("D:" + 100 * (activeCount / trail_Amount)  + "   TopS:" + topSpeed + "  step:" + step + "  T:" + t + "  ActiveC:" + activeCount);
+        //Debug.Log("D:" + 100 * (activeCount / trail_Amount)  + "   TopS:" + topSpeed + "  step:" + step + "  T:" + t + "  ActiveC:" + activeCount);
 
         
         if (topSpeed < preTop) topSpeed = preTop / 2;
@@ -612,6 +612,7 @@ public class Chaos : MonoBehaviour
         
     }
 
+    private float timeSinceLastUpdate;
     private void FixedUpdate()
     {
         TimeText.text = "Time: " + t.ToString("0.0000000");
@@ -619,7 +620,7 @@ public class Chaos : MonoBehaviour
         if (on)
         {
             //Update Thickness
-            lineThickness = playerMovement.dis * .005f;
+            lineThickness = playerMovement.dis * .0025f;
             for (int i = 0; i < trail_Amount; i++) trails[i].SetWidth(lineThickness * lineMulti);
 
 
@@ -631,9 +632,20 @@ public class Chaos : MonoBehaviour
                 UpdateEquations();
                 UpdateLines();
 
-                percentActive.text = "Diverged: " + 100 * (activeCount / trail_Amount) + "%";
-                avgSpeed.text = "Average Speed: " + (average).ToString("0.0000000");
-                stepText.text = "Step: " + step.ToString("0.0000000");
+
+                timeSinceLastUpdate += Time.fixedDeltaTime;
+
+                if (timeSinceLastUpdate >= 0.5f)
+                {
+                    timeSinceLastUpdate = 0;
+
+                    // Update details
+                    percentActive.text = "Diverged: " + 100 * (activeCount / trail_Amount) + "%";
+                    avgSpeed.text = "Average Speed: " + (average).ToString("0.000000000");
+                    stepText.text = "Step: " + step.ToString("0.000000000");
+                }
+
+                
             }
         }
     }

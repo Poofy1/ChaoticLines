@@ -1,10 +1,9 @@
 {
   "fullscreen": true,
-  "AA": 2,
+  "AA": 1,
   "vSync": true,
-  "mouseSen": 49.5630226,
-  "sound": 0.0,
-  "fov": 107.800766,
-  "hudScale": 1.0,
-  "safety": true
+  "mouseSen": 45.2857132,
+  "sound": 0.4205671,
+  "fov": 110.0,
+  "hudScale": 1.0
 }

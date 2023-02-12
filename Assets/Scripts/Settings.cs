@@ -35,7 +35,7 @@ public class Settings : MonoBehaviour
         VolumeChange(0);
         fovChange(0);
         hudScale(0);
-        hudScaleApply(0);
+        hudScaleApply();
         ToggleFS(0);
         AA(0);
         VSync(0);
@@ -64,7 +64,7 @@ public class Settings : MonoBehaviour
         hudText.text = hudSlider.value.ToString("0.00");
         
     }
-    public void hudScaleApply(int index)
+    public void hudScaleApply()
     {
         hudSlider.SetValueWithoutNotify(hudSlider.value);
         huds.referenceResolution = new Vector2(0, hudSlider.value * 500);
