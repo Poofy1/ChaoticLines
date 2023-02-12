@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 public class Chaos : MonoBehaviour
 {
+    public float topSpeedStep;
+
     //System vars
     public SaveColor saveColor;
     public PlayerMovement playerMovement;
@@ -20,14 +22,14 @@ public class Chaos : MonoBehaviour
     public Transform mapBounds;
     public int bounds = 10000;
     public int trail_Amount = 1;
-    public double t;
-    public double step;
+    public decimal t;
+    public decimal step;
     public bool safety = true;
     public GameObject[] cursor3D;
     private int color;
     private int boxBound = 0;
     private bool pauseTemp = false;
-    public double targetSpeed = 0;
+    public decimal targetSpeed = 0;
     public double exponent = 0;
     public float dampen = 0;
     private float average = 0;
@@ -136,7 +138,7 @@ public class Chaos : MonoBehaviour
 
     public void UpdateTarget()
     {
-        targetSpeed = (double)TargetSlider.value;
+        targetSpeed = (decimal)TargetSlider.value;
         TargetText.text = TargetSlider.value.ToString("0.00");
     }
 
@@ -209,7 +211,7 @@ public class Chaos : MonoBehaviour
             UpdateTarget();
 
             activeCount = 0;
-            step = 1e-04d;
+            step = 1e-04m;
 
             //Initialize inputs and vars
             exp = new Expression[func.Count];
@@ -460,11 +462,12 @@ public class Chaos : MonoBehaviour
 
     public float maxSpeed = 0.1f;
     public double dist_multi = 500;
-    public float target = 0.0001f;
 
-    public double topSpeed = 0;
 
-    public double testVar;
+    public decimal topSpeed;
+    public decimal preTop;
+
+    public decimal testVar = 0.0001m;
 
     private void UpdateEquations()
     {
@@ -474,7 +477,7 @@ public class Chaos : MonoBehaviour
             func[a].mainCords[0] = (float) t;
         }
 
-        topSpeed = 0.00000001d;
+        topSpeed = 0.00000001m;
 
         average = 0;
         for (int i = 1; i < trail_Amount; i++)
@@ -493,23 +496,25 @@ public class Chaos : MonoBehaviour
                 //Find Distance from last pos
                 Vector3 currentPos = new Vector3(func[0].mainCords[i], func[1].mainCords[i], func[2].mainCords[i]);
 
-                double dist = Vector3.Distance(prevPos[i], currentPos);
+                decimal dist = (decimal)Vector3.Distance(prevPos[i], currentPos);
                 float originDist = Vector3.Distance(new Vector3(0, 0, 0), currentPos);
                 average += (float)dist;
 
                 prevPos[i] = currentPos;
-
 
                 if (active[i] == false) activeCount++;
                 else topSpeed = Math.Max(topSpeed, dist);
 
             }
         }
-
-        Debug.Log("D:" + 100 * (activeCount / trail_Amount) + "   TopS:" + topSpeed + "  step:" + step + "  T:" + t + "  ActiveC:" + activeCount);
-        step = targetSpeed / ((topSpeed * dist_multi) + testVar);
+        Debug.Log("D:" + 100 * (activeCount / trail_Amount)  + "   TopS:" + topSpeed + "  step:" + step + "  T:" + t + "  ActiveC:" + activeCount);
 
         
+        if (topSpeed < preTop) topSpeed = preTop / 2;
+        preTop = topSpeed;
+
+        step = targetSpeed / ((topSpeed * Math.Max(topSpeed, 500)) + testVar);
+
 
         //Calc average distance traveled
         average /= trail_Amount;
@@ -623,10 +628,6 @@ public class Chaos : MonoBehaviour
                 stepText.text = "Step: " + step.ToString("0.0000000");
             }
         }
-
-
-
-        
     }
 }
 
