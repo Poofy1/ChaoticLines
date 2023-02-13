@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: cfa46f4379da0644fb34297fa13ee479
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Martian Mono Condensed
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 027ce7c3b775d4e40bcd9746d94ad022, type: 3}
+  - {fileID: 12800000, guid: c525a02c2cfd46c4c8aaf2082a232909, type: 3}
+  - {fileID: 12800000, guid: 6bcfd649d0eaf424aaa6c157fd2dd98d, type: 3}
+  - {fileID: 12800000, guid: dcc10d66e6f6d224da8273d3eec68d91, type: 3}
+  - {fileID: 12800000, guid: 2596276ebc60b2643ab7e9ab1fbef81d, type: 3}
+  - {fileID: 12800000, guid: fda463debc7b7e444aad10b7f0ac9a0d, type: 3}
+  - {fileID: 12800000, guid: 8dd3becc66901a94bad84a7475cea0ff, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

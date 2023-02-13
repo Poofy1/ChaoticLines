@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 06463e6fc9c21f747b873966f16a2755
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Martian Mono SemiCondensed
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 24b21aad0c173104ba8c4c89b3a5c8c7, type: 3}
+  - {fileID: 12800000, guid: 82157c8fbdead6f46ad6be6abaf17b5f, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

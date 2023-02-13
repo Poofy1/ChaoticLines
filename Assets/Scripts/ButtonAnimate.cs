@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ButtonAnimate : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class ButtonAnimate : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Refrences")]
     public CanvasScaler hud;
@@ -40,8 +40,7 @@ public class ButtonAnimate : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             uiSounds.PlayOneShot(audioSelect, .15f);
             if (scaling) transform.LeanScale(targetScale, time);
-            //if (transforming) transform.LeanMoveX(startingX + targetXoffset * (1000 / hud.referenceResolution.x), time).setEaseInOutCubic();
-            if (transforming) LeanTween.moveX(gameObject, transform.position.x + 20, time).setEaseInOutCubic();
+            if (transforming) transform.LeanMoveLocalX(20, time);
         }
         
     }
@@ -52,20 +51,12 @@ public class ButtonAnimate : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             uiSounds.PlayOneShot(audioSelect, .15f);
             if (scaling) transform.LeanScale(startingScale, time);
-            if (transforming) LeanTween.moveX(gameObject, transform.position.x - 20, time).setEaseInOutCubic();
+            if (transforming) transform.LeanMoveLocalX(-20, time);
         }
         
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (active) uiSounds.PlayOneShot(audioPress, .3f);
-    }
 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-
-    }
 
 
 }

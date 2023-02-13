@@ -16,6 +16,7 @@ public class Chaos : MonoBehaviour
     //System vars
     public SaveColor saveColor;
     public PlayerMovement playerMovement;
+    public AudioLowPassFilter lowPass;
     public GameObject crosshair;
     public TrailTemplate mainTrail;
     public MapRotate mapRotator;
@@ -63,7 +64,7 @@ public class Chaos : MonoBehaviour
     public Slider TargetSlider;
     public Text TargetText;
     public Slider directionSlider;
-    public Text directionText;
+    public TMP_Text directionText;
     public TMP_Text TimeText;
     public TMP_Text SystemTitle;
     public Button Activate;
@@ -176,7 +177,7 @@ public class Chaos : MonoBehaviour
         if (trailLength == 3)
         {
             trailLength = 9999999999999;
-            LengthText.text = "∞";
+            LengthText.text = "inf";
         }
         else
         {
@@ -204,12 +205,16 @@ public class Chaos : MonoBehaviour
             createVar.interactable = false;
             createRand.interactable = false;
             cursor.SetActive(false);
+            lowPass.enabled = false;
+
 
             UpdateAmount();
             UpdateTarget();
 
+
+
             activeCount = 0;
-            step = 1e-07m;
+            step = 1e-04m;
 
             //Initialize inputs and vars
             exp = new Expression[func.Count];
@@ -260,6 +265,8 @@ public class Chaos : MonoBehaviour
             pauseTemp = false;
 
             t = 0;
+
+            lowPass.enabled = true;
 
             Activate.gameObject.SetActive(true);
             stopButton.gameObject.SetActive(false);
@@ -516,13 +523,14 @@ public class Chaos : MonoBehaviour
 
             }
         }
-        //Debug.Log("D:" + 100 * (activeCount / trail_Amount)  + "   TopS:" + topSpeed + "  step:" + step + "  T:" + t + "  ActiveC:" + activeCount);
+        
 
         
         if (topSpeed < preTop) topSpeed = preTop / 2;
         preTop = topSpeed;
 
         step = (targetSpeed / ((topSpeed * Math.Max(topSpeed, 500)) + testVar)) * (1 + (originTopDis/ (decimal)originCurve));
+        //Debug.Log("2: TargetSp: " + targetSpeed + "   TopS:" + topSpeed + "  step:" + step + "  T:" + t + "  Origin: " + originTopDis + "  ActiveC:" + activeCount);
 
         //Calc average distance traveled
         average /= trail_Amount;
@@ -592,7 +600,7 @@ public class Chaos : MonoBehaviour
         obj.gameObject.name = name.ToString();
         obj.GetComponentInChildren<TMP_InputField>().onValueChanged.AddListener(delegate { SetCustomVars(); });
         obj.GetComponentInChildren<Button>().onClick.AddListener(delegate { DestoryVarInput(name); });
-        obj.gameObject.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = char.ToUpper(name) + ":";
+        obj.gameObject.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = char.ToUpper(name) + ":";
         return obj;
     }
 
@@ -615,7 +623,7 @@ public class Chaos : MonoBehaviour
     private float timeSinceLastUpdate;
     private void FixedUpdate()
     {
-        TimeText.text = "Time: " + t.ToString("0.0000000");
+        TimeText.text = "Time: " + t.ToString("0.000000000");
 
         if (on)
         {

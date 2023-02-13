@@ -16,6 +16,7 @@ public class SaveColor : MonoBehaviour
     public ColorScheme SchemeObj;
     public Transform ColorSchemeParent;
     public Color currentBackground;
+    public Image bgButton;
     public Camera cam;
 
     public List<SaveScheme> saveList;
@@ -56,13 +57,14 @@ public class SaveColor : MonoBehaviour
     public void RequestForeground()
     {
         waitingColor = !waitingColor;
-        Debug.Log("Waiting for color: " + waitingColor);
+        bgButton.color = new Color(.5f, .5f, .5f);
     }
 
     public void ChangeForeground()
     {
         cam.backgroundColor = currentBackground;
         foregroundImage.color = currentBackground;
+        bgButton.color = new Color(1, 1, 1);
     }
 
 

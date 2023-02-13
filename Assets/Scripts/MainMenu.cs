@@ -72,7 +72,6 @@ public class MainMenu : MonoBehaviour
         {
             player.transform.Rotate(randRotation);
             mainOri.transform.localPosition += zoom;
-            camera.LookAt(new Vector3(0, 0, 0));
         }
         else if (slowDown)
         {
@@ -80,8 +79,19 @@ public class MainMenu : MonoBehaviour
             mainOri.transform.localPosition += zoom;
             zoom *= 0.9f;
             randRotation *= 0.95f;
-            camera.LookAt(new Vector3(0, 0, 0));
             if (Math.Abs(randRotation.x) < 0.005) slowDown = false;
+        }
+    }
+
+    void Update()
+    {
+        if (MM_Active)
+        {
+            camera.LookAt(new Vector3(0, 0, 0));
+        }
+        else if (slowDown)
+        {
+            camera.LookAt(new Vector3(0, 0, 0));
         }
     }
 
