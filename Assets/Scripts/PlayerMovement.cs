@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -36,12 +39,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        MyInput();
-        SpeedControl();
+        if (!(EventSystem.current.currentSelectedGameObject != null && EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>() != null))
+        {
+            MyInput();
+            SpeedControl();
+        }
     }
 
     private void FixedUpdate()
     {
+
         if (active) MovePlayer();
     }
 

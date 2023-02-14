@@ -16,7 +16,7 @@ public class Chaos : MonoBehaviour
     //System vars
     public SaveColor saveColor;
     public PlayerMovement playerMovement;
-    public AudioLowPassFilter lowPass;
+    
     public GameObject crosshair;
     public TrailTemplate mainTrail;
     public MapRotate mapRotator;
@@ -88,6 +88,9 @@ public class Chaos : MonoBehaviour
     //Customizer
     public RectTransform colorTexture;
     public Texture2D colorRef;
+
+    public AudioLowPassFilter lowPass;
+    private Boolean lowPassSwitch;
 
 
     public void Start()
@@ -202,10 +205,8 @@ public class Chaos : MonoBehaviour
             Activate.gameObject.SetActive(false);
             stopButton.gameObject.SetActive(true);
             Amount.interactable = false;
-            createVar.interactable = false;
-            createRand.interactable = false;
             cursor.SetActive(false);
-            lowPass.enabled = false;
+            lowPassSwitch = true;
 
 
             UpdateAmount();
@@ -271,8 +272,6 @@ public class Chaos : MonoBehaviour
             Activate.gameObject.SetActive(true);
             stopButton.gameObject.SetActive(false);
             Amount.interactable = true;
-            createRand.interactable = true;
-            createVar.interactable = true;
             cursor.SetActive(true);
             for (int i = 0; i < func.Count; i++) func[i].textInput.interactable = true;
             for (int i = 0; i < trail_Amount; i++) Destroy(trails[i].gameObject);
@@ -407,6 +406,7 @@ public class Chaos : MonoBehaviour
     //Create Random System
     public void GenRand()
     {
+        if (on) On();
         for (int i = 0; i < func.Count; i++) func[i].textInput.text = RandomFunction.Create(4, func);
     }
 
@@ -566,6 +566,8 @@ public class Chaos : MonoBehaviour
     //Secondary List Stuff
     public void CreateCustomVar()
     {
+        if (on) On();
+
         char newName = '0';
         List<char> letters = new List<char>();
 
@@ -649,13 +651,27 @@ public class Chaos : MonoBehaviour
 
                     // Update details
                     percentActive.text = "Diverged: " + 100 * (activeCount / trail_Amount) + "%";
-                    avgSpeed.text = "Average Speed: " + (average).ToString("0.000000000");
+                    avgSpeed.text = "Average Speed: " + (average).ToString("0.0000000");
                     stepText.text = "Step: " + step.ToString("0.000000000");
                 }
 
                 
             }
         }
+
+
+        if (lowPassSwitch)
+        {
+            lowPass.cutoffFrequency += 100;
+            if (lowPass.cutoffFrequency > 10000)
+            {
+                lowPassSwitch = false;
+                lowPass.enabled = false;
+                lowPass.cutoffFrequency = 1000;
+            }
+        }
+
+
     }
 }
 

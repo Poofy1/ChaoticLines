@@ -363,7 +363,7 @@
       }
     ],
     "date": "2023-01-17-14-55-01-76",
-    "SaveName": "test1231452135"
+    "SaveName": "test456789"
   },
   {
     "CustomFunctions": [
@@ -489,6 +489,60 @@
       }
     ],
     "date": "2023-02-11-14-48-32-23",
-    "SaveName": "KEEP"
+    "SaveName": "KEEEP"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-Cos(-x)*-t)+(z*x)+(-z*x)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(y*Sin(z))-y-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(t*-Sin(z))",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-14-00-57-40-65",
+    "SaveName": "Keep 2"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-y*z)+z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(z*-Tan(z))-(g*y)-(-t*y)-g",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(g*Tan(x))-(y*-t)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "g",
+        "function": "(-y*z)",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-14-01-59-16-14",
+    "SaveName": "asdadWdad"
   }
 ]

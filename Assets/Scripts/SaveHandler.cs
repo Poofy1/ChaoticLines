@@ -22,14 +22,16 @@ public class SaveHandler : MonoBehaviour
     public GameObject hud;
     public GameObject photoHud;
     public RawImage preview;
+    public SelfAni imagePreview;
+    public KeyCode enterKey = KeyCode.Return;
 
-    
 
     private GameObject[] spawnedButtons;
     public int currentSelected;
     private bool appliedRename;
     private string newName;
     private string newDate;
+    private bool awaitingEnter;
 
     private void Start()
     {
@@ -110,13 +112,16 @@ public class SaveHandler : MonoBehaviour
             //Wait For Screenshot
             photoHud.SetActive(true);
             animHandler.HideHud();
+            imagePreview.Clicked();
             yield return StartCoroutine(ScreenShot());
+            photoHud.SetActive(false);
+
 
             //Wait for rename
             yield return StartCoroutine(RenameSystemCall());
 
             animHandler.ShowHud();
-            photoHud.SetActive(false);
+            
 
 
 
@@ -330,7 +335,9 @@ public class SaveHandler : MonoBehaviour
     //Set Name
     IEnumerator RenameSystemCall()
     {
+        awaitingEnter = true;
         renamePanel.SetActive(true);
+        renameInput.ActivateInputField();
         yield return new WaitUntil(() => appliedRename);
         newName = renameInput.text;
         appliedRename = false;
@@ -338,11 +345,18 @@ public class SaveHandler : MonoBehaviour
         renameInput.text = "";
     }
 
-    //Apply Name
-    public void ApplyRename()
+    private void Update()
     {
-        appliedRename = true;
+        if (awaitingEnter)
+        {
+            if (Input.GetKey(enterKey))
+            {
+                appliedRename = true;
+                awaitingEnter = false;
+            }
+        }
     }
+
 
     //Delete System 
     public void DeleteSystem(string name)

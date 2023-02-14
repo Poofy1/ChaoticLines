@@ -56,7 +56,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: JetBrainsMono-Medium Material
   m_Shader: {fileID: 4800000, guid: 68e6db2ebdc24f95958faec2be5558d6, type: 3}
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - UNDERLAY_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -168,11 +169,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: JetBrainsMono-Medium
+  m_Name: SHADOW
   m_EditorClassIdentifier: 
-  hashCode: -2021653875
+  hashCode: -963747098
   material: {fileID: -237833949738619971}
-  materialHashCode: 1736872973
+  materialHashCode: 569401478
   m_Version: 1.1.0
   m_SourceFontFileGUID: 695c3b213e2c0fa4c91d014b9835e9e6
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 695c3b213e2c0fa4c91d014b9835e9e6, type: 3}
