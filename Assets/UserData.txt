@@ -544,5 +544,29 @@
     ],
     "date": "2023-02-14-01-59-16-14",
     "SaveName": "asdadWdad"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(x*Sin(z))+t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(Sin(x)*t*t)+(x*x)+(t*-y)+z-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-Tan(-y)*-y)-z",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-14-18-11-00-19",
+    "SaveName": "TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
   }
 ]
