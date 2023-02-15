@@ -108,32 +108,18 @@ public class Chaos : MonoBehaviour
     //Canvas Updates
     public void UpdateAmount()
     {
-        if (Int32.TryParse(Amount.text, out trail_Amount))
+        if (!(Int32.TryParse(Amount.text, out trail_Amount)) || trail_Amount < 1)
         {
-            if (trail_Amount < 1)
-            {
-                trail_Amount = 1;
-                warningText.text = "Please enter a positve whole number";
-                Amount.text = "";
-                Activate.interactable = false;
-            }
-            else if (trail_Amount > 5000)
-            {
-                warningText.text = "It is recommended to not go above 5,000";
-            }
-            else
-            {
-                warningText.text = "";
-                Activate.interactable = true;
-            }
+            trail_Amount = 1;
+            warningText.text = "Please enter a positive whole number";
+            Amount.text = "";
+            Activate.interactable = false;
 
         }
         else
         {
-            trail_Amount = 1;
-            warningText.text = "Please enter a positve whole number";
-            Amount.text = "";
-            Activate.interactable = false;
+            warningText.text = "";
+            Activate.interactable = true;
         }
 
     }
@@ -153,6 +139,7 @@ public class Chaos : MonoBehaviour
 
     public void UpdateDirection()
     {
+        if (on) On();
         if (directionSlider.value == 0)
         {
             directionText.text = "-";
@@ -592,6 +579,7 @@ public class Chaos : MonoBehaviour
             //Spawn + Add to list
             GameObject cus = CreateVarInput(newName);
             func.Add(new FunctionInput(cus.gameObject.GetComponentInChildren<TMP_InputField>(), newName, ""));
+            SetCustomVars();
         }
         
     }
@@ -619,7 +607,10 @@ public class Chaos : MonoBehaviour
                 return;
             }
         }
-        
+
+        SetCustomVars();
+
+
     }
 
     private float timeSinceLastUpdate;

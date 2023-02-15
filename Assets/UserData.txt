@@ -4,132 +4,6 @@
       {
         "textInput": null,
         "name": "x",
-        "function": "(-z*-y)-(x*t)-t",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(y*x)-(a*t)-(a*x)+x+y",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(-Sin(-y)*-z)+(t*z)+r+z",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "r",
-        "function": "(-r*t)+(t*x)+(-x*r)+t",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "a",
-        "function": "(z*x)+(y*Tan(t))+y-r",
-        "mainCords": null
-      }
-    ],
-    "date": "2022-11-12-02-11-53-29",
-    "SaveName": "teehee"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
-        "function": "(-z*t)+(-t*x)-(-x*-g)-y",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(y*z)+(t*x)+x",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(t*x)-t",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "g",
-        "function": "(-z*z)",
-        "mainCords": null
-      }
-    ],
-    "date": "2022-11-13-17-56-02-77",
-    "SaveName": "KEEP THIS ONE"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
-        "function": "(-z*-g)-(z*y)",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(-g*g)-(z*z)",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(-x*-g)+z",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "g",
-        "function": "(x*-y)-(-y*x)+(Tan(x)*-g)-g+x",
-        "mainCords": null
-      }
-    ],
-    "date": "2022-11-20-20-25-17-40",
-    "SaveName": "richard"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
-        "function": "(-Sin(-g)*g)-(g*g)",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(Sin(x)*t)-(z*-g)",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(t*z)-g+g-t",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "g",
-        "function": "(-g*-t)+(x*x)-y",
-        "mainCords": null
-      }
-    ],
-    "date": "2022-11-21-19-27-00-16",
-    "SaveName": "akjdbikwa"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
         "function": "(-z*t)+(-t*x)-(-x*-g)-y",
         "mainCords": null
       },
@@ -159,7 +33,7 @@
       }
     ],
     "date": "2022-11-22-18-04-58-86",
-    "SaveName": "cool one 2"
+    "SaveName": "System 1"
   },
   {
     "CustomFunctions": [
@@ -189,7 +63,7 @@
       }
     ],
     "date": "2022-12-22-16-21-37-56",
-    "SaveName": "cool c:"
+    "SaveName": "System 2"
   },
   {
     "CustomFunctions": [
@@ -219,115 +93,7 @@
       }
     ],
     "date": "2023-01-03-12-23-16-00",
-    "SaveName": "yee this is neat"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
-        "function": "(-x*y)-y+x",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(-x*x)-(-t*-Sin(-x))-r+r-a",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(-t*-z)",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "r",
-        "function": "(z*-x)-(-t*-r)+y+y",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "a",
-        "function": "(-Cos(-x)*t)+a",
-        "mainCords": null
-      }
-    ],
-    "date": "2023-01-14-14-12-49-27",
-    "SaveName": "90 Degree"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
-        "function": "(x*t)+(a*z)-r+r-x",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(-r*t)+(a*t)+(z*y)",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(t*Sin(x))+r+y",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "r",
-        "function": "(Tan(y)*Tan(a))-(-a*Tan(r))+t+x",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "a",
-        "function": "(t*t)+(t*Tan(t))+y+y",
-        "mainCords": null
-      }
-    ],
-    "date": "2023-01-17-14-49-32-63",
-    "SaveName": "test2"
-  },
-  {
-    "CustomFunctions": [
-      {
-        "textInput": null,
-        "name": "x",
-        "function": "(-a*x)+(-r*y)+z-t+t",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "y",
-        "function": "(a*x)-y+r",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "z",
-        "function": "(-a*r)+(y*-y)-z+r",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "r",
-        "function": "(-z*r)-z",
-        "mainCords": null
-      },
-      {
-        "textInput": null,
-        "name": "a",
-        "function": "(-t*y)-x",
-        "mainCords": null
-      }
-    ],
-    "date": "2023-01-17-14-49-58-20",
-    "SaveName": "test3"
+    "SaveName": "System 3"
   },
   {
     "CustomFunctions": [
@@ -363,7 +129,7 @@
       }
     ],
     "date": "2023-01-17-14-55-01-76",
-    "SaveName": "test456789"
+    "SaveName": "System 4"
   },
   {
     "CustomFunctions": [
@@ -387,7 +153,7 @@
       }
     ],
     "date": "2023-01-17-19-50-24-37",
-    "SaveName": "Pretty Cool"
+    "SaveName": "System 5"
   },
   {
     "CustomFunctions": [
@@ -411,7 +177,7 @@
       }
     ],
     "date": "2023-02-11-12-36-04-28",
-    "SaveName": "REALLY COOL!"
+    "SaveName": "System 6"
   },
   {
     "CustomFunctions": [
@@ -441,7 +207,7 @@
       }
     ],
     "date": "2023-02-11-13-46-49-87",
-    "SaveName": "COOL 183762"
+    "SaveName": "System 7"
   },
   {
     "CustomFunctions": [
@@ -465,7 +231,7 @@
       }
     ],
     "date": "2023-02-11-14-43-50-01",
-    "SaveName": "woahhhh"
+    "SaveName": "System 8"
   },
   {
     "CustomFunctions": [
@@ -489,7 +255,7 @@
       }
     ],
     "date": "2023-02-11-14-48-32-23",
-    "SaveName": "KEEEP"
+    "SaveName": "System 9"
   },
   {
     "CustomFunctions": [
@@ -513,7 +279,7 @@
       }
     ],
     "date": "2023-02-14-00-57-40-65",
-    "SaveName": "Keep 2"
+    "SaveName": "System 10"
   },
   {
     "CustomFunctions": [
@@ -543,30 +309,36 @@
       }
     ],
     "date": "2023-02-14-01-59-16-14",
-    "SaveName": "asdadWdad"
+    "SaveName": "System 11"
   },
   {
     "CustomFunctions": [
       {
         "textInput": null,
         "name": "x",
-        "function": "(x*Sin(z))+t",
+        "function": "(-z*t)+(-t*x)-(-x*-g)-y",
         "mainCords": null
       },
       {
         "textInput": null,
         "name": "y",
-        "function": "(Sin(x)*t*t)+(x*x)+(t*-y)+z-y",
+        "function": "(y*z)+(t*x)+x",
         "mainCords": null
       },
       {
         "textInput": null,
         "name": "z",
-        "function": "(-Tan(-y)*-y)-z",
+        "function": "(t*x)-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "g",
+        "function": "(-z*z)",
         "mainCords": null
       }
     ],
-    "date": "2023-02-14-18-11-00-19",
-    "SaveName": "TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+    "date": "2023-02-14-22-59-01-51",
+    "SaveName": "System 12"
   }
 ]

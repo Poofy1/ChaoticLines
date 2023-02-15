@@ -5,6 +5,8 @@ using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using System;
 
 public class SaveHandler : MonoBehaviour
 {
@@ -23,6 +25,7 @@ public class SaveHandler : MonoBehaviour
     public GameObject photoHud;
     public RawImage preview;
     public SelfAni imagePreview;
+    public TMP_Text nameWarning;
     public KeyCode enterKey = KeyCode.Return;
 
 
@@ -175,7 +178,13 @@ public class SaveHandler : MonoBehaviour
         hud.SetActive(true);
 
         byte[] bytes = currentCapture.EncodeToPNG();
-        System.IO.File.WriteAllBytes(Application.dataPath + "/PreviewImages/" + newDate + ".png", bytes);
+
+        String path = Application.dataPath + "/PreviewImages/";
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        System.IO.File.WriteAllBytes(path + newDate + ".png", bytes);
     }
 
 
@@ -351,8 +360,17 @@ public class SaveHandler : MonoBehaviour
         {
             if (Input.GetKey(enterKey))
             {
-                appliedRename = true;
-                awaitingEnter = false;
+                if (renameInput.text == "")
+                {
+                    renameInput.ActivateInputField();
+                    nameWarning.text = "Enter a valid name";
+                }
+                else
+                {
+                    nameWarning.text = "";
+                    appliedRename = true;
+                    awaitingEnter = false;
+                }
             }
         }
     }

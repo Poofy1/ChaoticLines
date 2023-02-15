@@ -41,8 +41,9 @@ public class MainMenu : MonoBehaviour
 
     public void StartMainMenu()
     {
-        
+        buttons.interactable = false;
         if (mainEvents.on == true) mainEvents.On();
+        mainEvents.lowPass.enabled = false;
         movementController.active = false;
         mouseLook.active = false;
         MM_Active = true;
@@ -54,6 +55,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartScene()
     {
+        buttons.interactable = false;
         buttons.alpha = 0;
         title[0].GetComponent<CanvasGroup>().alpha = 0;
         title[1].GetComponent<CanvasGroup>().alpha = 0;
@@ -155,6 +157,7 @@ public class MainMenu : MonoBehaviour
         {
             yield return StartCoroutine(FadeIn(fade, .005f, 0));
             mainEvents.On();
+            mainEvents.lowPass.enabled = false;
             StartCoroutine(ResetScene());
         }
         
@@ -166,6 +169,8 @@ public class MainMenu : MonoBehaviour
         buttons.alpha = 0;
 
         yield return new WaitForSeconds(2);
+
+        buttons.interactable = true;
 
         StartCoroutine(FadeIn(title[0], .01f, 0f));
         StartCoroutine(FadeIn(title[1], .01f, .5f));
