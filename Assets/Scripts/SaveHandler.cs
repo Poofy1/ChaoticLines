@@ -25,6 +25,7 @@ public class SaveHandler : MonoBehaviour
     public GameObject photoHud;
     public RawImage preview;
     public SelfAni imagePreview;
+    public TMP_Text details;
     public TMP_Text nameWarning;
     public KeyCode enterKey = KeyCode.Return;
 
@@ -115,7 +116,6 @@ public class SaveHandler : MonoBehaviour
             //Wait For Screenshot
             photoHud.SetActive(true);
             animHandler.HideHud();
-            imagePreview.Clicked();
             yield return StartCoroutine(ScreenShot());
             photoHud.SetActive(false);
 
@@ -228,9 +228,6 @@ public class SaveHandler : MonoBehaviour
                 //Create List
                 buttonList.Add(new SaveButton(saveList[i].SaveName, saveList[i].CustomFunctions, spawnedButtons[i]));
 
-                //Add details
-                spawnedButtons[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Layers: " + saveList[i].CustomFunctions.Count + "\nDate Created: " + saveList[i].date.Substring(0, 10);
-
                 //Set Listener
                 setButtonListener(i);
             }
@@ -245,9 +242,9 @@ public class SaveHandler : MonoBehaviour
     private void setButtonListener(int i)
     {
         buttonList[i].button.GetComponent<Button>().onClick.AddListener(delegate { ButtonClicked(i); });
-        buttonList[i].button.transform.GetChild(2).GetComponentInChildren<Button>().onClick.AddListener(delegate { DeleteSystem(saveList[i].SaveName); });
-        buttonList[i].button.transform.GetChild(3).GetComponentInChildren<Button>().onClick.AddListener(delegate { RenameSystem(saveList[i].SaveName); });
-        buttonList[i].button.transform.GetChild(4).GetComponentInChildren<Button>().onClick.AddListener(delegate { LoadSystem(saveList[i].SaveName); });
+        buttonList[i].button.transform.GetChild(1).GetComponentInChildren<Button>().onClick.AddListener(delegate { DeleteSystem(saveList[i].SaveName); });
+        buttonList[i].button.transform.GetChild(2).GetComponentInChildren<Button>().onClick.AddListener(delegate { RenameSystem(saveList[i].SaveName); });
+        buttonList[i].button.transform.GetChild(3).GetComponentInChildren<Button>().onClick.AddListener(delegate { LoadSystem(saveList[i].SaveName); });
     }
 
 
@@ -270,6 +267,9 @@ public class SaveHandler : MonoBehaviour
             tex.LoadImage(File.ReadAllBytes(filePath));
             preview.texture = tex;
         }
+
+        //Show details
+        details.text = "Layers: " + saveList[a].CustomFunctions.Count + "\n" + saveList[a].date.Substring(0, 10);
     }
 
     //Reset currently Selected
@@ -281,7 +281,7 @@ public class SaveHandler : MonoBehaviour
     //Reset currently Selected Load
     public void ResetLoadColor()
     {
-        for (int i = 0; i < spawnedButtons.Length; i++) buttonList[i].button.transform.GetChild(4).GetChild(0).GetComponent<Image>().color = new Color(.8f, .8f, .8f, 1);
+        for (int i = 0; i < spawnedButtons.Length; i++) buttonList[i].button.transform.GetChild(3).GetChild(0).GetComponent<Image>().color = new Color(.8f, .8f, .8f, 1);
     }
 
     //Load System
@@ -292,9 +292,12 @@ public class SaveHandler : MonoBehaviour
         int buttonIndex = LocateButton(name);
         mainEvents.SystemTitle.text = saveList[buttonIndex].SaveName;
 
+        //reset selected
+        ButtonClicked(buttonIndex);
+
         //Reset Load Color
         ResetLoadColor();
-        buttonList[buttonIndex].button.transform.GetChild(4).GetChild(0).GetComponent<Image>().color = new Color(.4823529f, 0, 0, 1);
+        buttonList[buttonIndex].button.transform.GetChild(3).GetChild(0).GetComponent<Image>().color = new Color(.4823529f, 0, 0, 1);
 
         while (mainEvents.func.Count > 3)
         {
@@ -367,9 +370,17 @@ public class SaveHandler : MonoBehaviour
                 }
                 else
                 {
-                    nameWarning.text = "";
-                    appliedRename = true;
-                    awaitingEnter = false;
+                    if (LocateButton(renameInput.text) == -1)
+                    {
+                        nameWarning.text = "";
+                        appliedRename = true;
+                        awaitingEnter = false;
+                    }
+                    else
+                    {
+                        renameInput.ActivateInputField();
+                        nameWarning.text = "Choose a new name";
+                    }
                 }
             }
         }

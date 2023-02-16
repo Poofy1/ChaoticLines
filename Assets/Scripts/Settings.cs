@@ -61,13 +61,13 @@ public class Settings : MonoBehaviour
     //HUD Scale
     public void hudScale(int index)
     {
-        hudText.text = hudSlider.value.ToString("0.00");
+        hudText.text = (hudSlider.value + 1).ToString("0.00");
         
     }
     public void hudScaleApply()
     {
         hudSlider.SetValueWithoutNotify(hudSlider.value);
-        huds.referenceResolution = new Vector2(0, hudSlider.value * 500);
+        huds.referenceResolution = new Vector2(0, ((hudSlider.value / 2) + 1) * 500);
     }
 
     //FullScreen

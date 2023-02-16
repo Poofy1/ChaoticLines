@@ -67,6 +67,12 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = Math.Max(0, dis - 3) + walkSpeed;
         }
 
+        //Move up
+        if (Input.GetKey(KeyCode.Space)) rb.AddForce(new Vector3(0, 1, 0) * moveSpeed * 10f, ForceMode.Force);
+
+        //Move down
+        if (Input.GetKey(KeyCode.LeftControl)) rb.AddForce(new Vector3(0, -1, 0) * moveSpeed * 10f, ForceMode.Force);
+
         crosshair.color = new Color(1, 1, 1, Math.Max(0, (float) Math.Pow(dis, 2) - 2));
 
         if (Input.GetKeyDown("r")) transform.position = new Vector3(0, 0, 0);
@@ -78,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
     }
+
 
     private void SpeedControl()
     {

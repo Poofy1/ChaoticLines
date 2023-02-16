@@ -87,11 +87,7 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
-        if (MM_Active)
-        {
-            camera.LookAt(new Vector3(0, 0, 0));
-        }
-        else if (slowDown)
+        if (MM_Active || slowDown)
         {
             camera.LookAt(new Vector3(0, 0, 0));
         }
@@ -130,7 +126,7 @@ public class MainMenu : MonoBehaviour
 
         //Start
         mainEvents.On();
-        StartCoroutine(FadeOut(fade, .005f, 0));
+        StartCoroutine(FadeOff(fade, .005f, 0));
 
         //random thickness 
         mainEvents.ThicknessSlider.SetValueWithoutNotify(UnityEngine.Random.Range(0.1f, 1.5f));
@@ -155,10 +151,13 @@ public class MainMenu : MonoBehaviour
         //ResetAgain if in MM
         if (MM_Active)
         {
-            yield return StartCoroutine(FadeIn(fade, .005f, 0));
-            mainEvents.On();
-            mainEvents.lowPass.enabled = false;
-            StartCoroutine(ResetScene());
+            yield return StartCoroutine(FadeDark(fade, .005f, 0));
+            if (MM_Active)
+            {
+                mainEvents.On();
+                mainEvents.lowPass.enabled = false;
+                StartCoroutine(ResetScene());
+            }
         }
         
     }
@@ -172,15 +171,15 @@ public class MainMenu : MonoBehaviour
 
         buttons.interactable = true;
 
-        StartCoroutine(FadeIn(title[0], .01f, 0f));
-        StartCoroutine(FadeIn(title[1], .01f, .5f));
-        StartCoroutine(FadeIn(title[2], .01f, 1f));
+        StartCoroutine(FadeDark(title[0], .01f, 0f));
+        StartCoroutine(FadeDark(title[1], .01f, .5f));
+        StartCoroutine(FadeDark(title[2], .01f, 1f));
 
-        StartCoroutine(FadeIn(buttons, .01f, 1f));
+        StartCoroutine(FadeDark(buttons, .01f, 1f));
 
     }
 
-    public IEnumerator FadeIn(CanvasGroup obj, float speed, float wait)
+    public IEnumerator FadeDark(CanvasGroup obj, float speed, float wait)
     {
         yield return new WaitForSeconds(wait);
         while (obj.alpha < 1)
@@ -190,7 +189,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    public IEnumerator FadeOut(CanvasGroup obj, float speed, float wait)
+    public IEnumerator FadeOff(CanvasGroup obj, float speed, float wait)
     {
         yield return new WaitForSeconds(wait);
         while (obj.alpha > 0)

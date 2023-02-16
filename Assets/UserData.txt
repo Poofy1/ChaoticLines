@@ -340,5 +340,29 @@
     ],
     "date": "2023-02-14-22-59-01-51",
     "SaveName": "System 12"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(y*-z)+y+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(Tan(y)*-t)-(z*-t)+(t*t)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(x*-y)+(-Cos(-x)*y)-z-t+y",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-15-22-19-27-46",
+    "SaveName": "System 13"
   }
 ]

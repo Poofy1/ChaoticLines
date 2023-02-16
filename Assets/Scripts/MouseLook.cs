@@ -30,6 +30,9 @@ public class MouseLook : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape)) locked = false;
 
+        if (Input.GetKeyDown(KeyCode.Mouse1)) locked = true;
+        if (Input.GetKeyUp(KeyCode.Mouse1)) locked = false;
+
         if (locked && active)
         {
             mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity;

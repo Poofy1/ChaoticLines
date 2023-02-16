@@ -34,6 +34,7 @@ public class Chaos : MonoBehaviour
     public double exponent = 0;
     public float dampen = 0;
     private float average = 0;
+    private decimal pastTopSpeed;
 
     //Main Render Pipe
     public List<FunctionInput> func;
@@ -188,6 +189,8 @@ public class Chaos : MonoBehaviour
 
         if (on)
         {
+            t = 0.00000001m;
+
             pauseTemp = false;
             Activate.gameObject.SetActive(false);
             stopButton.gameObject.SetActive(true);
@@ -202,7 +205,10 @@ public class Chaos : MonoBehaviour
 
 
             activeCount = 0;
-            step = 1e-04m;
+            step = 1e-06m;
+            pastTopSpeed = 0.000000001m;
+            easeInFrames = 5;
+            targetSpeed = targetSpeed / 100000;
 
             //Initialize inputs and vars
             exp = new Expression[func.Count];
@@ -246,8 +252,8 @@ public class Chaos : MonoBehaviour
         else
         {
             percentActive.text = "Diverged: 0%";
-            avgSpeed.text = "Average Speed: 0";
-            stepText.text = "Step: 0";
+            avgSpeed.text = "Average Speed: 0.000000000";
+            stepText.text = "Step: 0.000000000";
 
             pause.color = new Color(.8f, .8f, .8f);
             pauseTemp = false;
@@ -395,6 +401,7 @@ public class Chaos : MonoBehaviour
     {
         if (on) On();
         for (int i = 0; i < func.Count; i++) func[i].textInput.text = RandomFunction.Create(4, func);
+        On();
     }
 
     //Calculate
@@ -461,7 +468,9 @@ public class Chaos : MonoBehaviour
     private decimal originTopDis;
     public double originCurve;
 
-    public decimal testVar = 0.0001m;
+    private int easeInFrames;
+
+    public decimal testVar = 0.01m;
 
     private void UpdateEquations()
     {
@@ -471,7 +480,7 @@ public class Chaos : MonoBehaviour
             func[a].mainCords[0] = (float) t;
         }
 
-        topSpeed = 0.00000001m;
+        topSpeed = 0.000000001m;
         originTopDis = 0;
 
         average = 0;
@@ -512,12 +521,22 @@ public class Chaos : MonoBehaviour
         }
         
 
-        
+        //Speed up step slowly
         if (topSpeed < preTop) topSpeed = preTop / 2;
         preTop = topSpeed;
 
-        step = (targetSpeed / ((topSpeed * Math.Max(topSpeed, 500)) + testVar)) * (1 + (originTopDis/ (decimal)originCurve));
+        
+
+        //Prevent Overshooting initial stepper
+        if (easeInFrames > 0)
+        {
+            targetSpeed = targetSpeed * 10;
+            easeInFrames--;
+        }
+
         //Debug.Log("2: TargetSp: " + targetSpeed + "   TopS:" + topSpeed + "  step:" + step + "  T:" + t + "  Origin: " + originTopDis + "  ActiveC:" + activeCount);
+        step = (targetSpeed / ((topSpeed * Math.Max(topSpeed, 500)) + testVar)) * (1 + (originTopDis/ (decimal)originCurve));
+        
 
         //Calc average distance traveled
         average /= trail_Amount;
@@ -603,14 +622,10 @@ public class Chaos : MonoBehaviour
                 Destroy(func[i].textInput.transform.parent.gameObject);
                 func.RemoveAt(i);
                 if (on) On();
-                TestCustom();
+                SetCustomVars();
                 return;
             }
         }
-
-        SetCustomVars();
-
-
     }
 
     private float timeSinceLastUpdate;
@@ -628,10 +643,11 @@ public class Chaos : MonoBehaviour
             if (!pauseTemp)
             {
                 if (negitive) step *= -1;
-                t += step;
 
                 UpdateEquations();
                 UpdateLines();
+
+                t += step;
 
 
                 timeSinceLastUpdate += Time.fixedDeltaTime;

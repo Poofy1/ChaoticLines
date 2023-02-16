@@ -21,6 +21,7 @@ public class AnimationHandler : MonoBehaviour
     public GameObject[] DetailButtons;
     public GameObject[] hints;
     public GameObject[] TitlePos;
+    public SelfAni previewImg;
     public SelfAni MMSettings;
     public SelfAni MMInfo;
     public Transform map;
@@ -80,12 +81,10 @@ public class AnimationHandler : MonoBehaviour
     IEnumerator GoToMM()
     {
         hudFade.gameObject.SetActive(true);
-        StartCoroutine(mmController.FadeIn(hudFade, .01f, 0));
+        StartCoroutine(mmController.FadeDark(hudFade, .01f, 0));
 
         //remove hud
         HideHud();
-
-        
 
         //reset menu positions
         for (int i = 0; i < 3; i++) titles[i].localPosition = new Vector3(TitlePos[i].transform.localPosition.x, titles[i].localPosition.y, titles[i].localPosition.z);
@@ -105,7 +104,11 @@ public class AnimationHandler : MonoBehaviour
         LeanTween.moveLocalX(OptionButtons[0], OffPositions[0].transform.localPosition.x, 1).setEaseInOutCubic();
         LeanTween.moveLocalX(DetailButtons[0], OffPositions[0].transform.localPosition.x, 1).setEaseInOutCubic();
 
-        if (ControlButton[0].GetComponent<SelfAni>().open) ControlButton[0].GetComponent<SelfAni>().open = false;
+        if (ControlButton[0].GetComponent<SelfAni>().open)
+        {
+            previewImg.Clicked();
+            ControlButton[0].GetComponent<SelfAni>().open = false;
+        }
         if (CustomButton[0].GetComponent<SelfAni>().open) CustomButton[0].GetComponent<SelfAni>().open = false;
         if (OptionButtons[0].GetComponent<SelfAni>().open) OptionButtons[0].GetComponent<SelfAni>().open = false;
         if (DetailButtons[0].GetComponent<SelfAni>().open) DetailButtons[0].GetComponent<SelfAni>().open = false;
