@@ -8,9 +8,6 @@ public class ButtonAnimate : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
     [Header("Refrences")]
     public CanvasScaler hud;
-    public AudioSource uiSounds;
-    public AudioClip audioSelect;
-    public AudioClip audioPress;
 
     [Header("Hovering Settings")]
     public bool transforming;
@@ -38,7 +35,6 @@ public class ButtonAnimate : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (active)
         {
-            uiSounds.PlayOneShot(audioSelect, .15f);
             if (scaling) transform.LeanScale(targetScale, time);
             if (transforming) transform.LeanMoveLocalX(20, time);
         }
@@ -49,7 +45,6 @@ public class ButtonAnimate : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (active)
         {
-            uiSounds.PlayOneShot(audioSelect, .15f);
             if (scaling) transform.LeanScale(startingScale, time);
             if (transforming) transform.LeanMoveLocalX(-20, time);
         }

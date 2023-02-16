@@ -102,7 +102,7 @@ public class MainMenu : MonoBehaviour
         //Load random system
         if (saveHandler.saveList.Count == 0)
         {
-            mainEvents.GenRand();
+            mainEvents.GenRand(0);
         }
         else
         {

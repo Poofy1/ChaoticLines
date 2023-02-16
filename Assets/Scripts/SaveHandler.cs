@@ -111,7 +111,7 @@ public class SaveHandler : MonoBehaviour
     {
         if (mainEvents.TestCustom())
         {
-
+            cancelSave = false;
 
             //Wait For Screenshot
             photoHud.SetActive(true);
@@ -119,6 +119,7 @@ public class SaveHandler : MonoBehaviour
             yield return StartCoroutine(ScreenShot());
             photoHud.SetActive(false);
 
+            if (cancelSave) yield break;
 
             //Wait for rename
             yield return StartCoroutine(RenameSystemCall());
@@ -154,10 +155,17 @@ public class SaveHandler : MonoBehaviour
 
 
     //ScreenShot
+    private bool cancelSave;
     IEnumerator ScreenShot()
     {
         while (!Input.GetKeyDown(KeyCode.Space))
         {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                cancelSave = true;
+                animHandler.ShowHud();
+                break;
+            }
             yield return null;
         }
 
@@ -359,6 +367,7 @@ public class SaveHandler : MonoBehaviour
 
     private void Update()
     {
+        //checking if rename is correct
         if (awaitingEnter)
         {
             if (Input.GetKey(enterKey))

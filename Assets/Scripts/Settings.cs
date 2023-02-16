@@ -73,7 +73,7 @@ public class Settings : MonoBehaviour
     //FullScreen
     public void ToggleFS(int index)
     {
-        Screen.fullScreen = fullscreen.isOn;
+        Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, fullscreen.isOn);
     }
 
     //AA

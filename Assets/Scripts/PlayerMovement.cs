@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            moveSpeed = Math.Max(0, dis - 3) + walkSpeed;
+            moveSpeed = Math.Max(1, dis - 2) + walkSpeed;
         }
 
         //Move up

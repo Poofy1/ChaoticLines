@@ -117,6 +117,11 @@ public class Chaos : MonoBehaviour
             Activate.interactable = false;
 
         }
+        else if (trail_Amount > 1000)
+        {
+            warningText.text = "Performance Warning";
+            Activate.interactable = true;
+        }
         else
         {
             warningText.text = "";
@@ -397,11 +402,11 @@ public class Chaos : MonoBehaviour
     }
 
     //Create Random System
-    public void GenRand()
+    public void GenRand(int reset = 1)
     {
         if (on) On();
         for (int i = 0; i < func.Count; i++) func[i].textInput.text = RandomFunction.Create(4, func);
-        On();
+        if (reset == 1) On();
     }
 
     //Calculate

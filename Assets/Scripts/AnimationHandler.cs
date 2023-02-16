@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class AnimationHandler : MonoBehaviour
 {
     [Header("Refrences")]
-    public GameObject hud;
+    public GameObject hideHud;
     public MainMenu mmController;
     public CanvasGroup hudFade;
 
@@ -32,7 +32,7 @@ public class AnimationHandler : MonoBehaviour
     {
         if (Input.GetKeyDown("tab") && hudActive)
         {
-            hud.SetActive(!hud.activeSelf);
+            hideHud.SetActive(!hideHud.activeSelf);
         }
     }
 
