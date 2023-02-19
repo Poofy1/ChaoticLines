@@ -19,14 +19,9 @@ public class MouseLook : MonoBehaviour
 
     public bool active;
 
-
-    float offsetX;
-    float offsetY;
-
     public bool locked = false;
 
     private bool toggleOn;
-    private Vector3 initialCamRot;
 
     // Update is called once per frame
     void Update()
@@ -48,26 +43,15 @@ public class MouseLook : MonoBehaviour
             Cursor.visible = false;
             toggleOn = true;
 
-            if (mouseSmooth)
-            {
-                smoothMouse.x = Mathf.Lerp(smoothMouse.x, mouseX, 1.0f / smoothing);
-                smoothMouse.y = Mathf.Lerp(smoothMouse.y, mouseY, 1.0f / smoothing);
+            yRotation += mouseX;
+            xRotation -= mouseY;
 
-                yRotation += smoothMouse.x;
-                xRotation -= smoothMouse.y;
-            }
-            else
-            {
-                yRotation += mouseX;
-                xRotation -= mouseY;
-            }
 
-            
 
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-            transform.rotation = Quaternion.Euler(xRotation + initialCamRot.x, yRotation + initialCamRot.y, 0);
-            player.rotation = Quaternion.Euler(xRotation + initialCamRot.x, yRotation + initialCamRot.y, 0);
+            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            player.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         }
         else
         {
@@ -82,9 +66,6 @@ public class MouseLook : MonoBehaviour
 
     public void GameClicked()
     {
-        initialCamRot = transform.eulerAngles;
-        yRotation = 0;
-        xRotation = 0;
         locked = true;
     }
 

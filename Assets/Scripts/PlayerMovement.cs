@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
         dis = Vector3.Distance(new Vector3(0, 0, 0), transform.position);
 
         if (Input.GetKey(runKey)) {
-            moveSpeed = (Math.Max(0, dis - 3) + walkSpeed) * sprintSpeed;
+            moveSpeed = (Math.Max(1, dis - 2) + walkSpeed) * sprintSpeed;
         }
         else
         {
