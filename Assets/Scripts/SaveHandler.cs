@@ -50,10 +50,10 @@ public class SaveHandler : MonoBehaviour
 
 
         //LoadAll Settings
-        if (File.Exists(Application.dataPath + "/UserSettings.txt"))
+        if (File.Exists(Application.streamingAssetsPath + "/UserSettings.txt"))
         {
             //Deserialize
-            string saveString = File.ReadAllText(Application.dataPath + "/UserSettings.txt");
+            string saveString = File.ReadAllText(Application.streamingAssetsPath + "/UserSettings.txt");
             savedSet = JsonConvert.DeserializeObject<SettingItem>(saveString);
             LoadSettings();
         }
@@ -79,7 +79,7 @@ public class SaveHandler : MonoBehaviour
 
         //Write
         string json = JsonConvert.SerializeObject(savedSet, Formatting.Indented);
-        File.WriteAllText(Application.dataPath + "/UserSettings.txt", json);
+        File.WriteAllText(Application.streamingAssetsPath + "/UserSettings.txt", json);
     }
 
     //LoadSettings
@@ -187,7 +187,7 @@ public class SaveHandler : MonoBehaviour
 
         byte[] bytes = currentCapture.EncodeToPNG();
 
-        String path = Application.dataPath + "/PreviewImages/";
+        String path = Application.streamingAssetsPath + "/PreviewImages/";
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -201,7 +201,7 @@ public class SaveHandler : MonoBehaviour
     public void WriteSave()
     {
         string json = JsonConvert.SerializeObject(saveList, Formatting.Indented);
-        File.WriteAllText(Application.dataPath + "/UserData.txt", json);
+        File.WriteAllText(Application.streamingAssetsPath + "/UserData.txt", json);
 
         //Re-load all data
         LoadAll();
@@ -210,10 +210,10 @@ public class SaveHandler : MonoBehaviour
     //Load All Custom Data
     public void LoadAll()
     {
-        if (File.Exists(Application.dataPath + "/UserData.txt"))
+        if (File.Exists(Application.streamingAssetsPath + "/UserData.txt"))
         {
             //Deserialize
-            string saveString = File.ReadAllText(Application.dataPath + "/UserData.txt");
+            string saveString = File.ReadAllText(Application.streamingAssetsPath + "/UserData.txt");
             saveList = JsonConvert.DeserializeObject<List<SaveList>>(saveString);
 
             //Delete Buttons
@@ -267,7 +267,7 @@ public class SaveHandler : MonoBehaviour
 
         //show preview
         Texture2D tex = null;
-        string filePath = Application.dataPath + "/PreviewImages/" + saveList[a].date + ".png";
+        string filePath = Application.streamingAssetsPath + "/PreviewImages/" + saveList[a].date + ".png";
 
         if (File.Exists(filePath))
         {
@@ -406,7 +406,7 @@ public class SaveHandler : MonoBehaviour
             Destroy(buttonList[i].button);
 
             //Delete preview
-            string filePath = Application.dataPath + "/PreviewImages/" + saveList[i].date + ".png";
+            string filePath = Application.streamingAssetsPath + "/PreviewImages/" + saveList[i].date + ".png";
             if (File.Exists(filePath)) File.Delete(filePath);
 
             //Remove from list
