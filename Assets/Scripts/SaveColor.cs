@@ -208,7 +208,7 @@ public class SaveColor : MonoBehaviour
     {
         
         string json = JsonConvert.SerializeObject(saveList, Formatting.Indented);
-        File.WriteAllText(Application.dataPath + "/ColorData.txt", json);
+        File.WriteAllText(Application.streamingAssetsPath + "/ColorData.txt", json);
 
         //Re-load all data
         //LoadAll();
@@ -219,10 +219,10 @@ public class SaveColor : MonoBehaviour
     //Load All Custom Data
     public void LoadAll()
     {
-        if (File.Exists(Application.dataPath + "/ColorData.txt"))
+        if (File.Exists(Application.streamingAssetsPath + "/ColorData.txt"))
         {
             //Deserialize
-            string saveString = File.ReadAllText(Application.dataPath + "/ColorData.txt");
+            string saveString = File.ReadAllText(Application.streamingAssetsPath + "/ColorData.txt");
             saveList = JsonConvert.DeserializeObject<List<SaveScheme>>(saveString);
 
             //Delete Buttons

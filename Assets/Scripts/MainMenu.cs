@@ -25,13 +25,15 @@ public class MainMenu : MonoBehaviour
     private Vector3 randRotation;
 
     //Menu
-    public CanvasGroup[] title;
+    public CanvasGroup title;
     public CanvasGroup buttons;
     public CanvasGroup fade;
 
     //local
     private bool MM_Active;
     private bool slowDown;
+    private bool fadeDark;
+    private bool fadeOff;
 
     private void Start()
     {
@@ -57,9 +59,7 @@ public class MainMenu : MonoBehaviour
     {
         buttons.interactable = false;
         buttons.alpha = 0;
-        title[0].GetComponent<CanvasGroup>().alpha = 0;
-        title[1].GetComponent<CanvasGroup>().alpha = 0;
-        title[2].GetComponent<CanvasGroup>().alpha = 0;
+        title.GetComponent<CanvasGroup>().alpha = 0;
         movementController.active = true;
         mouseLook.active = true;
         MM_Active = false;
@@ -99,6 +99,9 @@ public class MainMenu : MonoBehaviour
         //Reset
         yield return 0;
 
+        mainEvents.Amount.text = "450";
+        mainEvents.UpdateAmount();
+
         //Load random system
         if (saveHandler.saveList.Count == 0)
         {
@@ -123,15 +126,9 @@ public class MainMenu : MonoBehaviour
             saveColor.loadScheme(name);
         }
 
-
-        //Start
-        mainEvents.On();
-        StartCoroutine(FadeOff(fade, .005f, 0));
-
         //random thickness 
         mainEvents.ThicknessSlider.SetValueWithoutNotify(UnityEngine.Random.Range(0.1f, 1.5f));
         mainEvents.UpdateThickness();
-
 
         //Reset Camera
         randSceneTime = UnityEngine.Random.Range(15f, 25f);
@@ -145,13 +142,22 @@ public class MainMenu : MonoBehaviour
                                    UnityEngine.Random.Range(-.2f, .2f),
                                    UnityEngine.Random.Range(-.2f, .2f));
 
+        //Start
+        mainEvents.On();
+        yield return StartCoroutine(FadeOff(fade, .5f, 0));
+
+        
+
+
+        
+
         //Wait
         yield return new WaitForSeconds(randSceneTime);
 
         //ResetAgain if in MM
         if (MM_Active)
         {
-            yield return StartCoroutine(FadeDark(fade, .005f, 0));
+            yield return StartCoroutine(FadeDark(fade, .5f, 0));
             if (MM_Active)
             {
                 mainEvents.On();
@@ -164,18 +170,16 @@ public class MainMenu : MonoBehaviour
 
     IEnumerator MenuFade()
     {
-        for (int i = 0; i < title.Length; i++) title[i].alpha = 0;
+        title.alpha = 0;
         buttons.alpha = 0;
 
         yield return new WaitForSeconds(2);
 
         buttons.interactable = true;
 
-        StartCoroutine(FadeDark(title[0], .01f, 0f));
-        StartCoroutine(FadeDark(title[1], .01f, .5f));
-        StartCoroutine(FadeDark(title[2], .01f, 1f));
+        StartCoroutine(FadeDark(title, 1f, 0f));
 
-        StartCoroutine(FadeDark(buttons, .01f, 1f));
+        StartCoroutine(FadeDark(buttons, 1f, 1f));
 
     }
 
@@ -184,8 +188,8 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(wait);
         while (obj.alpha < 1)
         {
-            obj.alpha += speed;
-            yield return new WaitForSeconds(.0025f);
+            obj.alpha += speed * Time.deltaTime;
+            yield return 0;
         }
     }
 
@@ -194,8 +198,8 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(wait);
         while (obj.alpha > 0)
         {
-            obj.alpha -= speed;
-            yield return new WaitForSeconds(.0025f);
+            obj.alpha -= speed * Time.deltaTime;
+            yield return 0;
         }
     }
 }

@@ -12,7 +12,7 @@ public class AnimationHandler : MonoBehaviour
     public CanvasGroup hudFade;
 
     [Header("AnimatedObjects")]
-    public Transform[] titles;
+    public Transform title;
     public Transform[] MMButtons;
     public Transform[] OffPositions;
     public GameObject[] ControlButton;
@@ -20,7 +20,7 @@ public class AnimationHandler : MonoBehaviour
     public GameObject[] OptionButtons;
     public GameObject[] DetailButtons;
     public GameObject[] hints;
-    public GameObject[] TitlePos;
+    public GameObject TitlePos;
     public SelfAni previewImg;
     public SelfAni MMSettings;
     public SelfAni MMInfo;
@@ -39,9 +39,7 @@ public class AnimationHandler : MonoBehaviour
     public void LeaveMM()
     {
         //MM Leave Trasition
-        titles[0].LeanMoveX(-800, .5f).setEaseInOutCubic();
-        titles[1].LeanMoveX(-800, .75f).setEaseInOutCubic();
-        titles[2].LeanMoveX(-800, 1).setEaseInOutCubic();
+        title.LeanMoveX(-800, .5f).setEaseInOutCubic();
 
         if (MMSettings.open) MMSettings.Clicked();
         if (MMInfo.open) MMInfo.Clicked();
@@ -81,17 +79,18 @@ public class AnimationHandler : MonoBehaviour
     IEnumerator GoToMM()
     {
         hudFade.gameObject.SetActive(true);
-        StartCoroutine(mmController.FadeDark(hudFade, .01f, 0));
 
         //remove hud
         HideHud();
 
+        yield return StartCoroutine(mmController.FadeDark(hudFade, 1f, 0));
+
+        
+
         //reset menu positions
-        for (int i = 0; i < 3; i++) titles[i].localPosition = new Vector3(TitlePos[i].transform.localPosition.x, titles[i].localPosition.y, titles[i].localPosition.z);
+        title.localPosition = new Vector3(TitlePos.transform.localPosition.x, title.localPosition.y, title.localPosition.z);
         for (int i = 0; i < 4; i++) MMButtons[i].localPosition = new Vector3(-50, MMButtons[i].localPosition.y, MMButtons[i].localPosition.z);
 
-
-        yield return new WaitForSeconds(1f);
         for (int i = 0; i < 4; i++) MMButtons[i].gameObject.GetComponent<Button>().interactable = true;
         mmController.GetComponent<MainMenu>().StartMainMenu();
     }

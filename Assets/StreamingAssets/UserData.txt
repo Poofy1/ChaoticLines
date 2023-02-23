@@ -364,5 +364,59 @@
     ],
     "date": "2023-02-15-22-19-27-46",
     "SaveName": "System 13"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(t*z)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(y*-t)+x+y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-t*z)+(-Cos(x)*x)-t",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-17-18-26-05-64",
+    "SaveName": "System 14"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-z*x)+z-x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(-t*y)+(x*z)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(a*x)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "a",
+        "function": "(z*t)+(t*x)+(-a*t)-y-x+x",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-19-03-25-58-56",
+    "SaveName": "System 15"
   }
 ]
