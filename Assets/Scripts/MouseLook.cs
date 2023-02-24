@@ -11,10 +11,10 @@ public class MouseLook : MonoBehaviour
     public bool mouseSmooth;
     public float smoothing = 2.0f; // control the amount of smoothing
     private Vector2 smoothMouse = Vector2.zero; // stores the smoothed mouse input values
-    float mouseX;
-    float mouseY;
-    float xRotation;
-    float yRotation;
+    public float mouseX;
+    public float mouseY;
+    public float xRotation;
+    public float yRotation;
     public float mouseSensitivity;
 
     public bool active;
@@ -22,6 +22,7 @@ public class MouseLook : MonoBehaviour
     public bool locked = false;
 
     private bool toggleOn;
+    public Vector3 initialCamRot;
 
     // Update is called once per frame
     void Update()
@@ -50,8 +51,8 @@ public class MouseLook : MonoBehaviour
 
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-            player.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            transform.rotation = Quaternion.Euler(xRotation + initialCamRot.x, yRotation + initialCamRot.y, 0);
+            player.rotation = Quaternion.Euler(xRotation + initialCamRot.x, yRotation + initialCamRot.y, 0);
         }
         else
         {
@@ -66,6 +67,9 @@ public class MouseLook : MonoBehaviour
 
     public void GameClicked()
     {
+        initialCamRot = transform.eulerAngles;
+        yRotation = 0;
+        xRotation = 0;
         locked = true;
     }
 

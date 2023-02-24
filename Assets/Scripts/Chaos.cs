@@ -145,7 +145,6 @@ public class Chaos : MonoBehaviour
 
     public void UpdateDirection()
     {
-        if (on) On();
         if (directionSlider.value == 0)
         {
             directionText.text = "-";
@@ -163,6 +162,13 @@ public class Chaos : MonoBehaviour
             directionText.text = "+";
             absolute = false;
             negitive = false;
+        }
+
+        //Resart if on
+        if (on)
+        {
+            On();
+            On();
         }
     }
 
@@ -217,7 +223,7 @@ public class Chaos : MonoBehaviour
 
             //Initialize inputs and vars
             exp = new Expression[func.Count];
-            boxBound = bounds * 2000;
+            boxBound = bounds * 1000;
             mapBounds.localScale = new Vector3(boxBound, boxBound, boxBound);
             mapRotator.maxZoomOut = boxBound / 20;
 
@@ -636,23 +642,25 @@ public class Chaos : MonoBehaviour
     private float timeSinceLastUpdate;
     private void FixedUpdate()
     {
-        TimeText.text = "Time: " + t.ToString("0.000000000");
+        if (absolute) TimeText.text = "Time: -/+" + t.ToString("0.000000000");
+        else TimeText.text = "Time: " + t.ToString("0.000000000");
 
         if (on)
         {
             //Update Thickness
-            lineThickness = playerMovement.dis * .0025f;
+            lineThickness = (playerMovement.dis * .002f) + 0.001f;
             for (int i = 0; i < trail_Amount; i++) trails[i].SetWidth(lineThickness * lineMulti);
 
 
             if (!pauseTemp)
             {
-                if (negitive) step *= -1;
+                if (negitive) t -= step;
+                else t += step;
 
                 UpdateEquations();
                 UpdateLines();
 
-                t += step;
+                
 
 
                 timeSinceLastUpdate += Time.fixedDeltaTime;

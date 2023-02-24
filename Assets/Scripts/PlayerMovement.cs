@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Objects")]
     public Transform orientation;
     public Material crosshair;
+    public MouseLook mouseLook;
 
     public float dis;
     public bool active;
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     float verticalInput;
 
     Vector3 moveDirection;
+
 
     Rigidbody rb;
 
@@ -68,14 +70,31 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Move up
-        if (Input.GetKey(KeyCode.Space)) rb.AddForce(new Vector3(0, 1, 0) * moveSpeed * 10f, ForceMode.Force);
+        if (Input.GetKey(KeyCode.Space)) rb.AddForce(new Vector3(0, 1, 0) * moveSpeed * 3, ForceMode.Force);
 
         //Move down
-        if (Input.GetKey(KeyCode.LeftControl)) rb.AddForce(new Vector3(0, -1, 0) * moveSpeed * 10f, ForceMode.Force);
+        if (Input.GetKey(KeyCode.LeftControl)) rb.AddForce(new Vector3(0, -1, 0) * moveSpeed * 3, ForceMode.Force);
 
         crosshair.color = new Color(1, 1, 1, Math.Max(0, (float) Math.Pow(dis, 2) - 2));
 
-        if (Input.GetKeyDown("r")) transform.position = new Vector3(0, 0, 0);
+        if (Input.GetKeyDown("r"))
+        {
+            //reset rotation
+            mouseLook.transform.eulerAngles = Vector3.zero;
+            mouseLook.player.eulerAngles = Vector3.zero;
+
+            mouseLook.initialCamRot.x = 0;
+            mouseLook.initialCamRot.y = 0;
+
+            mouseLook.yRotation = 0;
+            mouseLook.xRotation = 0;
+
+
+            //reset position
+            transform.position = new Vector3(0, 0, -1);
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 
     private void MovePlayer()

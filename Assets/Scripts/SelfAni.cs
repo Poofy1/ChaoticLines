@@ -22,7 +22,12 @@ public class SelfAni : MonoBehaviour
     }
 
 
-
+    public void VerticalClicked()
+    {
+        if (open) LeanTween.moveLocalY(gameObject, min.localPosition.y, time).setEaseInOutCubic();
+        else LeanTween.moveLocalY(gameObject, max.localPosition.y, time).setEaseInOutCubic();
+        open = !open;
+    }
 
 
 }

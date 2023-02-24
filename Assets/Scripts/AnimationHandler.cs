@@ -10,6 +10,7 @@ public class AnimationHandler : MonoBehaviour
     public GameObject hideHud;
     public MainMenu mmController;
     public CanvasGroup hudFade;
+    public GameObject crosshair;
 
     [Header("AnimatedObjects")]
     public Transform title;
@@ -33,6 +34,7 @@ public class AnimationHandler : MonoBehaviour
         if (Input.GetKeyDown("tab") && hudActive)
         {
             hideHud.SetActive(!hideHud.activeSelf);
+            crosshair.SetActive(!crosshair.activeSelf);
         }
     }
 
