@@ -47,8 +47,8 @@ public class Settings : MonoBehaviour
     public void VolumeChange(int index)
     {
         music.volume = musicSlider.value;
-        uiSound.volume = musicSlider.value * .9f;
-        musicText.text = music.volume.ToString("0.0");
+        uiSound.volume = musicSlider.value;
+        musicText.text = music.volume.ToString("0.00");
     }
 
     //FOV

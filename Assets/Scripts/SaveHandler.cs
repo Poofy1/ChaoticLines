@@ -17,6 +17,7 @@ public class SaveHandler : MonoBehaviour
     public List<SaveButton> buttonList;
     public SettingItem savedSet;
     public MouseLook mouse;
+    public SelfAni hotkeyAnim;
     public GameObject button;
     public GameObject buttonParent;
     public GameObject renamePanel;
@@ -77,9 +78,14 @@ public class SaveHandler : MonoBehaviour
         savedSet.fov = settings.fovSlider.value;
         savedSet.hudScale = settings.hudSlider.value;
 
+        savedSet.hotkeys = hotkeyAnim.open;
+
         //Write
         string json = JsonConvert.SerializeObject(savedSet, Formatting.Indented);
         File.WriteAllText(Application.streamingAssetsPath + "/UserSettings.txt", json);
+
+
+
     }
 
     //LoadSettings
@@ -95,6 +101,11 @@ public class SaveHandler : MonoBehaviour
 
         mouse.SensitivityChanged(0);
         settings.UpdateAll();
+
+        if (savedSet.hotkeys && !hotkeyAnim.open)
+        {
+            hotkeyAnim.VerticalClicked();
+        }
     }
 
 
@@ -442,6 +453,9 @@ public class SaveHandler : MonoBehaviour
         public float sound { get; set; }
         public float fov { get; set; }
         public float hudScale { get; set; }
+
+        //Hidden
+        public bool hotkeys { get; set; }
     }
 
     //SaveSystem

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class SelfAni : MonoBehaviour
 {
@@ -22,10 +23,21 @@ public class SelfAni : MonoBehaviour
     }
 
 
+    // Made for hotkey hints:
+    public TextMeshProUGUI title;
+
     public void VerticalClicked()
     {
-        if (open) LeanTween.moveLocalY(gameObject, min.localPosition.y, time).setEaseInOutCubic();
-        else LeanTween.moveLocalY(gameObject, max.localPosition.y, time).setEaseInOutCubic();
+        if (open)
+        {
+            LeanTween.moveLocalY(gameObject, min.localPosition.y, time).setEaseInOutCubic();
+            title.text = "Show Hotkeys";
+        }
+        else
+        {
+            LeanTween.moveLocalY(gameObject, max.localPosition.y, time).setEaseInOutCubic();
+            title.text = "Hide Hotkeys";
+        }
         open = !open;
     }
 

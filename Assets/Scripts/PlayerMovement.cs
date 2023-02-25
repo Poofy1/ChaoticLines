@@ -46,6 +46,12 @@ public class PlayerMovement : MonoBehaviour
             MyInput();
             SpeedControl();
         }
+
+        float x = Mathf.Clamp(transform.localPosition.x, -2000000, 2000000);
+        float y = Mathf.Clamp(transform.localPosition.y, -2000000, 2000000);
+        float z = Mathf.Clamp(transform.localPosition.z, -2000000, 2000000);
+
+        transform.localPosition = new Vector3(x,y,z);
     }
 
     private void FixedUpdate()

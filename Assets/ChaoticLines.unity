@@ -2832,7 +2832,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3214,6 +3214,7 @@ MonoBehaviour:
   min: {fileID: 984424659}
   max: {fileID: 710280161}
   open: 0
+  title: {fileID: 0}
 --- !u!1 &278808026
 GameObject:
   m_ObjectHideFlags: 0
@@ -4642,6 +4643,7 @@ MonoBehaviour:
   min: {fileID: 0}
   max: {fileID: 0}
   open: 0
+  title: {fileID: 0}
 --- !u!222 &366831028
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5163,7 +5165,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -5
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -5659,6 +5661,7 @@ MonoBehaviour:
   animHandler: {fileID: 2008228325}
   settings: {fileID: 1676777912}
   mouse: {fileID: 1478915683}
+  hotkeyAnim: {fileID: 924752446}
   button: {fileID: 7493967668713619867, guid: 2d0a07fb547967e41a4f91d6c9e2ae5e, type: 3}
   buttonParent: {fileID: 1335358885}
   renamePanel: {fileID: 154878102}
@@ -6771,7 +6774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.8000001, g: 0.8000001, b: 0.8000001, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7504,7 +7507,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -5
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -8363,7 +8366,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -383.99994, y: -159}
+  m_AnchoredPosition: {x: -383.99994, y: -156.9}
   m_SizeDelta: {x: 1101, y: 599}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &637743219
@@ -10576,7 +10579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.7686275, g: 0.7686275, b: 0.7686275, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -11123,7 +11126,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -383.2, y: -353}
+  m_AnchoredPosition: {x: -383.2, y: -156.9}
   m_SizeDelta: {x: 1101, y: 599}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &924752446
@@ -11141,7 +11144,8 @@ MonoBehaviour:
   time: 0.25
   min: {fileID: 637743218}
   max: {fileID: 300781325}
-  open: 1
+  open: 0
+  title: {fileID: 1150027842}
 --- !u!222 &924752447
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11723,7 +11727,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.7686275, g: 0.7686275, b: 0.7686275, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -11782,6 +11786,7 @@ MonoBehaviour:
   min: {fileID: 756450353}
   max: {fileID: 1491249275}
   open: 0
+  title: {fileID: 0}
 --- !u!222 &1007819207
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11875,6 +11880,7 @@ MonoBehaviour:
   min: {fileID: 1908829036}
   max: {fileID: 366831026}
   open: 0
+  title: {fileID: 0}
 --- !u!1 &1021729087
 GameObject:
   m_ObjectHideFlags: 0
@@ -13000,7 +13006,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 175.2, y: -2.5}
+  m_AnchoredPosition: {x: 201.0997, y: -2.5}
   m_SizeDelta: {x: 250, y: 280}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1107429057
@@ -13057,6 +13063,7 @@ MonoBehaviour:
   min: {fileID: 5855836}
   max: {fileID: 2051507870}
   open: 0
+  title: {fileID: 0}
 --- !u!1 &1110354376
 GameObject:
   m_ObjectHideFlags: 0
@@ -13320,6 +13327,7 @@ MonoBehaviour:
   min: {fileID: 0}
   max: {fileID: 0}
   open: 0
+  title: {fileID: 0}
 --- !u!1 &1150027840
 GameObject:
   m_ObjectHideFlags: 0
@@ -13332,7 +13340,7 @@ GameObject:
   - component: {fileID: 1150027843}
   - component: {fileID: 1150027842}
   m_Layer: 0
-  m_Name: CharList (2)
+  m_Name: title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14331,7 +14339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5647059, g: 0.5647059, b: 0.5647059, a: 0.6117647}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -15377,7 +15385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5647059, g: 0.5647059, b: 0.5647059, a: 0.6117647}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -15604,7 +15612,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8c258dca7e08fb1438113b0b75348f71, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.45
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -16806,8 +16814,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -113.3}
-  m_SizeDelta: {x: 300, y: 50}
+  m_AnchoredPosition: {x: 0, y: -104.7}
+  m_SizeDelta: {x: 300, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1463071210
 MonoBehaviour:
@@ -16870,6 +16878,18 @@ MonoBehaviour:
       - m_Target: {fileID: 924752446}
         m_TargetAssemblyTypeName: SelfAni, Assembly-CSharp
         m_MethodName: VerticalClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 441955525}
+        m_TargetAssemblyTypeName: SaveHandler, Assembly-CSharp
+        m_MethodName: SaveSettings
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -17778,6 +17798,7 @@ MonoBehaviour:
   min: {fileID: 979443299}
   max: {fileID: 1525488988}
   open: 0
+  title: {fileID: 0}
 --- !u!1 &1525488987
 GameObject:
   m_ObjectHideFlags: 0
@@ -19299,7 +19320,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 0.5
+  m_Text: 0.50
 --- !u!222 &1672599923
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20357,7 +20378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.7686275, g: 0.7686275, b: 0.7686275, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -21226,6 +21247,7 @@ MonoBehaviour:
   min: {fileID: 0}
   max: {fileID: 0}
   open: 0
+  title: {fileID: 0}
 --- !u!114 &1844878901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21342,7 +21364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5647059, g: 0.5647059, b: 0.5647059, a: 0.6117647}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -22144,6 +22166,7 @@ MonoBehaviour:
   min: {fileID: 0}
   max: {fileID: 0}
   open: 0
+  title: {fileID: 0}
 --- !u!222 &1908829038
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23580,6 +23603,7 @@ MonoBehaviour:
   min: {fileID: 1888390624}
   max: {fileID: 287623157}
   open: 0
+  title: {fileID: 0}
 --- !u!1 &1998743180
 GameObject:
   m_ObjectHideFlags: 0
@@ -24346,7 +24370,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5647059, g: 0.5647059, b: 0.5647059, a: 0.6117647}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -25701,6 +25725,7 @@ MonoBehaviour:
   min: {fileID: 1694549430}
   max: {fileID: 1233821230}
   open: 0
+  title: {fileID: 0}
 --- !u!222 &173289164112715960
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -27904,7 +27929,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 1.0
+  m_Text: 1.00
 --- !u!224 &4578425868925717662
 RectTransform:
   m_ObjectHideFlags: 0

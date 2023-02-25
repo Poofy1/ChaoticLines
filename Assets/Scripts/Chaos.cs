@@ -139,7 +139,7 @@ public class Chaos : MonoBehaviour
     public void UpdateThickness()
     {
         lineMulti = ThicknessSlider.value;
-        ThicknessText.text = lineMulti.ToString("0.0");
+        ThicknessText.text = lineMulti.ToString("0.00");
         lineMulti *= 2;
     }
 
@@ -183,7 +183,7 @@ public class Chaos : MonoBehaviour
         }
         else
         {
-            LengthText.text = trailLength.ToString("0.0");
+            LengthText.text = trailLength.ToString("0.00");
             trailLength *= 3;
         }
 
@@ -690,8 +690,14 @@ public class Chaos : MonoBehaviour
                 lowPass.cutoffFrequency = 1000;
             }
         }
+    }
 
 
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F)) On();
+        if (Input.GetKeyDown(KeyCode.G)) Pause();
     }
 }
 
