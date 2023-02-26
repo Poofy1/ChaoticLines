@@ -27,6 +27,8 @@ public static class RandomFunction
             output += multiplier();
         }
 
+
+        //Additional addition at end
         for (int i = 0; i < Random.Range(0, 5); i++)
         {
             if (Random.Range(0, 2) == 0) output += "-";
@@ -59,7 +61,7 @@ public static class RandomFunction
     }
 
     //Selects random var, -/+
-    private static string randVar()
+    private static string randVar(bool trig = true)
     {
         string output = "";
         if (Random.Range(0, 3) == 0) output += "-";
@@ -67,7 +69,7 @@ public static class RandomFunction
         //pick var letter
         string v = char.ToString(vars[Random.Range(0, vars.Length)]);
 
-        if (Random.Range(0, 8) == 0)
+        if (trig && Random.Range(0, 12) == 0)
         {
             if (Random.Range(0, 3) == 0) v = "-" + v;
 

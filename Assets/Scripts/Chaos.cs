@@ -62,6 +62,7 @@ public class Chaos : MonoBehaviour
     public TMP_InputField Amount;
     public TMP_Text AmountText;
     public TMP_Text warningText;
+    public TMP_Text warningText_Speed;
     public Slider TargetSlider;
     public Text TargetText;
     public Slider directionSlider;
@@ -134,6 +135,14 @@ public class Chaos : MonoBehaviour
     {
         targetSpeed = (decimal) ( 2 / (1 + Math.Pow( Math.E, -15 * (TargetSlider.value - 1))  ));
         TargetText.text = TargetSlider.value.ToString("0.00");
+        if(TargetSlider.value > 0.8f)
+        {
+            warningText_Speed.text = "Increased velocity will reduce accuracy";
+        }
+        else
+        {
+            warningText_Speed.text = "";
+        }
     }
 
     public void UpdateThickness()
@@ -411,7 +420,8 @@ public class Chaos : MonoBehaviour
     public void GenRand(int reset = 1)
     {
         if (on) On();
-        for (int i = 0; i < func.Count; i++) func[i].textInput.text = RandomFunction.Create(4, func);
+        for (int i = 0; i < 3; i++) func[i].textInput.text = RandomFunction.Create(5, func);
+        for (int i = 3; i < func.Count; i++) func[i].textInput.text = RandomFunction.Create(2, func);
         if (reset == 1) On();
     }
 
