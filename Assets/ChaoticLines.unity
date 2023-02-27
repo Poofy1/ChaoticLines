@@ -5809,6 +5809,7 @@ MonoBehaviour:
   details: {fileID: 596619896}
   nameWarning: {fileID: 613693211}
   enterKey: 13
+  examples: {fileID: 4900000, guid: 19ab6711c9a65ea4d8d4f7549b27948d, type: 3}
   saveTitle: {fileID: 1705442540}
   examplesON: 0
   currentSelected: 0

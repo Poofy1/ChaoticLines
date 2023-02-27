@@ -30,6 +30,9 @@ public class SaveHandler : MonoBehaviour
     public TMP_Text nameWarning;
     public KeyCode enterKey = KeyCode.Return;
 
+    public TextAsset examples;
+
+
     public TMP_Text saveTitle;
     public bool examplesON;
 
@@ -246,14 +249,15 @@ public class SaveHandler : MonoBehaviour
     {
         if (examplesON)
         {
-            LoadFromFile(Application.dataPath + "/Examples.txt");
+            ResetButtons();
+            Deserialize(examples.text);
         }
         else{
             LoadFromFile(Application.streamingAssetsPath + "/UserData.txt");
         }
     }
 
-    private void LoadFromFile(string file)
+    private void ResetButtons()
     {
         //Delete Buttons
         for (int i = 0; i < spawnedButtons.Length; i++)
@@ -261,34 +265,49 @@ public class SaveHandler : MonoBehaviour
             Destroy(spawnedButtons[i]);
         }
         buttonList = new List<SaveButton>();
+    }
+
+    private void LoadFromFile(string file)
+    {
+        ResetButtons();
 
         if (File.Exists(file))
         {
             //Deserialize
             string saveString = File.ReadAllText(file);
-            saveList = JsonConvert.DeserializeObject<List<SaveList>>(saveString);
-
-            //Spawn Buttons
-            spawnedButtons = new GameObject[saveList.Count];
-
-            for (int i = 0; i < saveList.Count; i++)
-            {
-                //Spawn
-                var name = Instantiate(button, new Vector3(0, 0, 0), Quaternion.identity, buttonParent.transform);
-                name.gameObject.name = "Button" + i;
-                spawnedButtons[i] = name.gameObject;
-
-                //Create List
-                buttonList.Add(new SaveButton(saveList[i].SaveName, saveList[i].CustomFunctions, spawnedButtons[i]));
-
-                //Set Listener
-                setButtonListener(i);
-            }
+            Deserialize(saveString);
         }
+        else
+        {
+            Deserialize(null);
+        }
+    }
+
+    private void Deserialize(string text)
+    {
+        if (!string.IsNullOrEmpty(text)) saveList = JsonConvert.DeserializeObject<List<SaveList>>(text);
         else
         {
             saveList = new List<SaveList>();
             spawnedButtons = new GameObject[0];
+            return;
+        }
+
+        //Spawn Buttons
+        spawnedButtons = new GameObject[saveList.Count];
+
+        for (int i = 0; i < saveList.Count; i++)
+        {
+            //Spawn
+            var name = Instantiate(button, new Vector3(0, 0, 0), Quaternion.identity, buttonParent.transform);
+            name.gameObject.name = "Button" + i;
+            spawnedButtons[i] = name.gameObject;
+
+            //Create List
+            buttonList.Add(new SaveButton(saveList[i].SaveName, saveList[i].CustomFunctions, spawnedButtons[i]));
+
+            //Set Listener
+            setButtonListener(i);
         }
     }
 
