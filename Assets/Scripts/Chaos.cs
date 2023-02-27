@@ -262,12 +262,12 @@ public class Chaos : MonoBehaviour
                 trails[i] = name;
             }
 
+            trails[0].gameObject.SetActive(false);
+
             //Update Prefrences
             UpdateLength();
             UpdateThickness();
             UpdateColor();
-
-
         }
         else
         {
@@ -708,6 +708,17 @@ public class Chaos : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F)) On();
         if (Input.GetKeyDown(KeyCode.G)) Pause();
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            TargetSlider.value -= 0.1f;
+            UpdateTarget();
+        }
+        else if (Input.GetKeyDown(KeyCode.V))
+        {
+            TargetSlider.value += 0.1f;
+            UpdateTarget();
+        }
     }
 }
 

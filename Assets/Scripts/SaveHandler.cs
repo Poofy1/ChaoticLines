@@ -30,6 +30,9 @@ public class SaveHandler : MonoBehaviour
     public TMP_Text nameWarning;
     public KeyCode enterKey = KeyCode.Return;
 
+    public TMP_Text saveTitle;
+    public bool examplesON;
+
 
     private GameObject[] spawnedButtons;
     public int currentSelected;
@@ -112,6 +115,26 @@ public class SaveHandler : MonoBehaviour
 
     //SYSTEMS:
 
+
+
+
+    public void SwapSaveLayout()
+    {
+        examplesON = !examplesON;
+        if (examplesON)
+        {
+            saveTitle.text = "Examples";
+        }
+        else
+        {
+            saveTitle.text = "Saved Systems";
+        }
+
+        LoadAll();
+    }
+
+
+
     //Save Custom
     public void SaveCurrent()
     {
@@ -122,6 +145,8 @@ public class SaveHandler : MonoBehaviour
     {
         if (mainEvents.TestCustom())
         {
+            if (examplesON) SwapSaveLayout();
+
             cancelSave = false;
 
             //Wait For Screenshot
@@ -160,8 +185,6 @@ public class SaveHandler : MonoBehaviour
             ResetSelected();
             
         }
-
-        
     }
 
 
@@ -221,20 +244,31 @@ public class SaveHandler : MonoBehaviour
     //Load All Custom Data
     public void LoadAll()
     {
-        if (File.Exists(Application.streamingAssetsPath + "/UserData.txt"))
+        if (examplesON)
+        {
+            LoadFromFile(Application.dataPath + "/Examples.txt");
+        }
+        else{
+            LoadFromFile(Application.streamingAssetsPath + "/UserData.txt");
+        }
+    }
+
+    private void LoadFromFile(string file)
+    {
+        //Delete Buttons
+        for (int i = 0; i < spawnedButtons.Length; i++)
+        {
+            Destroy(spawnedButtons[i]);
+        }
+        buttonList = new List<SaveButton>();
+
+        if (File.Exists(file))
         {
             //Deserialize
-            string saveString = File.ReadAllText(Application.streamingAssetsPath + "/UserData.txt");
+            string saveString = File.ReadAllText(file);
             saveList = JsonConvert.DeserializeObject<List<SaveList>>(saveString);
 
-            //Delete Buttons
-            for (int i = 0; i < spawnedButtons.Length; i++)
-            {
-                Destroy(spawnedButtons[i]);
-            }
-
             //Spawn Buttons
-            buttonList = new List<SaveButton>();
             spawnedButtons = new GameObject[saveList.Count];
 
             for (int i = 0; i < saveList.Count; i++)
@@ -253,7 +287,8 @@ public class SaveHandler : MonoBehaviour
         }
         else
         {
-            Debug.Log("No Save!"); //UI This in the future
+            saveList = new List<SaveList>();
+            spawnedButtons = new GameObject[0];
         }
     }
 
