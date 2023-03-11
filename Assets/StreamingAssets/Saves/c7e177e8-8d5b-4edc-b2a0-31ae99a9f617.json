@@ -1,0 +1,27 @@
+{
+  "CustomFunctions": [
+    {
+      "name": "x",
+      "function": "(a*z)+(x*-a)-(a*a)",
+      "mainCords": null
+    },
+    {
+      "name": "y",
+      "function": "(Cos(-z)*z)",
+      "mainCords": null
+    },
+    {
+      "name": "z",
+      "function": "(-x*Sin(t))-(z*-t)-y+x",
+      "mainCords": null
+    },
+    {
+      "name": "a",
+      "function": "(y*a)-(x*-t)-(-t*z)+x+a",
+      "mainCords": null
+    }
+  ],
+  "date": "2023-03-10-19-57-46-45",
+  "SaveName": "System 20",
+  "id": "c7e177e8-8d5b-4edc-b2a0-31ae99a9f617"
+}

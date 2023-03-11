@@ -1,0 +1,27 @@
+{
+  "CustomFunctions": [
+    {
+      "name": "x",
+      "function": "(a*-t)+(-z*a)+z",
+      "mainCords": null
+    },
+    {
+      "name": "y",
+      "function": "(z*y)-y",
+      "mainCords": null
+    },
+    {
+      "name": "z",
+      "function": "(-Tan(-z)*Tan(x)*Tan(y))+(-t*x)+t-t",
+      "mainCords": null
+    },
+    {
+      "name": "a",
+      "function": "(-t*Sin(z))+(t*-z)-x+t+z",
+      "mainCords": null
+    }
+  ],
+  "date": "2023-03-10-19-56-35-47",
+  "SaveName": "System 19",
+  "id": "c9199b41-475e-4ee7-8aa0-de069c06c945"
+}

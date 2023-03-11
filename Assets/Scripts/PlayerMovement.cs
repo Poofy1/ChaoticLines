@@ -57,7 +57,17 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
 
-        if (active) MovePlayer();
+        if (active && mouseLook.locked)
+        {
+            MovePlayer();
+
+
+            //Move up
+            if (Input.GetKey(KeyCode.Space)) rb.AddForce(new Vector3(0, 1, 0) * moveSpeed * 3, ForceMode.Force);
+
+            //Move down
+            if (Input.GetKey(KeyCode.LeftControl)) rb.AddForce(new Vector3(0, -1, 0) * moveSpeed * 3, ForceMode.Force);
+        }
     }
 
     private void MyInput()
@@ -75,11 +85,7 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = Math.Max(1, dis - 2) + walkSpeed;
         }
 
-        //Move up
-        if (Input.GetKey(KeyCode.Space)) rb.AddForce(new Vector3(0, 1, 0) * moveSpeed * 3, ForceMode.Force);
-
-        //Move down
-        if (Input.GetKey(KeyCode.LeftControl)) rb.AddForce(new Vector3(0, -1, 0) * moveSpeed * 3, ForceMode.Force);
+        
 
         crosshair.color = new Color(1, 1, 1, Math.Max(0, (float) Math.Pow(dis, 2) - 2));
 

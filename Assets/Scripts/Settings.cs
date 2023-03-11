@@ -29,6 +29,8 @@ public class Settings : MonoBehaviour
     public Text fovText;
     public Slider hudSlider;
     public Text hudText;
+    public Toggle tooltipButton;
+    public TooltipManager toolManager;
 
     public void UpdateAll()
     {
@@ -38,7 +40,6 @@ public class Settings : MonoBehaviour
         hudScaleApply();
         ToggleFS(0);
         AA(0);
-        VSync(0);
         Safety(0);
     }
 
@@ -86,18 +87,36 @@ public class Settings : MonoBehaviour
     }
 
     //VSync
-    public void VSync(int index)
+    public void VSync()
     {
         if (vSyncOn)
         {
             QualitySettings.vSyncCount = 0;
             vSyncOn = false;
+            vSync.SetIsOnWithoutNotify(false);
         }
         else
         {
             QualitySettings.vSyncCount = 1;
             vSyncOn = true;
+            vSync.SetIsOnWithoutNotify(true);
         }
+    }
+
+    //Tooltips
+    public void Tooltip()
+    {
+        if (toolManager.active)
+        {
+            toolManager.active = false;
+            tooltipButton.SetIsOnWithoutNotify(false);
+        }
+        else
+        {
+            toolManager.active = true;
+            tooltipButton.SetIsOnWithoutNotify(true);
+        }
+        
     }
 
     //Divergence Safety

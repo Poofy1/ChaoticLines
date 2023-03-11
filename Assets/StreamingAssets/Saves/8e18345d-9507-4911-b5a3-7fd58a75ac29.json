@@ -1,0 +1,27 @@
+{
+  "CustomFunctions": [
+    {
+      "name": "x",
+      "function": "(Cos(-z)*y)+(Cos(x)*t)+(-y*-a)+z+z-y",
+      "mainCords": null
+    },
+    {
+      "name": "y",
+      "function": "(t*-z)+(-t*z)+(t*x)+y",
+      "mainCords": null
+    },
+    {
+      "name": "z",
+      "function": "(y*a)+(t*t)+(-y*t)-z",
+      "mainCords": null
+    },
+    {
+      "name": "a",
+      "function": "(t*y)+(Cos(y)*-x)",
+      "mainCords": null
+    }
+  ],
+  "date": "2023-03-10-20-14-55-79",
+  "SaveName": "System 6",
+  "id": "8e18345d-9507-4911-b5a3-7fd58a75ac29"
+}

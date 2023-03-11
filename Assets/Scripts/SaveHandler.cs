@@ -2,16 +2,20 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using UnityEngine.EventSystems;
 
 public class SaveHandler : MonoBehaviour
 {
     public Chaos mainEvents;
     public AnimationHandler animHandler;
+    public PlayerMovement playerMovement;
+    public MouseLook mouseLook;
     public Settings settings;
     public List<SaveList> saveList;
     public List<SaveButton> buttonList;
@@ -28,14 +32,10 @@ public class SaveHandler : MonoBehaviour
     public SelfAni imagePreview;
     public TMP_Text details;
     public TMP_Text nameWarning;
+    public TooltipManager toolManager;
     public KeyCode enterKey = KeyCode.Return;
 
     public TextAsset examples;
-
-
-    public TMP_Text saveTitle;
-    public bool examplesON;
-
 
     private GameObject[] spawnedButtons;
     public int currentSelected;
@@ -57,10 +57,10 @@ public class SaveHandler : MonoBehaviour
 
 
         //LoadAll Settings
-        if (File.Exists(Application.streamingAssetsPath + "/UserSettings.txt"))
+        if (File.Exists(Path.Combine(Application.streamingAssetsPath, "UserSettings.txt")))
         {
             //Deserialize
-            string saveString = File.ReadAllText(Application.streamingAssetsPath + "/UserSettings.txt");
+            string saveString = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "UserSettings.txt"));
             savedSet = JsonConvert.DeserializeObject<SettingItem>(saveString);
             LoadSettings();
         }
@@ -78,17 +78,18 @@ public class SaveHandler : MonoBehaviour
     {
         savedSet.fullscreen = settings.fullscreen.isOn;
         savedSet.AA = settings.AAMenu.GetComponent<TMP_Dropdown>().value;
-        savedSet.vSync = !settings.vSyncOn;
+        savedSet.vSync = settings.vSyncOn;
         savedSet.mouseSen = mouse.setting.value;
         savedSet.sound = settings.musicSlider.value;
         savedSet.fov = settings.fovSlider.value;
         savedSet.hudScale = settings.hudSlider.value;
+        savedSet.tooltips = toolManager.active;
 
         savedSet.hotkeys = hotkeyAnim.open;
 
         //Write
         string json = JsonConvert.SerializeObject(savedSet, Formatting.Indented);
-        File.WriteAllText(Application.streamingAssetsPath + "/UserSettings.txt", json);
+        File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "UserSettings.txt"), json);
 
 
 
@@ -99,16 +100,19 @@ public class SaveHandler : MonoBehaviour
     {
         settings.fullscreen.isOn = savedSet.fullscreen;
         settings.AAMenu.GetComponent<TMP_Dropdown>().value = savedSet.AA;
-        settings.vSyncOn = savedSet.vSync;
+        settings.vSyncOn = !savedSet.vSync;
         mouse.setting.value = savedSet.mouseSen;
         settings.musicSlider.value = savedSet.sound;
         settings.fovSlider.value = savedSet.fov;
         settings.hudSlider.value = savedSet.hudScale;
+        toolManager.active = !savedSet.tooltips;
 
         mouse.SensitivityChanged(0);
         settings.UpdateAll();
+        settings.Tooltip();
+        settings.VSync();
 
-        if (savedSet.hotkeys && !hotkeyAnim.open)
+        if (!savedSet.hotkeys && hotkeyAnim.open)
         {
             hotkeyAnim.VerticalClicked();
         }
@@ -117,25 +121,6 @@ public class SaveHandler : MonoBehaviour
 
 
     //SYSTEMS:
-
-
-
-
-    public void SwapSaveLayout()
-    {
-        examplesON = !examplesON;
-        if (examplesON)
-        {
-            saveTitle.text = "Examples";
-        }
-        else
-        {
-            saveTitle.text = "Saved Systems";
-        }
-
-        LoadAll();
-    }
-
 
 
     //Save Custom
@@ -148,7 +133,6 @@ public class SaveHandler : MonoBehaviour
     {
         if (mainEvents.TestCustom())
         {
-            if (examplesON) SwapSaveLayout();
 
             cancelSave = false;
 
@@ -161,10 +145,13 @@ public class SaveHandler : MonoBehaviour
             if (cancelSave) yield break;
 
             //Wait for rename
+            playerMovement.active = false;
             yield return StartCoroutine(RenameSystemCall());
+            playerMovement.active = true;
 
             animHandler.ShowHud();
-            
+            mouseLook.GameClicked();
+            EventSystem.current.SetSelectedGameObject(null);
 
 
 
@@ -180,11 +167,12 @@ public class SaveHandler : MonoBehaviour
             {
                 CustomFunctions = temp,
                 date = newDate,
-                SaveName = newName
+                SaveName = newName,
+                id = Guid.NewGuid().ToString()
             });
 
             //WriteSave and reset
-            WriteSave();
+            WriteSave(saveList.Count - 1);
             ResetSelected();
             
         }
@@ -195,13 +183,13 @@ public class SaveHandler : MonoBehaviour
     private bool cancelSave;
     IEnumerator ScreenShot()
     {
-        while (!Input.GetKeyDown(KeyCode.Space))
+        while (!Input.GetKeyDown(KeyCode.T))
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 cancelSave = true;
                 animHandler.ShowHud();
-                break;
+                yield break;
             }
             yield return null;
         }
@@ -235,63 +223,38 @@ public class SaveHandler : MonoBehaviour
 
 
     //Write Custom Save
-    public void WriteSave()
+    public void WriteSave(int index)
     {
-        string json = JsonConvert.SerializeObject(saveList, Formatting.Indented);
-        File.WriteAllText(Application.streamingAssetsPath + "/UserData.txt", json);
+        string json = JsonConvert.SerializeObject(saveList[index], Formatting.Indented);
+        File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "Saves", saveList[index].id + ".json"), json);
+        
 
         //Re-load all data
         LoadAll();
     }
 
-    //Load All Custom Data
+    //Load All Custom Datas
     public void LoadAll()
     {
-        if (examplesON)
-        {
-            ResetButtons();
-            Deserialize(examples.text);
-        }
-        else{
-            LoadFromFile(Application.streamingAssetsPath + "/UserData.txt");
-        }
-    }
-
-    private void ResetButtons()
-    {
+        var saveEntries = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, "Saves")).GetFiles().Where(file => file.Extension == ".json");
         //Delete Buttons
         for (int i = 0; i < spawnedButtons.Length; i++)
         {
             Destroy(spawnedButtons[i]);
         }
         buttonList = new List<SaveButton>();
-    }
 
-    private void LoadFromFile(string file)
-    {
-        ResetButtons();
+        saveEntries = saveEntries.OrderBy(file => file.LastWriteTime).ToArray();
 
-        if (File.Exists(file))
+        //Deserialize
+        saveList = new List<SaveList>();
+        foreach (string path in saveEntries.Select(entry => entry.FullName))
         {
             //Deserialize
-            string saveString = File.ReadAllText(file);
-            Deserialize(saveString);
+            string saveString = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "Saves", path));
+            saveList.Add(JsonConvert.DeserializeObject<SaveList>(saveString));
         }
-        else
-        {
-            Deserialize(null);
-        }
-    }
 
-    private void Deserialize(string text)
-    {
-        if (!string.IsNullOrEmpty(text)) saveList = JsonConvert.DeserializeObject<List<SaveList>>(text);
-        else
-        {
-            saveList = new List<SaveList>();
-            spawnedButtons = new GameObject[0];
-            return;
-        }
 
         //Spawn Buttons
         spawnedButtons = new GameObject[saveList.Count];
@@ -310,6 +273,7 @@ public class SaveHandler : MonoBehaviour
             setButtonListener(i);
         }
     }
+
 
     //Set Custom Button Listeners
     private void setButtonListener(int i)
@@ -332,7 +296,7 @@ public class SaveHandler : MonoBehaviour
 
         //show preview
         Texture2D tex = null;
-        string filePath = Application.streamingAssetsPath + "/PreviewImages/" + saveList[a].date + ".png";
+        string filePath = Path.Combine(Application.streamingAssetsPath, "PreviewImages", saveList[a].date + ".png");
 
         if (File.Exists(filePath))
         {
@@ -397,10 +361,6 @@ public class SaveHandler : MonoBehaviour
                 mainEvents.func[i].textInput.text = funcText;
                 
             }
-                
-
-            
-
         }
             
     }
@@ -414,13 +374,14 @@ public class SaveHandler : MonoBehaviour
     {
         yield return StartCoroutine(RenameSystemCall());
         saveList[i].SaveName = newName;
-        WriteSave();
+        WriteSave(i);
     }
 
     //Set Name
     IEnumerator RenameSystemCall()
     {
         awaitingEnter = true;
+        mouseLook.active = false;
         renamePanel.SetActive(true);
         renameInput.ActivateInputField();
         yield return new WaitUntil(() => appliedRename);
@@ -428,6 +389,7 @@ public class SaveHandler : MonoBehaviour
         appliedRename = false;
         renamePanel.SetActive(false);
         renameInput.text = "";
+        mouseLook.active = true;
     }
 
     private void Update()
@@ -470,15 +432,18 @@ public class SaveHandler : MonoBehaviour
             //Destroy button
             Destroy(buttonList[i].button);
 
-            //Delete preview
-            string filePath = Application.streamingAssetsPath + "/PreviewImages/" + saveList[i].date + ".png";
+            //Delete files
+            string filePath = Path.Combine(Application.streamingAssetsPath, "PreviewImages", saveList[i].date + ".png");
+            if (File.Exists(filePath)) File.Delete(filePath);
+
+            filePath = Path.Combine(Application.streamingAssetsPath, "Saves", saveList[i].id + ".json");
             if (File.Exists(filePath)) File.Delete(filePath);
 
             //Remove from list
             saveList.RemoveAt(i);
             buttonList.RemoveAt(i);
 
-            WriteSave();
+            LoadAll();
         }
     }
 
@@ -507,6 +472,7 @@ public class SaveHandler : MonoBehaviour
         public float sound { get; set; }
         public float fov { get; set; }
         public float hudScale { get; set; }
+        public bool tooltips { get; set; }
 
         //Hidden
         public bool hotkeys { get; set; }
@@ -518,6 +484,7 @@ public class SaveHandler : MonoBehaviour
         public List<FunctionInput> CustomFunctions { get; set; }
         public string date { get; set; }
         public string SaveName { get; set; }
+        public string id { get; set; }
     }
 
     //Save Item List

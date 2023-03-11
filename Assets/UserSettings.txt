@@ -1,0 +1,11 @@
+{
+  "fullscreen": true,
+  "AA": 1,
+  "vSync": false,
+  "mouseSen": 50.0,
+  "sound": 0.5,
+  "fov": 90.0,
+  "hudScale": 0.5,
+  "tooltips": true,
+  "hotkeys": true
+}

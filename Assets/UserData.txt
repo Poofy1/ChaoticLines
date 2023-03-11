@@ -1,0 +1,536 @@
+[
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-z*t)+(-t*x)-(-x*-g)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(y*z)+(t*x)+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(t*x)+c",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "g",
+        "function": "(-x*x)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "c",
+        "function": "(-y*y)",
+        "mainCords": null
+      }
+    ],
+    "date": "2022-11-22-18-04-58-86",
+    "SaveName": "System 1"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(g*-t)+(-z*g)+z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(z*y)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-Tan(-z)*Tan(x)*Tan(y))+(-t*x)+t-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "g",
+        "function": "(-t*Sin(z))+(t*-z)-x+t+z",
+        "mainCords": null
+      }
+    ],
+    "date": "2022-12-22-16-21-37-56",
+    "SaveName": "System 2"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(g*z)+(x*-g)-(g*g)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(Cos(-z)*z)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-x*Sin(t))-(z*-t)-y+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "g",
+        "function": "(y*g)-(x*-t)-(-t*z)+x+g",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-01-03-12-23-16-00",
+    "SaveName": "System 3"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(x*x)-x-z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(-Sin(z)*x)+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-y*-a)+(z*t)+t+t+x+t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "r",
+        "function": "(r*-z)+(z*x)-(y*a)-a-a",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "a",
+        "function": "(r*-t)-(Cos(t)*x)-(-Tan(y)*z)+x+z",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-01-17-14-55-01-76",
+    "SaveName": "System 4"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(z*-y)+(t*x*t)-(-Tan(-x)*z)-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(x*-Sin(z))+(x*y)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(y*t)+(z*-z)+t",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-01-17-19-50-24-37",
+    "SaveName": "System 5"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-t*-x)-y+z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(z*z)-(y*z)+(y*z)-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(y*z*y)+(y*t)-x",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-11-12-36-04-28",
+    "SaveName": "System 6"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-t*-x)-y+z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(z*z)-(y*z)+(y*z)-a",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(y*z*y)+(y*t)-x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "a",
+        "function": "(x*t) + a",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-11-13-46-49-87",
+    "SaveName": "System 7"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(x*z)+(x*-x)-z-y+t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(-Cos(x)*-t)+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-z*x)+(Tan(-x)*-z)-z+z",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-11-14-43-50-01",
+    "SaveName": "System 8"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-Tan(z)*y)+t-z-x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(Tan(z)*-y)-z-z-x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-z*t)-(-x*y)+t-t-x+y",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-11-14-48-32-23",
+    "SaveName": "System 9"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-Cos(-x)*-t)+(z*x)+(-z*x)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(y*Sin(z))-y-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(t*-Sin(z))",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-14-00-57-40-65",
+    "SaveName": "System 10"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-y*z)+z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(z*-Tan(z))-(g*y)-(-t*y)-g",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(g*Tan(x))-(y*-t)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "g",
+        "function": "(-y*z)",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-14-01-59-16-14",
+    "SaveName": "System 11"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-z*t)+(-t*x)-(-x*-g)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(y*z)+(t*x)+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(t*x)-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "g",
+        "function": "(z*z)",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-24-16-16-23-47",
+    "SaveName": "System 12"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(y*-z)+y+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(Tan(y)*-t)-(z*-t)+(t*t)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(x*-y)+(-Cos(-x)*y)-z-t+y",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-15-22-19-27-46",
+    "SaveName": "System 13"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(t*z)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(y*-t)+x+y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-t*z)+(-Cos(x)*x)-t",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-17-18-26-05-64",
+    "SaveName": "System 14"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-z*x)+z-x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(-t*y)+(x*z)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(a*x)",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "a",
+        "function": "(z*t)+(t*x)+(-a*t)-y-x+x",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-19-03-25-58-56",
+    "SaveName": "System 15"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-z*x)+(z*-a)+a",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(x*Tan(-z))+a",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(y*a)-t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "a",
+        "function": "(t*-y)+(z*t)-a-z+t",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-24-01-11-01-17",
+    "SaveName": "System 16"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(Cos(-z)*y)+(Cos(x)*t)+(-y*-a)+z+z-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(t*-z)+(-t*z)+(t*x)+y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(y*a)+(t*t)+(-y*t)-z",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "a",
+        "function": "(t*y)+(Cos(y)*-x)",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-24-01-15-29-72",
+    "SaveName": "System 17"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(-a*t)-(-t*x)+t+t+t",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(x*z)-(-z*z)+x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-t*z)-(a*t)-x+z-y+y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "a",
+        "function": "(y*x)-x",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-24-01-19-59-92",
+    "SaveName": "System 18"
+  },
+  {
+    "CustomFunctions": [
+      {
+        "textInput": null,
+        "name": "x",
+        "function": "(x*z*t)-(z*z)+t-x",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "y",
+        "function": "(t*x)-y",
+        "mainCords": null
+      },
+      {
+        "textInput": null,
+        "name": "z",
+        "function": "(-t*-Sin(y))-y",
+        "mainCords": null
+      }
+    ],
+    "date": "2023-02-24-02-02-52-16",
+    "SaveName": "System 19"
+  }
+]

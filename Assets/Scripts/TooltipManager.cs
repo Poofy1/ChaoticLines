@@ -7,6 +7,7 @@ public class TooltipManager : MonoBehaviour
 {
     public static TooltipManager _instance;
     public TextMeshProUGUI text;
+    public bool active = true;
 
 
     private void Awake()
@@ -38,8 +39,12 @@ public class TooltipManager : MonoBehaviour
 
     public void InitializeTooltip(string message)
     {
-        gameObject.SetActive(true);
-        text.text = message;
+        if (active)
+        {
+            gameObject.SetActive(true);
+            text.text = message;
+        }
+        
     }
 
     public void HideTooltip()

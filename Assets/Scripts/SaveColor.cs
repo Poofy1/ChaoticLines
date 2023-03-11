@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -187,7 +188,8 @@ public class SaveColor : MonoBehaviour
         {
             identifier = listSpace,
             colors = temp,
-            foreground = new PlainColor(currentBackground)
+            foreground = new PlainColor(currentBackground),
+            guid = Guid.NewGuid().ToString()
         });
 
         //Add to button list
@@ -196,7 +198,7 @@ public class SaveColor : MonoBehaviour
         buttonList[buttonList.Count - 1].GetComponentInChildren<ColorScheme>().loadButton.onClick.AddListener(delegate { loadScheme(listSpace); });
 
         //WriteSave and reset
-        WriteSave();
+        WriteSave(saveList.Count - 1);
 
         
     }
@@ -204,11 +206,11 @@ public class SaveColor : MonoBehaviour
 
 
     //Write Custom Save
-    public void WriteSave()
+    public void WriteSave(int index)
     {
         
-        string json = JsonConvert.SerializeObject(saveList, Formatting.Indented);
-        File.WriteAllText(Application.streamingAssetsPath + "/ColorData.txt", json);
+        string json = JsonConvert.SerializeObject(saveList[index], Formatting.Indented);
+        File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "ColorSaves", saveList[index].guid + ".json"), json);
 
         //Re-load all data
         //LoadAll();
@@ -219,54 +221,57 @@ public class SaveColor : MonoBehaviour
     //Load All Custom Data
     public void LoadAll()
     {
-        if (File.Exists(Application.streamingAssetsPath + "/ColorData.txt"))
+        var saveEntries = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, "ColorSaves")).GetFiles().Where(file => file.Extension == ".json");
+        
+        //Delete Buttons
+        for (int i = 0; i < buttonList.Count; i++)
+        {
+            Destroy(buttonList[i]);
+        }
+        buttonList = new List<GameObject>();
+        
+        saveEntries = saveEntries.OrderBy(file => file.LastWriteTime).ToArray();
+        
+        //Deserialize
+        saveList = new List<SaveScheme>();
+        foreach (string path in saveEntries.Select(entry => entry.FullName))
         {
             //Deserialize
-            string saveString = File.ReadAllText(Application.streamingAssetsPath + "/ColorData.txt");
-            saveList = JsonConvert.DeserializeObject<List<SaveScheme>>(saveString);
-
-            //Delete Buttons
-            for (int i = 0; i < buttonList.Count; i++)
-            {
-                Destroy(buttonList[i]);
-            }
-            buttonList = new List<GameObject>();
-
-            //Spawn Buttons
-            for (int i = 0; i < saveList.Count; i++)
-            {
-                //Spawn
-                var name = Instantiate(SchemeObj, new Vector3(0, 0, 0), Quaternion.identity, ColorSchemeParent);
-                name.gameObject.name = "Button" + i;
-
-                //Add Details
-                Color[] current = new Color[10];
-                for (int a = 0; a < 10; a++)
-                {
-                    if (saveList[i].colors.Count > a)
-                    {
-                        current[a] = saveList[i].colors[a].ToUnityColor();
-                    }
-                }
-                
-                //Update Save pallette 
-                name.UpdateAll(current, saveList[i].foreground.ToUnityColor());
-
-
-                //Create List
-                buttonList.Add(name.gameObject);
-
-
-
-                //Set Listener
-                int tempVar = saveList[i].identifier;
-                buttonList[i].GetComponentInChildren<ColorScheme>().delButton.onClick.AddListener(delegate { DeleteColor(tempVar); });
-                buttonList[i].GetComponentInChildren<ColorScheme>().loadButton.onClick.AddListener(delegate { loadScheme(tempVar); });
-            }
+            string saveString = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "ColorSaves", path));
+            saveList.Add(JsonConvert.DeserializeObject<SaveScheme>(saveString));
         }
-        else
+
+
+        //Spawn Buttons
+        for (int i = 0; i < saveList.Count; i++)
         {
-            Debug.Log("No Save!"); //UI This in the future
+            //Spawn
+            var name = Instantiate(SchemeObj, new Vector3(0, 0, 0), Quaternion.identity, ColorSchemeParent);
+            name.gameObject.name = "Button" + i;
+
+            //Add Details
+            Color[] current = new Color[10];
+            for (int a = 0; a < 10; a++)
+            {
+                if (saveList[i].colors.Count > a)
+                {
+                    current[a] = saveList[i].colors[a].ToUnityColor();
+                }
+            }
+
+            //Update Save pallette 
+            name.UpdateAll(current, saveList[i].foreground.ToUnityColor());
+
+
+            //Create List
+            buttonList.Add(name.gameObject);
+
+
+
+            //Set Listener
+            int tempVar = saveList[i].identifier;
+            buttonList[i].GetComponentInChildren<ColorScheme>().delButton.onClick.AddListener(delegate { DeleteColor(tempVar); });
+            buttonList[i].GetComponentInChildren<ColorScheme>().loadButton.onClick.AddListener(delegate { loadScheme(tempVar); });
         }
     }
 
@@ -290,12 +295,12 @@ public class SaveColor : MonoBehaviour
             //Destroy button
             Destroy(buttonList[i]);
 
+            string filePath = Path.Combine(Application.streamingAssetsPath, "ColorSaves", saveList[i].guid + ".json");
+            if (File.Exists(filePath)) File.Delete(filePath);
 
             //Remove from list
             saveList.RemoveAt(i);
             buttonList.RemoveAt(i);
-
-            WriteSave();
         }
     }
 
@@ -353,6 +358,7 @@ public class SaveColor : MonoBehaviour
     public class SaveScheme
     {
         public int identifier;
+        public string guid;
         public List<PlainColor> colors { get; set; }
         public PlainColor foreground { get; set; }
     }

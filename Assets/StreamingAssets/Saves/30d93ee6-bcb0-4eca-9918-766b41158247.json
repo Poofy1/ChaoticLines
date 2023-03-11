@@ -1,0 +1,22 @@
+{
+  "CustomFunctions": [
+    {
+      "name": "x",
+      "function": "(y*-z)+y+x",
+      "mainCords": null
+    },
+    {
+      "name": "y",
+      "function": "(Tan(y)*-t)-(z*-t)+(t*t)-y",
+      "mainCords": null
+    },
+    {
+      "name": "z",
+      "function": "(x*-y)+(-Cos(-x)*y)-z-t+y",
+      "mainCords": null
+    }
+  ],
+  "date": "2023-03-10-20-12-41-66",
+  "SaveName": "System 8",
+  "id": "30d93ee6-bcb0-4eca-9918-766b41158247"
+}

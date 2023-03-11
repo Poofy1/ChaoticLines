@@ -1,0 +1,22 @@
+{
+  "CustomFunctions": [
+    {
+      "name": "x",
+      "function": "(-Cos(-x)*-t)+(z*x)+(-z*x)",
+      "mainCords": null
+    },
+    {
+      "name": "y",
+      "function": "(y*Sin(z))-y-t",
+      "mainCords": null
+    },
+    {
+      "name": "z",
+      "function": "(t*-Sin(z))",
+      "mainCords": null
+    }
+  ],
+  "date": "2023-03-10-20-09-20-77",
+  "SaveName": "System 15",
+  "id": "da1c8bdc-a4bc-4ad8-8202-c7a4c8f95c9f"
+}

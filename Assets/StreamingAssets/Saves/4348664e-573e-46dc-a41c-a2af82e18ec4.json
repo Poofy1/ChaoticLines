@@ -1,0 +1,27 @@
+{
+  "CustomFunctions": [
+    {
+      "name": "x",
+      "function": "(-t*-x)-y+z",
+      "mainCords": null
+    },
+    {
+      "name": "y",
+      "function": "(z*z)-(y*z)+(y*z)-a",
+      "mainCords": null
+    },
+    {
+      "name": "z",
+      "function": "(y*z*y)+(y*t)-x",
+      "mainCords": null
+    },
+    {
+      "name": "a",
+      "function": "(x*t) + a",
+      "mainCords": null
+    }
+  ],
+  "date": "2023-03-10-20-07-40-99",
+  "SaveName": "System 12",
+  "id": "4348664e-573e-46dc-a41c-a2af82e18ec4"
+}

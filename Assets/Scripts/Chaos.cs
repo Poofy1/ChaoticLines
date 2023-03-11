@@ -16,7 +16,7 @@ public class Chaos : MonoBehaviour
     //System vars
     public SaveColor saveColor;
     public PlayerMovement playerMovement;
-    
+    public MouseLook mouseLook;
     public GameObject crosshair;
     public TrailTemplate mainTrail;
     public MapRotate mapRotator;
@@ -92,7 +92,10 @@ public class Chaos : MonoBehaviour
     public Texture2D colorRef;
 
     public AudioLowPassFilter lowPass;
-    private Boolean lowPassSwitch;
+    private bool lowPassSwitch;
+
+    //Optimized vars
+    public int funcCount;
 
 
     public void Start()
@@ -229,15 +232,16 @@ public class Chaos : MonoBehaviour
             pastTopSpeed = 0.000000001m;
             easeInFrames = 5;
             targetSpeed = targetSpeed / 100000;
+            funcCount = func.Count;
 
             //Initialize inputs and vars
-            exp = new Expression[func.Count];
+            exp = new Expression[funcCount];
             boxBound = bounds * 1000;
             mapBounds.localScale = new Vector3(boxBound, boxBound, boxBound);
             mapRotator.maxZoomOut = boxBound / 20;
 
 
-            for (int i = 0; i < func.Count; i++)
+            for (int i = 0; i < funcCount; i++)
             {
                 func[i].textInput.interactable = false;
                 func[i].SetSize(trail_Amount);
@@ -286,7 +290,7 @@ public class Chaos : MonoBehaviour
             stopButton.gameObject.SetActive(false);
             Amount.interactable = true;
             cursor.SetActive(true);
-            for (int i = 0; i < func.Count; i++) func[i].textInput.interactable = true;
+            for (int i = 0; i < funcCount; i++) func[i].textInput.interactable = true;
             for (int i = 0; i < trail_Amount; i++) Destroy(trails[i].gameObject);
         }
     }
@@ -351,20 +355,7 @@ public class Chaos : MonoBehaviour
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
 
@@ -373,9 +364,10 @@ public class Chaos : MonoBehaviour
     //Ready Custom Equations for use
     public void SetCustomVars()
     {
+        funcCount = func.Count;
         if (TestCustom())
         {
-            for (int i = 0; i < func.Count; i++)
+            for (int i = 0; i < funcCount; i++)
             {
                 func[i].function = func[i].textInput.text;
             }
@@ -391,13 +383,13 @@ public class Chaos : MonoBehaviour
     public bool TestCustom()
     {
         bool faultSearch = true;
-        for (int i = 0; i < func.Count; i++)
+        for (int i = 0; i < funcCount; i++)
         {
 
             try
             {
                 Expression test = new Expression(func[i].textInput.text);
-                for (int a = 0; a < func.Count; a++)
+                for (int a = 0; a < funcCount; a++)
                     test.Parameters[func[a].name.ToString()] = 0;
 
                 test.Parameters["t"] = 0;
@@ -421,7 +413,7 @@ public class Chaos : MonoBehaviour
     {
         if (on) On();
         for (int i = 0; i < 3; i++) func[i].textInput.text = RandomFunction.Create(5, func);
-        for (int i = 3; i < func.Count; i++) func[i].textInput.text = RandomFunction.Create(2, func);
+        for (int i = 3; i < funcCount; i++) func[i].textInput.text = RandomFunction.Create(2, func);
         if (reset == 1) On();
     }
 
@@ -429,7 +421,7 @@ public class Chaos : MonoBehaviour
     public void CordCalc(int a, int i)
     {
 
-        for (int b = 0; b < func.Count; b++)
+        for (int b = 0; b < funcCount; b++)
         {
             exp[a].Parameters[func[b].name.ToString()] = (double)func[b].mainCords[i - 1];
         }
@@ -454,7 +446,7 @@ public class Chaos : MonoBehaviour
     public void AbsCalc(int a, int i)
     {
 
-        for (int b = 0; b < func.Count; b++)
+        for (int b = 0; b < funcCount; b++)
         {
             if (i == Mathf.Floor(trail_Amount / 2))
                 exp[a].Parameters[func[b].name.ToString()] = (double)func[b].mainCords[0];
@@ -496,7 +488,7 @@ public class Chaos : MonoBehaviour
     private void UpdateEquations()
     {
         //Initialize equations 
-        for (int a = 0; a < func.Count; a++)
+        for (int a = 0; a < funcCount; a++)
         {
             func[a].mainCords[0] = (float) t;
         }
@@ -510,7 +502,7 @@ public class Chaos : MonoBehaviour
             if (active[i])
             {
 
-                for (int a = 0; a < func.Count; a++)
+                for (int a = 0; a < funcCount; a++)
                 {
                     //Calculate
                     if (absolute)
@@ -598,7 +590,7 @@ public class Chaos : MonoBehaviour
         char newName = '0';
         List<char> letters = new List<char>();
 
-        for (int i = 0; i < func.Count; i++)
+        for (int i = 0; i < funcCount; i++)
         {
             letters.Add(func[i].name);
         }
@@ -636,13 +628,13 @@ public class Chaos : MonoBehaviour
 
     public void DestoryVarInput(char name)
     {
-        for (int i = 0; i < func.Count; i++)
+        for (int i = 0; i < funcCount; i++)
         {
             if (func[i].name.Equals(name))
             {
+                if (on) On();
                 Destroy(func[i].textInput.transform.parent.gameObject);
                 func.RemoveAt(i);
-                if (on) On();
                 SetCustomVars();
                 return;
             }
@@ -675,7 +667,7 @@ public class Chaos : MonoBehaviour
 
                 timeSinceLastUpdate += Time.fixedDeltaTime;
 
-                if (timeSinceLastUpdate >= 0.5f)
+                if (timeSinceLastUpdate > 0.5f)
                 {
                     timeSinceLastUpdate = 0;
 
@@ -706,18 +698,21 @@ public class Chaos : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F)) On();
-        if (Input.GetKeyDown(KeyCode.G)) Pause();
+        if (mouseLook.active && mouseLook.locked)
+        {
+            if (Input.GetKeyDown(KeyCode.F)) On();
+            if (Input.GetKeyDown(KeyCode.G)) Pause();
 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            TargetSlider.value -= 0.1f;
-            UpdateTarget();
-        }
-        else if (Input.GetKeyDown(KeyCode.V))
-        {
-            TargetSlider.value += 0.1f;
-            UpdateTarget();
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                TargetSlider.value -= 0.1f;
+                UpdateTarget();
+            }
+            else if (Input.GetKeyDown(KeyCode.V))
+            {
+                TargetSlider.value += 0.1f;
+                UpdateTarget();
+            }
         }
     }
 }
@@ -725,7 +720,7 @@ public class Chaos : MonoBehaviour
 //Input List
 public class FunctionInput
 {
-
+    [Newtonsoft.Json.JsonIgnore]
     public TMP_InputField textInput;
     public char name;
     public string function;

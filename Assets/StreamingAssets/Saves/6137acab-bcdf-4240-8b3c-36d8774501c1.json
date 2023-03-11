@@ -1,0 +1,22 @@
+{
+  "CustomFunctions": [
+    {
+      "name": "x",
+      "function": "(t*z)-y",
+      "mainCords": null
+    },
+    {
+      "name": "y",
+      "function": "(y*-t)+x+y",
+      "mainCords": null
+    },
+    {
+      "name": "z",
+      "function": "(-t*z)+(-Cos(x)*x)-t",
+      "mainCords": null
+    }
+  ],
+  "date": "2023-03-10-20-13-08-69",
+  "SaveName": "System 7",
+  "id": "6137acab-bcdf-4240-8b3c-36d8774501c1"
+}

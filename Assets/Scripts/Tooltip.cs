@@ -7,6 +7,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public string message;
 
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         TooltipManager._instance.InitializeTooltip(message);

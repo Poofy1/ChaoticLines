@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MouseLook : MonoBehaviour
 {
     public Transform player;
+    public Chaos mainEvents;
     public Slider setting;
     public Text settingText;
     public bool mouseSmooth;
@@ -28,7 +29,11 @@ public class MouseLook : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Escape)) locked = false;
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            locked = false;
+        }
+            
 
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {

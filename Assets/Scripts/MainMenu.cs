@@ -127,11 +127,18 @@ public class MainMenu : MonoBehaviour
         }
 
         //random thickness 
-        mainEvents.ThicknessSlider.SetValueWithoutNotify(UnityEngine.Random.Range(0.1f, 1.5f));
+        mainEvents.ThicknessSlider.SetValueWithoutNotify(UnityEngine.Random.Range(0.5f, 1.5f));
         mainEvents.UpdateThickness();
 
+        //random length 
+        if (UnityEngine.Random.Range(0, 2) == 0)
+            mainEvents.LengthSlider.SetValueWithoutNotify(3);
+        else
+            mainEvents.LengthSlider.SetValueWithoutNotify(UnityEngine.Random.Range(0.1f, 1f));
+        mainEvents.UpdateLength();
+
         //Reset Camera
-        randSceneTime = UnityEngine.Random.Range(15f, 25f);
+        randSceneTime = UnityEngine.Random.Range(20f, 30f);
 
         randZoomRange[0] = new Vector3(0, 0, UnityEngine.Random.Range(-15f, -5f));
         randZoomRange[1] = new Vector3(0, 0, UnityEngine.Random.Range(-50f, -30f));
