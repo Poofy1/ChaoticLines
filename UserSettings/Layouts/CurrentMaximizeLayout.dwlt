@@ -224,9 +224,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: 006f0000
       m_LastClickedID: 0
-      m_ExpandedIDs: bcb4f3ff0cb5f3ffe0b6f3ff7047f4ffc047f4ff9c49f4ff38fbffff324a0000244b0000e84b0000fa4b000064510000
+      m_ExpandedIDs: 76f6ffffc4f6ffff98f8ffff38fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -886,22 +886,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/StreamingAssets/Saves
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets
+  - Assets/StreamingAssets/Saves
   m_LastFoldersGridSize: -1
   m_LastProjectPath: F:\UNITY\Projects\ChaoticLinesProjectNew
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 43}
-    m_SelectedIDs: 42550000
-    m_LastClickedID: 21826
-    m_ExpandedIDs: 000000004255000000ca9a3b
+    scrollPos: {x: 0, y: 55}
+    m_SelectedIDs: fe6e0000
+    m_LastClickedID: 28414
+    m_ExpandedIDs: 00000000425500005e55000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -929,7 +929,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000004255000000ca9a3b
+    m_ExpandedIDs: 0000000042550000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -954,9 +954,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs: 006f0000
+    m_LastClickedInstanceID: 28416
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c623000096570000fa9400004af90000c2570000985a0000a84b01000a580000000000009e580000fa560000d6830400
     m_RenameOverlay:
       m_UserAcceptedRename: 0

@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using TMPro;
@@ -236,7 +237,6 @@ public class SaveHandler : MonoBehaviour
     //Load All Custom Datas
     public void LoadAll()
     {
-        var saveEntries = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, "Saves")).GetFiles().Where(file => file.Extension == ".json");
         //Delete Buttons
         for (int i = 0; i < spawnedButtons.Length; i++)
         {
@@ -244,16 +244,22 @@ public class SaveHandler : MonoBehaviour
         }
         buttonList = new List<SaveButton>();
 
-        saveEntries = saveEntries.OrderBy(file => file.LastWriteTime).ToArray();
 
-        //Deserialize
+        var saveEntries = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, "Saves")).GetFiles().Where(file => file.Extension == ".json");
+
+        // Deserialize and add the save files to the list
         saveList = new List<SaveList>();
-        foreach (string path in saveEntries.Select(entry => entry.FullName))
+        foreach (FileInfo file in saveEntries)
         {
-            //Deserialize
-            string saveString = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "Saves", path));
+            string saveString = File.ReadAllText(file.FullName);
             saveList.Add(JsonConvert.DeserializeObject<SaveList>(saveString));
         }
+
+        // Sort the list based on the date and time property in each SaveList object
+        saveList = saveList.OrderBy(save => DateTime.ParseExact(save.date, "yyyy-MM-dd-HH-mm-ss-ff", CultureInfo.InvariantCulture)).ToList();
+
+
+
 
 
         //Spawn Buttons
