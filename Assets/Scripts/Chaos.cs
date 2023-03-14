@@ -40,7 +40,8 @@ public class Chaos : MonoBehaviour
     public List<FunctionInput> func;
     public TMP_InputField[] defaultInput;
     public SaveHandler saveHandler;
-    private Expression[] exp;
+    private Func<double[], double>[] expression;
+    double[] varinputs;
     private Vector3[] prevPos;
 
     //Secondary Render Pipe
@@ -235,7 +236,8 @@ public class Chaos : MonoBehaviour
             funcCount = func.Count;
 
             //Initialize inputs and vars
-            exp = new Expression[funcCount];
+            varinputs = new double[funcCount + 1];
+            expression = new Func<double[], double>[funcCount];
             boxBound = bounds * 1000;
             mapBounds.localScale = new Vector3(boxBound, boxBound, boxBound);
             mapRotator.maxZoomOut = boxBound / 20;
@@ -245,7 +247,7 @@ public class Chaos : MonoBehaviour
             {
                 func[i].textInput.interactable = false;
                 func[i].SetSize(trail_Amount);
-                exp[i] = new Expression(func[i].function);
+                expression[i] = Evaluator.CreateMethod(func[i].function);
             }
             
             active = new bool[trail_Amount];
@@ -420,55 +422,32 @@ public class Chaos : MonoBehaviour
     //Calculate
     public void CordCalc(int a, int i)
     {
-
+        varinputs[0] = (double)t;
         for (int b = 0; b < funcCount; b++)
         {
-            exp[a].Parameters[func[b].name.ToString()] = (double)func[b].mainCords[i - 1];
+            varinputs[b+1] = func[b].mainCords[i - 1];
         }
-            
-        exp[a].Parameters["t"] = t;
 
-        func[a].mainCords[i] = Convert.ToSingle(exp[a].Evaluate());
-
-        try
-        {
-            
-            func[a].mainCords[i] = SaftyCheck(func[a].mainCords[i], i);
-        }
-        catch
-        {
-            Debug.Log("input Error");
-            func[a].mainCords[i] = 0;
-        }
+        func[a].mainCords[i] = SaftyCheck((float)expression[a](varinputs), i);
     }
 
     //Calculate
     public void AbsCalc(int a, int i)
     {
-
         for (int b = 0; b < funcCount; b++)
         {
             if (i == Mathf.Floor(trail_Amount / 2))
-                exp[a].Parameters[func[b].name.ToString()] = (double)func[b].mainCords[0];
+                varinputs[b + 1] = func[b].mainCords[0];
             else
-                exp[a].Parameters[func[b].name.ToString()] = (double)func[b].mainCords[i - 1]; 
+                varinputs[b + 1] = func[b].mainCords[i - 1];
         }
 
         if (i < Mathf.Floor(trail_Amount / 2))
-            exp[a].Parameters["t"] = t;
+            varinputs[0] = (double)t;
         else
-            exp[a].Parameters["t"] = -t;
+            varinputs[0] = -(double)t;
 
-        try
-        {
-            func[a].mainCords[i] = Convert.ToSingle(exp[a].Evaluate());
-            func[a].mainCords[i] = SaftyCheck(func[a].mainCords[i], i);
-        }
-        catch
-        {
-            Debug.Log("input Error");
-            func[a].mainCords[i] = 0;
-        }
+        func[a].mainCords[i] = SaftyCheck((float)expression[a](varinputs), i);
     }
 
 
