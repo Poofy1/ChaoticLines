@@ -99,7 +99,7 @@ public class MainMenu : MonoBehaviour
         //Reset
         yield return 0;
 
-        mainEvents.Amount.text = "450";
+        mainEvents.Amount.text = "500";
         mainEvents.UpdateAmount();
 
         //Load random system

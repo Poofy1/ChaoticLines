@@ -357,10 +357,35 @@ public class Chaos : MonoBehaviour
 
 
 
-    
 
 
 
+    public void T_Transform(int id)
+    {
+        //Retreive original epxression
+        string originalExp = "";
+        char oldName = func[id].name;
+        originalExp = func[id].textInput.text;
+        func[id].textInput.text = "t*10";
+
+
+        //Create new layer with info
+        CreateCustomVar();
+        func[func.Count - 1].textInput.text = originalExp;
+
+
+        //Replace all id vars with new var
+        char newName = func[func.Count - 1].name;
+        Debug.Log(oldName);
+        Debug.Log(newName);
+        for (int i = 0; i < funcCount; i++)
+        {
+            func[i].textInput.text = func[i].textInput.text.Replace(oldName, newName);
+        }
+
+
+        SetCustomVars();
+    }
 
 
     //Ready Custom Equations for use

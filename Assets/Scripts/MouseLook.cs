@@ -9,9 +9,6 @@ public class MouseLook : MonoBehaviour
     public Chaos mainEvents;
     public Slider setting;
     public Text settingText;
-    public bool mouseSmooth;
-    public float smoothing = 2.0f; // control the amount of smoothing
-    private Vector2 smoothMouse = Vector2.zero; // stores the smoothed mouse input values
     public float mouseX;
     public float mouseY;
     public float xRotation;
@@ -29,7 +26,7 @@ public class MouseLook : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyUp(KeyCode.Mouse1))
         {
             locked = false;
         }
@@ -37,9 +34,8 @@ public class MouseLook : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            locked = true;
+            GameClicked();
         }
-        if (Input.GetKeyUp(KeyCode.Mouse1)) locked = false;
 
         if (locked && active)
         {
@@ -52,18 +48,20 @@ public class MouseLook : MonoBehaviour
             yRotation += mouseX;
             xRotation -= mouseY;
 
-
-
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-            transform.rotation = Quaternion.Euler(xRotation + initialCamRot.x, yRotation + initialCamRot.y, 0);
-            player.rotation = Quaternion.Euler(xRotation + initialCamRot.x, yRotation + initialCamRot.y, 0);
+            float xFinal = Mathf.Clamp(xRotation, -90f, 90f);
+            float yFinal = yRotation;
+
+            transform.rotation = Quaternion.Euler(xFinal, yFinal, 0);
+            player.rotation = Quaternion.Euler(xFinal, yFinal, 0);
         }
         else
         {
-            Cursor.lockState = CursorLockMode.None;
+            
             if (toggleOn)
             {
+                Cursor.lockState = CursorLockMode.None;
                 toggleOn = false;
                 Cursor.visible = true;
             }
@@ -73,8 +71,8 @@ public class MouseLook : MonoBehaviour
     public void GameClicked()
     {
         initialCamRot = transform.eulerAngles;
-        yRotation = 0;
-        xRotation = 0;
+        yRotation = transform.eulerAngles.y;
+        xRotation = (transform.eulerAngles.x > 180) ? transform.eulerAngles.x - 360 : transform.eulerAngles.x; ;
         locked = true;
     }
 
