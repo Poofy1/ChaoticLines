@@ -22,12 +22,14 @@ public class SaveColor : MonoBehaviour
 
     public List<SaveScheme> saveList;
     private List<GameObject> buttonList;
+    private string saveFolderPath;
+
 
     private void Start()
     {
-        //JsonConvert.DefaultSettings().Converters.Add(new ColorConverter());
         saveList = new List<SaveScheme>();
         currentColorSet = new List<ColorSet>();
+        saveFolderPath = Path.Combine(Application.streamingAssetsPath, "ColorSaves");
 
         buttonList = new List<GameObject>();
         LoadAll();
@@ -210,6 +212,13 @@ public class SaveColor : MonoBehaviour
     {
         
         string json = JsonConvert.SerializeObject(saveList[index], Formatting.Indented);
+
+
+        if (!Directory.Exists(saveFolderPath))
+        {
+            Directory.CreateDirectory(saveFolderPath);
+        }
+        
         File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "ColorSaves", saveList[index].guid + ".json"), json);
 
         //Re-load all data
@@ -221,7 +230,12 @@ public class SaveColor : MonoBehaviour
     //Load All Custom Data
     public void LoadAll()
     {
-        var saveEntries = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, "ColorSaves")).GetFiles().Where(file => file.Extension == ".json");
+        if (!Directory.Exists(saveFolderPath))
+        {
+            Directory.CreateDirectory(saveFolderPath);
+        }
+
+        var saveEntries = new DirectoryInfo(saveFolderPath).GetFiles().Where(file => file.Extension == ".json");
         
         //Delete Buttons
         for (int i = 0; i < buttonList.Count; i++)

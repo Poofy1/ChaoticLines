@@ -5,9 +5,6 @@ using System;
 using TMPro;
 using NCalc;
 using System.Collections.Generic;
-using System.Collections;
-using System.Threading;
-using System.Threading.Tasks;
 
 public class Chaos : MonoBehaviour
 {

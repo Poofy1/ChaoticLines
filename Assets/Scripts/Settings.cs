@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Steamworks;
 
 public class Settings : MonoBehaviour
 {
@@ -63,12 +64,13 @@ public class Settings : MonoBehaviour
     public void hudScale(int index)
     {
         hudText.text = (hudSlider.value + 1).ToString("0.00");
-        
     }
     public void hudScaleApply()
     {
-        hudSlider.SetValueWithoutNotify(hudSlider.value);
-        huds.referenceResolution = new Vector2(0, ((hudSlider.value / 2) + 1) * 500);
+        if(SteamUtils.IsRunningOnSteamDeck)
+            huds.referenceResolution = new Vector2(0, (((hudSlider.value / 2) + 1) * 500) - 20);
+        else
+            huds.referenceResolution = new Vector2(0, ((hudSlider.value / 2) + 1) * 500);
     }
 
     //FullScreen

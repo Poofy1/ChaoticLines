@@ -58,6 +58,10 @@ public static class Evaluator
             return "v[" + i + "]";
         });
 
+        // Filter out unwanted characters
+        result = result.Replace("\"", string.Empty);
+        result = result.Replace("\\", string.Empty);
+
         // Define the code template for the method
         string code =
             "using System;\n" +

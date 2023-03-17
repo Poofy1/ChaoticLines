@@ -3,9 +3,9 @@
   "AA": 1,
   "vSync": false,
   "mouseSen": 50.0,
-  "sound": 0.0,
+  "sound": 0.5,
   "fov": 90.0,
   "hudScale": 0.5,
-  "tooltips": false,
+  "tooltips": true,
   "hotkeys": true
 }

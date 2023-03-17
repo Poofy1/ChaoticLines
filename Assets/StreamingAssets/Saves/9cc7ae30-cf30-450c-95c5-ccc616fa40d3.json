@@ -2,26 +2,26 @@
   "CustomFunctions": [
     {
       "name": "x",
-      "function": "(-z*t)+(-t*x)-(-x*-a)-y",
+      "function": "(-Cos(-x)*-t)+(a*x)+(-a*x)",
       "mainCords": null
     },
     {
       "name": "y",
-      "function": "(y*z)+(t*x)+x",
+      "function": "(y*Sin(a))-y-t",
       "mainCords": null
     },
     {
       "name": "z",
-      "function": "(t*x)+(-y*y)",
+      "function": "t*100",
       "mainCords": null
     },
     {
       "name": "a",
-      "function": "(-x*x)",
+      "function": "(t*-Sin(a))",
       "mainCords": null
     }
   ],
-  "date": "2023-03-10-19-55-24-50",
-  "SaveName": "System 4",
-  "id": "9fefa3a0-8225-4509-9b15-5af117e2bb77"
+  "date": "2023-03-17-01-45-10-53",
+  "SaveName": "System 20",
+  "id": "9cc7ae30-cf30-450c-95c5-ccc616fa40d3"
 }

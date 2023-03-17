@@ -44,13 +44,14 @@ public class SaveHandler : MonoBehaviour
     private string newName;
     private string newDate;
     private bool awaitingEnter;
+    private string saveFolderPath;
 
     private void Start()
     {
-        mainEvents = GameObject.Find("Chaos_Event").GetComponent<Chaos>();
         saveList = new List<SaveList>();
         buttonList = new List<SaveButton>();
         savedSet = new SettingItem();
+        saveFolderPath = Path.Combine(Application.streamingAssetsPath, "Saves");
 
         spawnedButtons = new GameObject[0];
         LoadAll();
@@ -68,8 +69,8 @@ public class SaveHandler : MonoBehaviour
         else
         {
             Screen.fullScreen = true;
-            settings.hudScaleApply();
         }
+        settings.hudScaleApply();
     }
 
     //SETTINGS:
@@ -227,6 +228,13 @@ public class SaveHandler : MonoBehaviour
     public void WriteSave(int index)
     {
         string json = JsonConvert.SerializeObject(saveList[index], Formatting.Indented);
+
+        
+        if (!Directory.Exists(saveFolderPath))
+        {
+            Directory.CreateDirectory(saveFolderPath);
+        }
+
         File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "Saves", saveList[index].id + ".json"), json);
         
 
@@ -245,7 +253,12 @@ public class SaveHandler : MonoBehaviour
         buttonList = new List<SaveButton>();
 
 
-        var saveEntries = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, "Saves")).GetFiles().Where(file => file.Extension == ".json");
+        if (!Directory.Exists(saveFolderPath))
+        {
+            Directory.CreateDirectory(saveFolderPath);
+        }
+
+        var saveEntries = new DirectoryInfo(saveFolderPath).GetFiles().Where(file => file.Extension == ".json");
 
         // Deserialize and add the save files to the list
         saveList = new List<SaveList>();

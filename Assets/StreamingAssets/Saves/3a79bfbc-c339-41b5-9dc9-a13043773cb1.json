@@ -1,0 +1,22 @@
+{
+  "CustomFunctions": [
+    {
+      "name": "x",
+      "function": "Cos(y*1.5)",
+      "mainCords": null
+    },
+    {
+      "name": "y",
+      "function": "z+t",
+      "mainCords": null
+    },
+    {
+      "name": "z",
+      "function": "x",
+      "mainCords": null
+    }
+  ],
+  "date": "2023-03-10-19-53-29-90",
+  "SaveName": "System 4",
+  "id": "3a79bfbc-c339-41b5-9dc9-a13043773cb1"
+}
