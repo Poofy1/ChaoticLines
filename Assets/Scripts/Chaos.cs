@@ -447,7 +447,7 @@ public class Chaos : MonoBehaviour
         varinputs[0] = (double)t;
         for (int b = 0; b < funcCount; b++)
         {
-            varinputs[b+1] = func[b].mainCords[i - 1];
+            varinputs[b + 1] = func[b].mainCords[i - 1];
         }
 
         func[a].mainCords[i] = SaftyCheck((float)expression[a](varinputs), i);
@@ -465,11 +465,18 @@ public class Chaos : MonoBehaviour
         }
 
         if (i < Mathf.Floor(trail_Amount / 2))
+        {
             varinputs[0] = (double)t;
+            func[a].mainCords[i] = SaftyCheck((float)expression[a](varinputs), i);
+        }
         else
+        {
             varinputs[0] = -(double)t;
+            func[a].mainCords[i] = SaftyCheck((float)expression[a](varinputs), i);
+        }
+            
 
-        func[a].mainCords[i] = SaftyCheck((float)expression[a](varinputs), i);
+        
     }
 
 
