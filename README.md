@@ -1,27 +1,19 @@
 # Chaotic Lines
 
-This project was made to simulate and visually represent the potentially chaotic nature of non-linear dynamic systems.
+This project was made to simulate and visually represent the potentially chaotic nature of non-linear dynamic systems. Experience the captivating complexity of chaotic dynamic systems with Parametric Engine. Easily create and discover your own mathematical systems that reveal intricate and stunning patterns. Personalize your cinematic experience to match your preference and taste.
 
-
-## Description
-
-This simulation offers many different customization options, allowing the user to create their own systems and save them for later. This project focuses on the beauty of these systems while in a fun and exploratory environment.
-
+This project is concidered finished and fully released however it will still receive updates!
 
 ## Road Map
 
-* Automatic Setting Saves
-* Photo Mode
-* Post fx
-* Additional color and customization options
-* Improve "About" page with more indepth and visual discription
-* Different types of system visuals
-* 3D Map
+* Deck Support
+* Steam workshop support
+* VR Support (Undecided)
 
 ### Installing
 
-* Current Unity builds may be very unstable / unfinished
-* Releases may be more stable to play test
+* Clone repository into empty Unity project (Version 2021.3.2f1)
+* Current Unity builds may be unstable / unfinished
 
 ## License
 
